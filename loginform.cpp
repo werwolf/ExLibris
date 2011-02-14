@@ -1,6 +1,20 @@
 #include "loginform.h"
 #include "ui_loginform.h"
+
 #include <QDebug>
+#include <QMessageBox>
+#include <QCryptographicHash>
+
+LoginForm::LoginForm(QSqlDatabase *_db, QDialog *parent) :
+    QDialog(parent),
+    ui(new Ui::LoginForm),
+    db(_db),
+    query(*_db)
+{
+    ui->setupUi(this);
+    usertype = AUTHOR;
+    ui->loginEdit->setFocus();
+}
 
 LoginForm::LoginForm(QDialog *parent) :
     QDialog(parent),
@@ -8,6 +22,7 @@ LoginForm::LoginForm(QDialog *parent) :
 {
     ui->setupUi(this);
     usertype = AUTHOR;
+    ui->loginEdit->setFocus();
 }
 
 LoginForm::~LoginForm()
@@ -81,5 +96,39 @@ void LoginForm::on_toolBox_currentChanged(int index)
         resize(220,260);
         on_typeCBox_currentIndexChanged(usertype);
         break;
+    }
+}
+
+void LoginForm::on_enterButton_clicked()
+{
+    QString login = ui->loginEdit->text();
+    QString pwd  = ui->pwdEdit->text();
+
+    // calculate password md5 hash
+    QCryptographicHash md5(QCryptographicHash::Md5);
+    md5.addData(pwd.toUtf8());
+    pwd = md5.result().toHex().constData();
+
+    qDebug("login: %s\npassword: %s",login.toAscii().data(), pwd.toLocal8Bit().data());
+
+    // find user
+    QString query_str = QString("SELECT id FROM user WHERE login='%1' AND password='%2'").arg(login).arg(pwd);
+    query.exec(query_str);
+
+    // if error
+    if (!query.isActive())
+        QMessageBox::warning(this, tr("Database Error"), query.lastError().text());
+
+    if (!query.next()) {
+        qDebug("bad login or password");
+        ui->loginEdit->setStyleSheet("* {background: rgb(240,0,0,80)}");
+        ui->pwdEdit->setStyleSheet("* {background: rgb(240,0,0,80)}");
+    } else {
+        quint16 user_id     = query.value(0).toInt();
+//        QString uset_type = query.value(1).toString();
+        qDebug("login correct");
+        // emit signal
+        emit loginning(user_id);
+        close();
     }
 }

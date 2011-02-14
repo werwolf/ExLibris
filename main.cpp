@@ -6,22 +6,22 @@
 #include "mainwindow.h"
 #include "loginform.h"
 
-bool createConnection(QString host, QString database, QString user, QString password)
-{
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", database);
-    db.setHostName(host);
-    db.setDatabaseName(database);
-    db.setUserName(user);
-    db.setPassword(password);
-    if (!db.open()) {
-//        QErrorMessage errorMessage;
-//        errorMessage.showMessage(db.lastError().text());
-//        errorMessage.exec();
-        QMessageBox::warning(0, "ExLibris", db.lastError().text(), QMessageBox::Ok);
-        return false;
-    }
-    return true;
-}
+//bool createConnection(QString host, QString database, QString user, QString password)
+//{
+//    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", database);
+//    db.setHostName(host);
+//    db.setDatabaseName(database);
+//    db.setUserName(user);
+//    db.setPassword(password);
+//    if (!db.open()) {
+////        QErrorMessage errorMessage;
+////        errorMessage.showMessage(db.lastError().text());
+////        errorMessage.exec();
+//        QMessageBox::warning(0, "ExLibris", db.lastError().text(), QMessageBox::Ok);
+//        return false;
+//    }
+//    return true;
+//}
 
 int main(int argc, char *argv[])
 {
@@ -36,15 +36,23 @@ int main(int argc, char *argv[])
     QString strUser = settings.value( strKey + "user").toString();
     QString strPassword = settings.value( strKey + "password").toString();
 
-    // Connecting to DB
-    if (!createConnection(strHost, strDatabase, strUser, strPassword))
+    // Connecting to DB    
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", strDatabase);
+    db.setHostName(strHost);
+    db.setDatabaseName(strDatabase);
+    db.setUserName(strUser);
+    db.setPassword(strPassword);
+    if (!db.open()) {
+        QMessageBox::warning(0, "ExLibris", db.lastError().text(), QMessageBox::Ok);
         return 1;
+    }
 
-    LoginForm login;
+    // Show login form
+    LoginForm login(&db);
     login.show();
 
-//    MainWindow w;
-//    w.show();
+    MainWindow w(&db);
+    QObject::connect(&login, SIGNAL(loginning(int)), &w, SLOT(startP(int)));
 
     return a.exec();
 }
