@@ -1,0 +1,25 @@
+# .gitignore
+.gitignore~
+.config.ini~
+
+# some KDE files
+.directory
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+
+# Compiled Dynamic libraries
+*.so
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+
+# Qt .pro.user files
+*.pro.user
+
+# make files
+Makefile
