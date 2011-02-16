@@ -20,7 +20,7 @@ public:
 private:
     Ui::MainWindow *ui;
     QSqlDatabase *db;
-    QSqlQuery query;
+    QSqlQuery query;    
 
 public slots:
     void startP(int user_id);

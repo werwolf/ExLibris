@@ -25,5 +25,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::startP(int user_id)
 {
+    Q_UNUSED(user_id);
     show();
 }

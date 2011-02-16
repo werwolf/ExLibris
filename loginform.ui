@@ -49,6 +49,9 @@
        <height>16777215</height>
       </size>
      </property>
+     <property name="contextMenuPolicy">
+      <enum>Qt::NoContextMenu</enum>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
@@ -176,9 +179,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>0</y>
-        <width>185</width>
-        <height>331</height>
+        <y>-74</y>
+        <width>205</width>
+        <height>329</height>
        </rect>
       </property>
       <property name="minimumSize">
@@ -207,21 +210,21 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" colspan="2">
+       <item row="0" column="1">
         <widget class="QComboBox" name="typeCBox">
          <item>
           <property name="text">
-           <string>Author</string>
+           <string>Клиент</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Client</string>
+           <string>Автор</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Supplier</string>
+           <string>Поставщик</string>
           </property>
          </item>
         </widget>
@@ -229,15 +232,25 @@
        <item row="1" column="0">
         <widget class="QLabel" name="regLoginLabel">
          <property name="text">
-          <string>Логин</string>
+          <string>Логин&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="1" column="1" colspan="2">
+       <item row="1" column="1">
         <widget class="QLineEdit" name="regLoginEdit">
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+}</string>
+         </property>
          <property name="maxLength">
           <number>20</number>
          </property>
@@ -246,15 +259,25 @@
        <item row="2" column="0">
         <widget class="QLabel" name="regPwdLabel">
          <property name="text">
-          <string>Пароль</string>
+          <string>Пароль&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" colspan="2">
+       <item row="2" column="1">
         <widget class="QLineEdit" name="regPwdEdit">
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+}</string>
+         </property>
          <property name="maxLength">
           <number>20</number>
          </property>
@@ -269,17 +292,27 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>Фамилия</string>
+          <string>Фамилия&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="3" column="1" colspan="2">
+       <item row="3" column="1">
         <widget class="QLineEdit" name="lastnameEdit">
          <property name="enabled">
           <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+}</string>
          </property>
          <property name="maxLength">
           <number>20</number>
@@ -292,17 +325,27 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>Имя</string>
+          <string>Имя&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="4" column="1" colspan="2">
+       <item row="4" column="1">
         <widget class="QLineEdit" name="nameEdit">
          <property name="enabled">
           <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+}</string>
          </property>
          <property name="maxLength">
           <number>20</number>
@@ -315,7 +358,7 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>Sex</string>
+          <string>Пол&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -332,12 +375,12 @@
          </property>
          <item>
           <property name="text">
-           <string>M</string>
+           <string>М</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>W</string>
+           <string>Ж</string>
           </property>
          </item>
         </widget>
@@ -348,17 +391,38 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>Birthday</string>
+          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Дата&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;рождения&lt;span style=&quot; color:#ff0000;&quot;&gt;*&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="6" column="1" colspan="2">
+       <item row="6" column="1">
         <widget class="QDateEdit" name="birthdayDEdit">
          <property name="enabled">
           <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QDateEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QDateEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+}
+QDateEdit::up-button{
+
+}
+QDateEdit::down-button{
+
+}</string>
          </property>
         </widget>
        </item>
@@ -368,17 +432,27 @@
           <bool>true</bool>
          </property>
          <property name="text">
-          <string>Distance</string>
+          <string>Расстояние&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
          </property>
         </widget>
        </item>
-       <item row="7" column="1" colspan="2">
+       <item row="7" column="1">
         <widget class="QLineEdit" name="distanceEdit">
          <property name="enabled">
           <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+}</string>
          </property>
          <property name="maxLength">
           <number>20</number>
@@ -386,6 +460,39 @@
         </widget>
        </item>
        <item row="8" column="0">
+        <widget class="QLabel" name="companyNameLabel">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>Компания&lt;span style=&quot;color:#ff0000; vertical-align:super;&quot;&gt;*&lt;/span&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1">
+        <widget class="QLineEdit" name="companyNameEdit">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(255, 11, 35, 210);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+}</string>
+         </property>
+         <property name="maxLength">
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="0">
         <widget class="QLabel" name="addressLable">
          <property name="enabled">
           <bool>true</bool>
@@ -398,17 +505,27 @@
          </property>
         </widget>
        </item>
-       <item row="8" column="1" colspan="2">
+       <item row="9" column="1">
         <widget class="QLineEdit" name="addressEdit">
          <property name="enabled">
           <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(122, 122, 255);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(41, 55, 255, 69), stop:0.375 rgba(70, 98, 255, 69), stop:0.423533 rgba(38, 59, 255, 145), stop:0.452957 rgba(83, 80, 255, 173), stop:0.477581 rgba(44, 90, 255, 130), stop:0.521505 rgba(87, 135, 255, 130), stop:0.552419 rgba(57, 63, 255, 159), stop:0.57754 rgba(41, 51, 255, 130), stop:0.612903 rgba(71, 62, 255, 69), stop:0.625 rgba(71, 62, 255, 69), stop:1 rgba(58, 81, 255, 69));
+}</string>
          </property>
          <property name="maxLength">
           <number>20</number>
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="10" column="0">
         <widget class="QLabel" name="phoneLabel">
          <property name="enabled">
           <bool>true</bool>
@@ -421,17 +538,27 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="1" colspan="2">
+       <item row="10" column="1">
         <widget class="QLineEdit" name="phoneEdit">
          <property name="enabled">
           <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(122, 122, 255);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(41, 55, 255, 69), stop:0.375 rgba(70, 98, 255, 69), stop:0.423533 rgba(38, 59, 255, 145), stop:0.452957 rgba(83, 80, 255, 173), stop:0.477581 rgba(44, 90, 255, 130), stop:0.521505 rgba(87, 135, 255, 130), stop:0.552419 rgba(57, 63, 255, 159), stop:0.57754 rgba(41, 51, 255, 130), stop:0.612903 rgba(71, 62, 255, 69), stop:0.625 rgba(71, 62, 255, 69), stop:1 rgba(58, 81, 255, 69));
+}</string>
          </property>
          <property name="maxLength">
           <number>20</number>
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
+       <item row="11" column="0">
         <widget class="QLabel" name="emailLabel">
          <property name="enabled">
           <bool>true</bool>
@@ -444,17 +571,27 @@
          </property>
         </widget>
        </item>
-       <item row="10" column="1" colspan="2">
+       <item row="11" column="1">
         <widget class="QLineEdit" name="emailEdit">
          <property name="enabled">
           <bool>true</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLineEdit {
+	border: 1px solid rgba(122, 122, 255);
+	border-radius: 4px;
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(41, 55, 255, 69), stop:0.375 rgba(70, 98, 255, 69), stop:0.423533 rgba(38, 59, 255, 145), stop:0.452957 rgba(83, 80, 255, 173), stop:0.477581 rgba(44, 90, 255, 130), stop:0.521505 rgba(87, 135, 255, 130), stop:0.552419 rgba(57, 63, 255, 159), stop:0.57754 rgba(41, 51, 255, 130), stop:0.612903 rgba(71, 62, 255, 69), stop:0.625 rgba(71, 62, 255, 69), stop:1 rgba(58, 81, 255, 69));
+}</string>
          </property>
          <property name="maxLength">
           <number>20</number>
          </property>
         </widget>
        </item>
-       <item row="11" column="0" colspan="3">
+       <item row="12" column="0" colspan="2">
         <widget class="QPushButton" name="registrationButton">
          <property name="text">
           <string>Регистрация</string>

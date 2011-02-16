@@ -1,27 +1,9 @@
 #include <QtGui/QApplication>
-//#include <QErrorMessage>
 #include <QMessageBox>
 #include <QSettings>
-#include <QtSql/QtSql>
+#include <QtSql>
 #include "mainwindow.h"
 #include "loginform.h"
-
-//bool createConnection(QString host, QString database, QString user, QString password)
-//{
-//    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", database);
-//    db.setHostName(host);
-//    db.setDatabaseName(database);
-//    db.setUserName(user);
-//    db.setPassword(password);
-//    if (!db.open()) {
-////        QErrorMessage errorMessage;
-////        errorMessage.showMessage(db.lastError().text());
-////        errorMessage.exec();
-//        QMessageBox::warning(0, "ExLibris", db.lastError().text(), QMessageBox::Ok);
-//        return false;
-//    }
-//    return true;
-//}
 
 int main(int argc, char *argv[])
 {
@@ -33,8 +15,10 @@ int main(int argc, char *argv[])
     QString strKey("DB.config/");
     QString strHost = settings.value( strKey + "host", "localhost").toString();
     QString strDatabase = settings.value( strKey + "database", "exlibris").toString();
-    QString strUser = settings.value( strKey + "user").toString();
-    QString strPassword = settings.value( strKey + "password").toString();
+    strKey = "DB.config.user/";
+    // Read user's login and password
+    QString strUser = settings.value( strKey + "login","user").toString();
+    QString strPassword = settings.value( strKey + "password","user_pwd").toString();
 
     // Connecting to DB    
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", strDatabase);

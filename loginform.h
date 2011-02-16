@@ -8,7 +8,7 @@ namespace Ui {
     class LoginForm;
 }
 
-enum UserT {AUTHOR, CLIENT, SUPPLIER};
+enum UserT {CLIENT, AUTHOR, SUPPLIER};
 
 class LoginForm : public QDialog
 {
@@ -24,9 +24,12 @@ private:
     UserT usertype;
     QSqlDatabase *db;
     QSqlQuery query;
+    // private methods
+    int checkUser(QString login, QString pwd);
 
 private slots:
-    void on_enterButton_clicked();
+    void on_registrationButton_clicked();
+    int   on_enterButton_clicked();
     void on_toolBox_currentChanged(int index);
     void on_typeCBox_currentIndexChanged(int index);
 
