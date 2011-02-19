@@ -23,12 +23,22 @@ private:
     Ui::LoginForm *ui;
     UserT usertype;
     QSqlDatabase *db;
-    QSqlQuery query;
+    QSqlQuery *query;
+    QValidator *phone_validator;
+
+    // styles
+    QString imp_field;
+    QString non_imp_field;
+    QString error_imp_field;
+    QString error_non_imp_field;
+
     // private methods
-    int checkUser(QString login, QString pwd);
+    void loadStyleSheets(void);
+    int checkUser(const QString login);
+    int checkUser(const QString login, const QString pwd);
 
 private slots:
-    void on_registrationButton_clicked();
+    int   on_registrationButton_clicked();
     int   on_enterButton_clicked();
     void on_toolBox_currentChanged(int index);
     void on_typeCBox_currentIndexChanged(int index);

@@ -1,0 +1,10 @@
+QLineEdit {
+	border: 1px solid rgba(122, 122, 255);
+	border-radius: 4px;
+	background-color: rgb(240,0,0,80);
+}
+QLineEdit:hover {
+	border-width: 3px;
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(60, 100, 255,
+160), stop:1 rgba(60, 102, 255, 160));
+}

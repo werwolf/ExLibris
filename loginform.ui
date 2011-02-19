@@ -179,7 +179,7 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>-74</y>
+        <y>-238</y>
         <width>205</width>
         <height>329</height>
        </rect>
@@ -248,7 +248,7 @@
 }
 QLineEdit:hover {
 	border-width: 3px;
-	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
 }</string>
          </property>
          <property name="maxLength">
@@ -274,8 +274,8 @@ QLineEdit:hover {
 	border-radius: 4px;
 }
 QLineEdit:hover {
-	border-width: 3px;
-	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+	border-width: 3px;	
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
 }</string>
          </property>
          <property name="maxLength">
@@ -311,7 +311,7 @@ QLineEdit:hover {
 }
 QLineEdit:hover {
 	border-width: 3px;
-	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
 }</string>
          </property>
          <property name="maxLength">
@@ -344,7 +344,7 @@ QLineEdit:hover {
 }
 QLineEdit:hover {
 	border-width: 3px;
-	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
 }</string>
          </property>
          <property name="maxLength">
@@ -415,7 +415,7 @@ p, li { white-space: pre-wrap; }
 }
 QDateEdit:hover {
 	border-width: 3px;
-	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
 }
 QDateEdit::up-button{
 
@@ -451,7 +451,7 @@ QDateEdit::down-button{
 }
 QLineEdit:hover {
 	border-width: 3px;
-	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
 }</string>
          </property>
          <property name="maxLength">
@@ -484,7 +484,7 @@ QLineEdit:hover {
 }
 QLineEdit:hover {
 	border-width: 3px;
-	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(255, 12, 68, 69), stop:0.375 rgba(255, 10, 46, 69), stop:0.423533 rgba(255, 19, 70, 145), stop:0.452957 rgba(255, 17, 56, 130), stop:0.477581 rgba(255, 16, 56, 130), stop:0.521505 rgba(255, 9, 37, 130), stop:0.552419 rgba(255, 9, 66, 135), stop:0.57754 rgba(255, 14, 78, 130), stop:0.612903 rgba(255, 12, 77, 69), stop:0.625 rgba(255, 38, 78, 69), stop:1 rgba(255, 28, 69, 69));
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(255, 10, 50, 110), stop:1 rgba(255, 10, 51, 110));
 }</string>
          </property>
          <property name="maxLength">
@@ -516,8 +516,8 @@ QLineEdit:hover {
 	border-radius: 4px;
 }
 QLineEdit:hover {
-	border-width: 3px;
-	border-color: qconicalgradient(cx:0, cy:0, angle:135, stop:0 rgba(41, 55, 255, 69), stop:0.375 rgba(70, 98, 255, 69), stop:0.423533 rgba(38, 59, 255, 145), stop:0.452957 rgba(83, 80, 255, 173), stop:0.477581 rgba(44, 90, 255, 130), stop:0.521505 rgba(87, 135, 255, 130), stop:0.552419 rgba(57, 63, 255, 159), stop:0.57754 rgba(41, 51, 255, 130), stop:0.612903 rgba(71, 62, 255, 69), stop:0.625 rgba(71, 62, 255, 69), stop:1 rgba(58, 81, 255, 69));
+	border-width: 3px;	
+	border-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(60, 100, 255, 160), stop:1 rgba(60, 102, 255, 160));
 }</string>
          </property>
          <property name="maxLength">

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/loginform/qss">
+        <file alias="error_imp_field.qss">qss/error_imp_field.qss</file>
+        <file alias="error_non_imp_field.qss">qss/error_non_imp_field.qss</file>
+        <file alias="imp_field.qss">qss/imp_field.qss</file>
+        <file alias="non_imp_field.qss">qss/non_imp_field.qss</file>
+    </qresource>
+</RCC>
