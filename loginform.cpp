@@ -64,7 +64,7 @@ void LoginForm::on_typeCBox_currentIndexChanged(int index)
 {
     bool info_grp = false;                // AUTHOR   : sex & birthday form
     bool dist_grp = false;                // SUPPLIER : distance form
-    bool comp_grp = false;             // CLIENT || SUPPLIER : company name form
+    bool comp_grp = false;                // CLIENT || SUPPLIER : company name form
 
     switch(index) {
     case 0:
