@@ -4,15 +4,12 @@
 #include <QDebug>
 #include <QMessageBox>
 
-LoginForm::LoginForm(QSqlDatabase *_db, QDialog *parent) :
-    QDialog(parent),
-    ui(new Ui::LoginForm),
-    db(_db),
-    query(new QSqlQuery(*_db))
+LoginForm::LoginForm(QDialog *parent) :  QDialog(parent), ui(new Ui::LoginForm)
 {
     ui->setupUi(this);
     loadStyleSheets();
     usertype = CLIENT;
+    user_id = -1;
     ui->loginEdit->setFocus();
 
     // i.e. "+46(0)31-445566"
@@ -24,16 +21,6 @@ LoginForm::LoginForm(QSqlDatabase *_db, QDialog *parent) :
     ui->phoneEdit->setValidator(phone_validator);
 
     ui->distanceEdit->setValidator(new QIntValidator(this));
-}
-
-LoginForm::LoginForm(QDialog *parent) :
-    QDialog(parent),
-    ui(new Ui::LoginForm)
-{
-    ui->setupUi(this);
-    loadStyleSheets();
-    usertype = AUTHOR;
-    ui->loginEdit->setFocus();
 }
 
 LoginForm::~LoginForm()
@@ -64,7 +51,7 @@ void LoginForm::on_typeCBox_currentIndexChanged(int index)
 {
     bool info_grp = false;                // AUTHOR   : sex & birthday form
     bool dist_grp = false;                // SUPPLIER : distance form
-    bool comp_grp = false;                // CLIENT || SUPPLIER : company name form
+    bool comp_grp = false;             // CLIENT || SUPPLIER : company name form
 
     switch(index) {
     case 0:
@@ -135,7 +122,9 @@ int LoginForm::on_enterButton_clicked()
     QString login = ui->loginEdit->text();
     QString pwd  = ui->pwdEdit->text();
 
-    if (checkUser(login, pwd) == -1) {
+    emit checkUser(login, pwd);
+
+    if (user_id == -1) {
         qDebug("bad login or password\n");
         ui->loginEdit->setStyleSheet("* {background: rgb(240,0,0,80)}");
         ui->pwdEdit->setStyleSheet("* {background: rgb(240,0,0,80)}");
@@ -143,7 +132,6 @@ int LoginForm::on_enterButton_clicked()
         return -1;
     } else {
         qDebug("login correct\n");
-        quint16 user_id = query->value(0).toInt();
         // emit signal.
         emit loginning(user_id);
         close();
@@ -225,7 +213,8 @@ int LoginForm::on_registrationButton_clicked()
     }
 
     //
-    if (checkUser(ui->regLoginEdit->text()) > 0) {
+    emit checkUser(ui->regLoginEdit->text());
+    if (user_id > 0) {
         qDebug("user with this login is already exist\n");
         ui->regLoginEdit->setStyleSheet(error_imp_field);
         ui->regLoginEdit->setFocus();
@@ -241,9 +230,9 @@ int LoginForm::on_registrationButton_clicked()
         QString phone = ui->phoneEdit->text();
         QString email = ui->emailEdit->text();
         //
-        QString company = ui->companyNameEdit->text();          // CLIENT && SUPPLIER
-        unsigned int dist = ui->distanceEdit->text().toInt();         // SUPPLIER only
-        QDate birthday = ui->birthdayDEdit->date();                    // AUTHOR
+        QString company = ui->companyNameEdit->text();       // CLIENT && SUPPLIER
+        unsigned int dist  = ui->distanceEdit->text().toInt();        // SUPPLIER only
+        QDate birthday = ui->birthdayDEdit->date();                   // AUTHOR
         QChar sex;                                                                         // AUTHOR
         switch (ui->sexCBox->currentIndex()) {
         case 1: sex = 'M'; break;
@@ -259,6 +248,8 @@ int LoginForm::on_registrationButton_clicked()
             break;
         default: break;
         }
+
+        Q_UNUSED(dist);
 
 //        QSqlDatabase::database().transaction();
 //        query.prepare("INSERT INTO users (id, login, password, lasname, name, address, phone, email, type, regdate)"
@@ -279,46 +270,7 @@ int LoginForm::on_registrationButton_clicked()
     return 0;
 }
 
-int LoginForm::checkUser(const QString login, const QString pwd)
+void LoginForm::setUserId(long user_id)
 {
-    qDebug("login: %s\npassword: %s",qPrintable(login), qPrintable(pwd));
-
-    // find user
-    QString query_str = QString("SELECT id FROM users WHERE login='%1' AND password=MD5('%2')").arg(login).arg(pwd);
-    query->exec(query_str);
-
-    // if error
-    if (!query->isActive())
-        QMessageBox::warning(this, tr("Database Error"), query->lastError().text());
-
-    if (!query->next()) {
-        // can not found user with this pair of login and password.
-        return -1;
-    } else {
-        // user is found. return user_id.
-        quint16 user_id = query->value(0).toInt();
-        return user_id;
-    }
-}
-
-int LoginForm::checkUser(const QString login)
-{
-    qDebug("login: %s",qPrintable(login));
-
-    // find user
-    QString query_str = QString("SELECT id FROM users WHERE login='%1'").arg(login);
-    query->exec(query_str);
-
-    // if error
-    if (!query->isActive())
-        QMessageBox::warning(this, tr("Database Error"), query->lastError().text());
-
-    if (!query->next()) {
-        // can not found user with this login
-        return -1;
-    } else {
-        // user is found. return user_id.
-        quint16 user_id = query->value(0).toInt();
-        return user_id;
-    }
+    this->user_id = user_id;
 }

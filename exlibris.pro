@@ -14,17 +14,19 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     loginform.cpp \
-    euser.cpp \
-    eclient.cpp \
-    esupplier.cpp \
-    eauthor.cpp
+#    euser.cpp \
+#    eclient.cpp \
+#    esupplier.cpp \
+#    eauthor.cpp \
+    edbconnection.cpp
 
 HEADERS  += mainwindow.h \
     loginform.h \
-    euser.h \
-    eclient.h \
-    esupplier.h \
-    eauthor.h
+#    euser.h \
+#    eclient.h \
+#    esupplier.h \
+#    eauthor.h \
+    edbconnection.h
 
 FORMS    += mainwindow.ui \
     loginform.ui

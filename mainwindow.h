@@ -14,16 +14,13 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    MainWindow(QSqlDatabase *_db, QWidget *parent = 0);
     ~MainWindow();
 
 private:
     Ui::MainWindow *ui;
-    QSqlDatabase *db;
-    QSqlQuery query;    
 
 public slots:
-    void startP(int user_id);
+    void startP(long user_id);
 };
 
 #endif // MAINWINDOW_H

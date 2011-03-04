@@ -8,22 +8,19 @@ namespace Ui {
     class LoginForm;
 }
 
-enum UserT {CLIENT, AUTHOR, SUPPLIER};
-
 class LoginForm : public QDialog
 {
     Q_OBJECT
 
 public:
     explicit LoginForm(QDialog *parent = 0);
-    LoginForm(QSqlDatabase *_db, QDialog *parent = 0);
     ~LoginForm();
+    enum UserT {CLIENT, AUTHOR, SUPPLIER};
 
 private:
     Ui::LoginForm *ui;
     UserT usertype;
-    QSqlDatabase *db;
-    QSqlQuery *query;
+    long user_id;
     QValidator *phone_validator;
 
     // styles
@@ -34,8 +31,6 @@ private:
 
     // private methods
     void loadStyleSheets(void);
-    int checkUser(const QString login);
-    int checkUser(const QString login, const QString pwd);
 
 private slots:
     int   on_registrationButton_clicked();
@@ -43,8 +38,11 @@ private slots:
     void on_toolBox_currentChanged(int index);
     void on_typeCBox_currentIndexChanged(int index);
 
+    void setUserId(long);
+
 signals:
-    int  loginning( int );
+    void loginning( long );
+    void checkUser(const QString login, const QString pwd = "ANY");
 };
 
 #endif // LOGINFORM_H

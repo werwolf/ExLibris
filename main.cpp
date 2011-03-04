@@ -1,42 +1,35 @@
 #include <QtGui/QApplication>
-#include <QMessageBox>
-#include <QSettings>
-#include <QtSql>
 #include "mainwindow.h"
 #include "loginform.h"
+#include "edbconnection.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    EDBconnection* m_db;
 
-    // Read DB settings from config.ini
-    // !!! config file must be in the same directory as the executable program
-    QSettings settings("config.ini", QSettings::IniFormat);
-    QString strKey("DB.config/");
-    QString strHost = settings.value( strKey + "host", "localhost").toString();
-    QString strDatabase = settings.value( strKey + "database", "exlibris").toString();
-    strKey = "DB.config.user/";
-    // Read user's login and password
-    QString strUser = settings.value( strKey + "login","user").toString();
-    QString strPassword = settings.value( strKey + "password","user_pwd").toString();
-
-    // Connecting to DB    
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", strDatabase);
-    db.setHostName(strHost);
-    db.setDatabaseName(strDatabase);
-    db.setUserName(strUser);
-    db.setPassword(strPassword);
-    if (!db.open()) {
-        QMessageBox::warning(0, "ExLibris", db.lastError().text(), QMessageBox::Ok);
+    try {
+        m_db = EDBconnection::getInstance();
+    }
+    catch (int error) {
+        qDebug("error (main) when try connect to DB");
+        return error;
+    }
+    catch (...) {
+        qDebug("error (main) when try connect to DB");
         return 1;
     }
 
-    // Show login form
-    LoginForm login(&db);
+    LoginForm login;
+    MainWindow w;
+
+    QObject::connect(&login, SIGNAL(checkUser(QString, QString)), m_db, SLOT(checkUser(QString, QString)));
+    QObject::connect(m_db,  SIGNAL(setUserId(long)), &login, SLOT(setUserId(long)));
+    QObject::connect(&login, SIGNAL(loginning(long)), &w, SLOT(startP(long)));
+
     login.show();
 
-    MainWindow w(&db);
-    QObject::connect(&login, SIGNAL(loginning(int)), &w, SLOT(startP(int)));
-
-    return a.exec();
+    int r_code = a.exec();
+    delete m_db;
+    return r_code;
 }
