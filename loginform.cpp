@@ -3,6 +3,7 @@
 
 #include <QDebug>
 #include <QMessageBox>
+#include "edbconnection.h"
 
 LoginForm::LoginForm(QDialog *parent) :  QDialog(parent), ui(new Ui::LoginForm)
 {
@@ -21,6 +22,22 @@ LoginForm::LoginForm(QDialog *parent) :  QDialog(parent), ui(new Ui::LoginForm)
     ui->phoneEdit->setValidator(phone_validator);
 
     ui->distanceEdit->setValidator(new QIntValidator(this));
+
+    QObject::connect(this,
+                     SIGNAL(newAuthor(QString,QString,QString,QString,QDate,QString,QString,QString,QString)),
+                     EDBconnection::getInstance(),
+                     SLOT(newAuthor(QString,QString,QString,QString,QDate,QString,QString,QString,QString))
+                     );
+    QObject::connect(this,
+                     SIGNAL(newClient(QString,QString,QString,QString,QString,QString,QString,QString)),
+                     EDBconnection::getInstance(),
+                     SLOT(newClient(QString,QString,QString,QString,QString,QString,QString,QString))
+                     );
+    QObject::connect(this,
+                     SIGNAL(newSupplier(QString,QString,QString,QString,uint,QString,QString,QString,QString)),
+                     EDBconnection::getInstance(),
+                     SLOT(newSupplier(QString,QString,QString,QString,uint,QString,QString,QString,QString))
+                     );
 }
 
 LoginForm::~LoginForm()
@@ -230,41 +247,27 @@ int LoginForm::on_registrationButton_clicked()
         QString phone = ui->phoneEdit->text();
         QString email = ui->emailEdit->text();
         //
-        QString company = ui->companyNameEdit->text();       // CLIENT && SUPPLIER
-        unsigned int dist  = ui->distanceEdit->text().toInt();        // SUPPLIER only
-        QDate birthday = ui->birthdayDEdit->date();                   // AUTHOR
-        QChar sex;                                                                         // AUTHOR
+        QString company = ui->companyNameEdit->text();              // CLIENT && SUPPLIER
+        unsigned int dist  = ui->distanceEdit->text().toInt();      // SUPPLIER only
+        QDate birthday = ui->birthdayDEdit->date();                 // AUTHOR
+        QString sex;                                                // AUTHOR
         switch (ui->sexCBox->currentIndex()) {
-        case 1: sex = 'M'; break;
-        case 2: sex = 'W'; break;
+        case 0: sex = "M"; break;
+        case 1: sex = "W"; break;
         }
 
         switch (usertype) {
         case CLIENT:
+            emit newClient(login, pwd, lastname, name, company, address, phone, email);
             break;
         case AUTHOR:
+            emit newAuthor(login, pwd, lastname, name, birthday, sex, address, phone, email);
             break;
         case SUPPLIER:
+            emit newSupplier(login, pwd, lastname, name, dist, company, address, phone, email);
             break;
         default: break;
         }
-
-        Q_UNUSED(dist);
-
-//        QSqlDatabase::database().transaction();
-//        query.prepare("INSERT INTO users (id, login, password, lasname, name, address, phone, email, type, regdate)"
-//        "VALUES (:id, :login, :password, :lasname, :name, :address, :phone, :email, :type, :regdate)");
-//        query.bindValue(":id", "NULL");
-//        query.bindValue(":login", );
-//        query.bindValue(":password", );
-//        query.bindValue(":lasname", );
-//        query.bindValue(":name", );
-//        query.bindValue(":address", );
-//        query.bindValue(":phone", );
-//        query.bindValue(":email", );
-//        query.bindValue(":type", );
-//        query.bindValue(":regdate", );
-//        QSqlDatabase::database().commit();
     }
 
     return 0;

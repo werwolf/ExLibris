@@ -10,12 +10,18 @@ class EDBconnection : public QObject
 
 public:
     static EDBconnection* getInstance();
-//    static void DestroyInstance (void) { if (pinstance) delete pinstance; } ;
+//    static void destroyInstance();
     ~EDBconnection();
     void executeSqlQuery(const QString) const;
 
 public slots:
     void checkUser(QString login, QString pwd = "ANY");
+
+//  newUser(login, pass, lastname, name, address, phone, email type);
+    void newUser(QString, QString, QString, QString, QString, QString, QString, QString);
+    void newAuthor(QString, QString, QString, QString, QDate, QString, QString, QString, QString);
+    void newClient(QString, QString, QString, QString, QString, QString, QString, QString);
+    void newSupplier(QString, QString, QString, QString, unsigned int, QString, QString, QString, QString);
 
 signals:
     void setUserId(long);

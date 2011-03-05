@@ -59,6 +59,11 @@ EDBconnection::~EDBconnection()
     qDebug("close DB");
 }
 
+//void EDBconnection::destroyInstance()
+//{
+//    if (pinstance) delete pinstance;
+//}
+
 void EDBconnection::executeSqlQuery(const QString query) const
 {
     QSqlQuery sqlQuery(query, db);
@@ -94,4 +99,106 @@ void EDBconnection::checkUser(QString login, QString pwd)
         // can not found user with this pair of login and password.
         emit setUserId(-1);
     }
+}
+
+void EDBconnection::newUser(QString login,
+                            QString password,
+                            QString lastname,
+                            QString name,
+                            QString address = "",
+                            QString phone = "",
+                            QString email = "",
+                            QString type = "CLIENT")
+{
+    QDateTime regdate = QDateTime::currentDateTime();
+    qDebug()<<regdate;
+
+    QSqlQuery sqlQuery(db);
+    sqlQuery.prepare("INSERT INTO users (id, login, password, lastname, name, address, phone, email, type, reg_date)"
+        "VALUES (NULL, ?, MD5(?), ?, ?, ?, ?, ?, ?, ?)");
+    sqlQuery.bindValue(0, login);
+    sqlQuery.bindValue(1, password);
+    sqlQuery.bindValue(2, lastname);
+    sqlQuery.bindValue(3, name);
+    sqlQuery.bindValue(4, address);
+    sqlQuery.bindValue(5, phone);
+    sqlQuery.bindValue(6, email);
+    sqlQuery.bindValue(7, type);
+    sqlQuery.bindValue(8, regdate);
+    sqlQuery.exec();
+
+    // if error
+    if (!sqlQuery.isActive()) qDebug()<<sqlQuery.lastError().text();
+}
+
+void EDBconnection::newAuthor(QString login,
+                            QString password,
+                            QString lastname,
+                            QString name,
+                            QDate   birth_date,
+                            QString sex,
+                            QString address = "",
+                            QString phone = "",
+                            QString email = "")
+{
+    QSqlQuery query(db);
+
+    // :TODO make transaction
+//    query.exec("START TRANSACTION;"); if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
+
+    newUser(login, password, lastname, name, address, phone, email,"AUTHOR");
+
+    query.prepare("INSERT INTO authors (id, user_id, dob, sex) VALUES (NULL, LAST_INSERT_ID(), ?, ?)");
+    query.bindValue(0, birth_date);
+    query.bindValue(1, sex);
+    query.exec();
+    // if error
+    if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
+
+//    query.exec("COMMIT;"); if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
+
+
+}
+
+void EDBconnection::newClient(QString login,
+                            QString password,
+                            QString lastname,
+                            QString name,
+                            QString company_name,
+                            QString address = "",
+                            QString phone = "",
+                            QString email = "")
+{
+    QSqlQuery query(db);
+
+    newUser(login, password, lastname, name, address, phone, email,"CLIENT");
+
+    query.prepare("INSERT INTO clients (id, user_id, company_name) VALUES (NULL, LAST_INSERT_ID(), ?)");
+    query.bindValue(0, company_name);
+    query.exec();
+    // if error
+    if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
+
+}
+
+void EDBconnection::newSupplier(QString login,
+                            QString password,
+                            QString lastname,
+                            QString name,
+                            unsigned int dist,
+                            QString company_name,
+                            QString address = "",
+                            QString phone = "",
+                            QString email = "")
+{
+    QSqlQuery query(db);
+
+    newUser(login, password, lastname, name, address, phone, email,"SUPPLIER");
+
+    query.prepare("INSERT INTO suppliers (id, user_id, distance, company_name) VALUES (NULL, LAST_INSERT_ID(), ?, ?)");
+    query.bindValue(0, dist);
+    query.bindValue(1, company_name);
+    query.exec();
+    // if error
+    if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
 }

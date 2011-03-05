@@ -14,7 +14,7 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     loginform.cpp \
-#    euser.cpp \
+    euser.cpp \
 #    eclient.cpp \
 #    esupplier.cpp \
 #    eauthor.cpp \
@@ -22,7 +22,7 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     loginform.h \
-#    euser.h \
+    euser.h \
 #    eclient.h \
 #    esupplier.h \
 #    eauthor.h \

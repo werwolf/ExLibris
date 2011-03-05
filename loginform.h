@@ -33,8 +33,8 @@ private:
     void loadStyleSheets(void);
 
 private slots:
-    int   on_registrationButton_clicked();
-    int   on_enterButton_clicked();
+    int  on_registrationButton_clicked();
+    int  on_enterButton_clicked();
     void on_toolBox_currentChanged(int index);
     void on_typeCBox_currentIndexChanged(int index);
 
@@ -43,6 +43,9 @@ private slots:
 signals:
     void loginning( long );
     void checkUser(const QString login, const QString pwd = "ANY");
+    void newAuthor(QString, QString, QString, QString, QDate, QString, QString, QString, QString);
+    void newClient(QString, QString, QString, QString, QString, QString, QString, QString);
+    void newSupplier(QString, QString, QString, QString, unsigned int, QString, QString, QString, QString);
 };
 
 #endif // LOGINFORM_H
