@@ -1,41 +1,40 @@
 #ifndef EUSER_H
 #define EUSER_H
 
-#include <QObject>
-#include <QString>
+#include <QtCore>
 
 class EUser : public QObject
 {
     Q_OBJECT
 
 public:
-//    EUser();
+    enum UserType {CLIENT, AUTHOR, SUPPLIER, OPERATOR, CEO, ADMIN};
+
     explicit EUser(long user_id);
-    explicit EUser(QString login);
-//    EUser(QString login,
-//       QString password,
-//       QString lasname,
-//       QString name,
-//       QString address = "",
-//       QString phone = "",
-//       QString email = "",
-//       QString type = "'CLIENT'");
+    explicit EUser(QString _login);
+//    ~EUser();
 
-//    void newUser();
+signals:
+    void selectUser(QString);
 
-//signals:
-//    void addUser(QString);
+public slots:
+    void setUserInfo(QList<QStringList>);
+
+protected:
+    EUser( const EUser& );
+    EUser& operator=( const EUser& );
 
 private:
+    long    id;
     QString login;
-    QString password;
+//    QString password;
     QString lasname;
     QString name;
     QString address;
     QString phone;
     QString email;
-    QString type;
-    QString regdate;
+    UserType  type;
+//    QDateTime regdate;
 };
 
 #endif // EUSER_H

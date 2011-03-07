@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include "edbconnection.h"
 
-LoginForm::LoginForm(QDialog *parent) :  QDialog(parent), ui(new Ui::LoginForm)
+LoginForm::LoginForm(QDialog *parent) : QDialog(parent), ui(new Ui::LoginForm)
 {
     ui->setupUi(this);
     loadStyleSheets();
@@ -66,8 +66,8 @@ void LoginForm::loadStyleSheets(void)
 
 void LoginForm::on_typeCBox_currentIndexChanged(int index)
 {
-    bool info_grp = false;                // AUTHOR   : sex & birthday form
-    bool dist_grp = false;                // SUPPLIER : distance form
+    bool info_grp = false;             // AUTHOR   : sex & birthday form
+    bool dist_grp = false;             // SUPPLIER : distance form
     bool comp_grp = false;             // CLIENT || SUPPLIER : company name form
 
     switch(index) {
@@ -105,10 +105,10 @@ void LoginForm::on_typeCBox_currentIndexChanged(int index)
 void LoginForm::on_toolBox_currentChanged(int index)
 {
     switch(index) {
-    case 0:
+    case 0:                     // login tab
         resize(220,180);
         break;
-    case 1:
+    case 1:                     // registration tab
         on_typeCBox_currentIndexChanged(usertype);
         break;
     }

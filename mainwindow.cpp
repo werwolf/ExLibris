@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include "euser.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -15,6 +17,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::startP(long user_id)
 {
-    Q_UNUSED(user_id);
+    EUser user(user_id);
     show();
 }

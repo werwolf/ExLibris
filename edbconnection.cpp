@@ -1,6 +1,7 @@
 #include "edbconnection.h"
 #include <QSettings>
 #include <QSqlQuery>
+#include <QSqlRecord>
 #include <QSqlError>
 #include <QRegExp>
 #include <QMessageBox>
@@ -67,6 +68,27 @@ EDBconnection::~EDBconnection()
 void EDBconnection::executeSqlQuery(const QString query) const
 {
     QSqlQuery sqlQuery(query, db);
+}
+
+void EDBconnection::executeSelQuery(const QString query)
+{
+    QList<QStringList> List;
+    QStringList fieldName;
+    QSqlQuery sqlQuery(query,db);
+    QSqlRecord rec = sqlQuery.record();
+    for( int i=0; i<rec.count(); ++i )
+        fieldName << rec.fieldName( i );
+
+    foreach( QString str, fieldName ){
+        QStringList tmpList;
+        while( sqlQuery.next() ){
+            tmpList << sqlQuery.value(rec.indexOf( str )).toString();
+        }
+        sqlQuery.seek(-1);  // since next at end - start at top again for next pass
+        List << tmpList;
+    }
+    qDebug()<<List;
+    emit setUserInfo(List);
 }
 
 void EDBconnection::checkUser(QString login, QString pwd)

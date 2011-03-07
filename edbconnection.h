@@ -12,9 +12,10 @@ public:
     static EDBconnection* getInstance();
 //    static void destroyInstance();
     ~EDBconnection();
-    void executeSqlQuery(const QString) const;
 
 public slots:
+    void executeSqlQuery(const QString) const;
+    void executeSelQuery(const QString);
     void checkUser(QString login, QString pwd = "ANY");
 
 //  newUser(login, pass, lastname, name, address, phone, email type);
@@ -25,6 +26,7 @@ public slots:
 
 signals:
     void setUserId(long);
+    void setUserInfo(QList<QStringList>);
 
 protected:
     EDBconnection();
