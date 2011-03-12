@@ -13,9 +13,12 @@ public:
 //    static void destroyInstance();
     ~EDBconnection();
 
-public slots:
     void executeSqlQuery(const QString) const;
-    void executeSelQuery(const QString);
+    QList<QStringList> executeSelQuery(const QString) const;
+
+public slots:
+//    void executeSqlQuery(const QString) const;
+//    void executeSelQuery(const QString);// const;
     void checkUser(QString login, QString pwd = "ANY");
 
 //  newUser(login, pass, lastname, name, address, phone, email type);
@@ -26,7 +29,7 @@ public slots:
 
 signals:
     void setUserId(long);
-    void setUserInfo(QList<QStringList>);
+//    void returnSelQuery(QList<QStringList>);
 
 protected:
     EDBconnection();

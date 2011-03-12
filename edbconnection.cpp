@@ -57,7 +57,7 @@ EDBconnection::EDBconnection()
 EDBconnection::~EDBconnection()
 {
     db.close();
-    qDebug("close DB");
+    qDebug("close connection to database");
 }
 
 //void EDBconnection::destroyInstance()
@@ -68,9 +68,10 @@ EDBconnection::~EDBconnection()
 void EDBconnection::executeSqlQuery(const QString query) const
 {
     QSqlQuery sqlQuery(query, db);
+    if (!sqlQuery.isActive()) qDebug()<<"[executeSqlQuery]\nerror :"<<sqlQuery.lastError().text();
 }
 
-void EDBconnection::executeSelQuery(const QString query)
+QList<QStringList> EDBconnection::executeSelQuery(const QString query) const
 {
     QList<QStringList> List;
     QStringList fieldName;
@@ -79,7 +80,7 @@ void EDBconnection::executeSelQuery(const QString query)
     for( int i=0; i<rec.count(); ++i )
         fieldName << rec.fieldName( i );
 
-    foreach( QString str, fieldName ){
+    foreach( QString str, fieldName ) {
         QStringList tmpList;
         while( sqlQuery.next() ){
             tmpList << sqlQuery.value(rec.indexOf( str )).toString();
@@ -87,8 +88,13 @@ void EDBconnection::executeSelQuery(const QString query)
         sqlQuery.seek(-1);  // since next at end - start at top again for next pass
         List << tmpList;
     }
-    qDebug()<<List;
-    emit setUserInfo(List);
+    if (!sqlQuery.isActive()) {
+        qDebug()<<"[executeSelQuery]\nerror :"<<sqlQuery.lastError().text();
+    } else {
+        qDebug()<<"[executeSelQuery]\nsqlQuery\t:"<<query<<"\nreturn\t:"<<List;
+//        emit returnSelQuery(List);
+    }
+    return List;
 }
 
 void EDBconnection::checkUser(QString login, QString pwd)
@@ -178,8 +184,6 @@ void EDBconnection::newAuthor(QString login,
     if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
 
 //    query.exec("COMMIT;"); if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
-
-
 }
 
 void EDBconnection::newClient(QString login,

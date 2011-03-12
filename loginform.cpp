@@ -23,6 +23,9 @@ LoginForm::LoginForm(QDialog *parent) : QDialog(parent), ui(new Ui::LoginForm)
 
     ui->distanceEdit->setValidator(new QIntValidator(this));
 
+    QObject::connect(this, SIGNAL(checkUser(QString, QString)), EDBconnection::getInstance(), SLOT(checkUser(QString, QString)));
+    QObject::connect(EDBconnection::getInstance(), SIGNAL(setUserId(long)), this, SLOT(setUserId(long)));
+
     QObject::connect(this,
                      SIGNAL(newAuthor(QString,QString,QString,QString,QDate,QString,QString,QString,QString)),
                      EDBconnection::getInstance(),

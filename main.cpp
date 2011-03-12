@@ -23,8 +23,6 @@ int main(int argc, char *argv[])
     LoginForm login;
     MainWindow w;
 
-    QObject::connect(&login, SIGNAL(checkUser(QString, QString)), m_db, SLOT(checkUser(QString, QString)));
-    QObject::connect(m_db,   SIGNAL(setUserId(long)), &login, SLOT(setUserId(long)));
     QObject::connect(&login, SIGNAL(loginning(long)), &w, SLOT(startP(long)));
 
     login.show();

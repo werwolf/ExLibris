@@ -2,20 +2,47 @@
 #include "edbconnection.h"
 #include <QDebug>
 
+EUser::EUser(const EUser& rhs) : QObject()
+{
+    operator =(rhs);
+}
+
+EUser& EUser::operator=( const EUser& rhs)
+{
+    if (this == &rhs) return *this;
+    id = rhs.id;
+    login = rhs.login;
+    lasname  = rhs.lasname;
+    name = rhs.name;
+    address = rhs.address;
+    phone = rhs.phone;
+    email = rhs.email;
+    type = rhs.type;
+//    qDebug()<<login;
+    return *this;
+}
+
 EUser::EUser(long user_id)
 {
+//  QString query("SELECT id, login. password, lastname, name, address, phone, email, type FROM users WHERE id='%1'").arg(user_id);
     QString query = QString("SELECT * FROM users WHERE id='%1'").arg(user_id);
-//    QString query("SELECT * FROM users");
+    QList<QStringList> List = EDBconnection::getInstance()->executeSelQuery(query);
 
-    connect(this, SIGNAL(selectUser(QString)), EDBconnection::getInstance(), SLOT(executeSelQuery(QString)));
-    connect(EDBconnection::getInstance(), SIGNAL(setUserInfo(QList<QStringList>)), this, SLOT(setUserInfo(QList<QStringList>)));
-
-    emit selectUser(query);
+    if (List.isEmpty()) {
+        qDebug("EUser constructor error: List is empty");
+    } else {
+        setUserInfo(List);
+    }
 }
 
 EUser::EUser(QString _login)
 {
     Q_UNUSED(_login);
+    qDebug(":TODO");
+}
+
+EUser::~EUser() {
+    qDebug("EUser destructor");
 }
 
 void EUser::setUserInfo(QList<QStringList> List)
@@ -41,5 +68,5 @@ void EUser::setUserInfo(QList<QStringList> List)
 
     qDebug()<<"\nid : "<<id<<"\nlogin : "<<login/*<<"\npassword : "<<password*/<<"\nlastname : "<<lasname<<"\nname : "<<name;
     qDebug()<<"address : "<<address<<"\nphone : "<<phone<<"\nemail : "<<email<<"\ntype : "<<str_type/*<<"\nregdate : "<<regdate*/;
-    qDebug()<<"\ntype #"<<type<<"\n";
+    qDebug("type #%d\n",type);
 }

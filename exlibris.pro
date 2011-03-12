@@ -15,7 +15,7 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     loginform.cpp \
     euser.cpp \
-#    eclient.cpp \
+    eclient.cpp \
 #    esupplier.cpp \
 #    eauthor.cpp \
     edbconnection.cpp
@@ -23,7 +23,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     loginform.h \
     euser.h \
-#    eclient.h \
+    eclient.h \
 #    esupplier.h \
 #    eauthor.h \
     edbconnection.h
