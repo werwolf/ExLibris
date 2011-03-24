@@ -23,3 +23,6 @@
 
 # make files
 Makefile
+
+# MySQL WorkBanch backup files
+*.mwb.bak

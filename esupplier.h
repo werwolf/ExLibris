@@ -2,11 +2,29 @@
 #define ESUPPLIER_H
 
 #include "euser.h"
+#include <QWidget>
+#include <QTreeWidgetItem>
 
-class ESupplier : public EUser
+namespace Ui {
+    class ESupplier;
+}
+
+class ESupplier : public EUser, public QWidget
 {
+    Q_OBJECT
+
 public:
-    ESupplier();
+    explicit ESupplier(QWidget *parent = 0);
+    ~ESupplier();
+
+private:
+    Ui::ESupplier *ui;
+
+//    QList<QTreeWidgetItem *> type_items;
+//    QList<QTreeWidgetItem *> items;
+
+    // methods
+    bool readData(void);
 };
 
 #endif // ESUPPLIER_H

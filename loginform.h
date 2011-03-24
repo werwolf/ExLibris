@@ -22,6 +22,8 @@ private:
     UserT usertype;
     long user_id;
     QValidator *phone_validator;
+    QValidator *username_validator;
+    QValidator *password_validator;
 
     // styles
     QString imp_field;

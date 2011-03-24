@@ -3,6 +3,8 @@
 #include "loginform.h"
 #include "edbconnection.h"
 
+#include "esupplier.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -26,6 +28,9 @@ int main(int argc, char *argv[])
     QObject::connect(&login, SIGNAL(loginning(long)), &w, SLOT(startP(long)));
 
     login.show();
+
+//    ESupplier supplier;
+//    supplier.show();
 
     int r_code = a.exec();
     delete m_db;

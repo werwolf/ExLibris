@@ -1,6 +1,7 @@
 #include "edbconnection.h"
 #include <QSettings>
 #include <QSqlQuery>
+#include <QSqlDriver>
 #include <QSqlRecord>
 #include <QSqlError>
 #include <QRegExp>
@@ -52,6 +53,11 @@ EDBconnection::EDBconnection()
     }
 
     qDebug("connected to database \n");
+
+//    QSqlDriver *driver = QSqlDatabase::database().driver();
+//    if (driver->hasFeature(QSqlDriver::Transactions)) qDebug("transaction is ok."); else qDebug("transaction is bad.");
+///    executeSqlQuery("SET AUTOCOMMIT=0;");
+//    executeSqlQuery("COMMIT;");
 }
 
 EDBconnection::~EDBconnection()
@@ -173,16 +179,18 @@ void EDBconnection::newAuthor(QString login,
 
     // :TODO make transaction
 //    query.exec("START TRANSACTION;"); if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
+    QSqlDatabase::database().transaction();
 
     newUser(login, password, lastname, name, address, phone, email,"AUTHOR");
 
-    query.prepare("INSERT INTO authors (id, user_id, dob, sex) VALUES (NULL, LAST_INSERT_ID(), ?, ?)");
+    query.prepare("INSERT INTO authors (id, user_id, dob, sex) VALUES (NULL, LAST_INSERT_ID(), ?', ?)");
     query.bindValue(0, birth_date);
     query.bindValue(1, sex);
     query.exec();
     // if error
     if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
 
+    QSqlDatabase::database().commit();
 //    query.exec("COMMIT;"); if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
 }
 

@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     eclient.cpp \
 #    esupplier.cpp \
 #    eauthor.cpp \
-    edbconnection.cpp
+    edbconnection.cpp \
+    esupplier.cpp
 
 HEADERS  += mainwindow.h \
     loginform.h \
@@ -26,10 +27,12 @@ HEADERS  += mainwindow.h \
     eclient.h \
 #    esupplier.h \
 #    eauthor.h \
-    edbconnection.h
+    edbconnection.h \
+    esupplier.h
 
 FORMS    += mainwindow.ui \
-    loginform.ui
+    loginform.ui \
+    esupplier.ui
 
 RESOURCES += \
     exlibris.qrc

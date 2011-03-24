@@ -21,6 +21,17 @@ LoginForm::LoginForm(QDialog *parent) : QDialog(parent), ui(new Ui::LoginForm)
     QValidator *phone_validator = new QRegExpValidator(regexPhone, 0);
     ui->phoneEdit->setValidator(phone_validator);
 
+    // validate username
+    QRegExp regexVal("^[\\w_]{6,18}$");
+    QValidator *username_validator = new QRegExpValidator(regexVal, 0);
+    ui->regLoginEdit->setValidator(username_validator);
+
+    // validate username and password
+    QValidator *password_validator = new QRegExpValidator(regexVal, 0);
+    ui->regPwdEdit->setValidator(password_validator);
+
+    ui->lastnameEdit->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z]{3,12}$"), 0));
+    ui->nameEdit->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z]{3,12}$"), 0));
     ui->distanceEdit->setValidator(new QIntValidator(this));
 
     QObject::connect(this, SIGNAL(checkUser(QString, QString)), EDBconnection::getInstance(), SLOT(checkUser(QString, QString)));
@@ -46,6 +57,9 @@ LoginForm::LoginForm(QDialog *parent) : QDialog(parent), ui(new Ui::LoginForm)
 LoginForm::~LoginForm()
 {
     delete ui;
+//    delete username_validator;
+    delete password_validator;
+//    delete phone_validator;
 }
 
 void LoginForm::loadStyleSheets(void)
@@ -71,7 +85,7 @@ void LoginForm::on_typeCBox_currentIndexChanged(int index)
 {
     bool info_grp = false;             // AUTHOR   : sex & birthday form
     bool dist_grp = false;             // SUPPLIER : distance form
-    bool comp_grp = false;             // CLIENT || SUPPLIER : company name form
+    bool comp_grp = false;          // CLIENT || SUPPLIER : company name form
 
     switch(index) {
     case 0:
@@ -219,7 +233,10 @@ int LoginForm::on_registrationButton_clicked()
 
     //
     if (!ui->emailEdit->text().isEmpty()) {
-        QRegExp regexEmail("^[^_\\.][a-z0-9_]+[\\.]?[a-z0-9_]+[^_\\.]@{1}[a-z0-9]+[\\.]{1}(([a-z]{2,4})|([a-z]{2,4}[\\.]{1}[a-z]{2,3}))$" );
+//        QRegExp regexEmail("^[^_\\.][a-z0-9_]+[\\.]?[a-z0-9_]+[^_\\.]@{1}[a-z0-9]+[\\.]{1}(([a-z]{2,4})|([a-z]{2,4}[\\.]{1}[a-z]{2,3}))$" );
+        QRegExp regexEmail("^[-a-z0-9!#$%&'*+/=?^_`{|}~]+"
+                           "(?:\\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*@(?:[a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\\.)*"
+                           "(?:aero|arpa|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])$");
         QRegExpValidator validator(regexEmail, 0);
 
         int pos = 0;
