@@ -2,7 +2,7 @@
 #include "edbconnection.h"
 #include <QDebug>
 
-EUser::EUser(const EUser& rhs) : QObject()
+EUser::EUser(const EUser& rhs)// : QObject()
 {
     operator =(rhs);
 }
@@ -28,7 +28,7 @@ EUser::EUser(long user_id)
     QString query = QString("SELECT * FROM users WHERE id='%1'").arg(user_id);
     QList<QStringList> List = EDBconnection::getInstance()->executeSelQuery(query);
 
-    if (List.isEmpty()) {
+    if (List.isEmpty()/* || List[0].isEmpty()*/) {
         qDebug("EUser constructor error: List is empty");
     } else {
         setUserInfo(List);

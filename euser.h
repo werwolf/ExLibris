@@ -3,9 +3,9 @@
 
 #include <QtCore>
 
-class EUser : public QObject
+class EUser// : public QObject
 {
-    Q_OBJECT
+//    Q_OBJECT
 
 public:
     enum UserType {CLIENT, AUTHOR, SUPPLIER, OPERATOR, CEO, ADMIN};
@@ -28,7 +28,7 @@ public:
 //signals:
 //    void selectUser(QString);
 
-public slots:
+//public slots:
     void setUserInfo(QList<QStringList>);
 
 //protected:

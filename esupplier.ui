@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>601</width>
-    <height>323</height>
+    <width>678</width>
+    <height>266</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
       <bool>false</bool>
      </attribute>
      <attribute name="headerDefaultSectionSize">
-      <number>100</number>
+      <number>150</number>
      </attribute>
      <attribute name="headerShowSortIndicator" stdset="0">
       <bool>false</bool>
@@ -216,7 +216,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="delete_btn">
          <property name="enabled">
           <bool>false</bool>
          </property>
@@ -242,9 +242,9 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="update_add_btn">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>Добавить</string>

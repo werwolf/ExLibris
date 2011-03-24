@@ -27,10 +27,11 @@ int main(int argc, char *argv[])
 
     QObject::connect(&login, SIGNAL(loginning(long)), &w, SLOT(startP(long)));
 
-    login.show();
+//    login.show();
 
-//    ESupplier supplier;
-//    supplier.show();
+    EUser user(19);
+    ESupplier supplier(user);
+    supplier.show();
 
     int r_code = a.exec();
     delete m_db;

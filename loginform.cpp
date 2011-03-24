@@ -58,7 +58,7 @@ LoginForm::~LoginForm()
 {
     delete ui;
 //    delete username_validator;
-    delete password_validator;
+//    delete password_validator;
 //    delete phone_validator;
 }
 
