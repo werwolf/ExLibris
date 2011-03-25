@@ -13,7 +13,7 @@ public:
 //    static void destroyInstance();
     ~EDBconnection();
 
-    void executeSqlQuery(const QString) const;
+    bool executeSqlQuery(const QString) const;
     QList<QStringList> executeSelQuery(const QString) const;
 
 public slots:

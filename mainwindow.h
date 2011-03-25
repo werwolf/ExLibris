@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtSql>
+#include "esupplier.h"
 
 namespace Ui {
     class MainWindow;
@@ -18,6 +19,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    ESupplier *supplier;
 
 public slots:
     void startP(long user_id);

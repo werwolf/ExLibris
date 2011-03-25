@@ -3,17 +3,20 @@
 
 #include "euser.h"
 #include "eclient.h"
+//#include "esupplier.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    supplier = 0;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete supplier;
 }
 
 void MainWindow::startP(long user_id)
@@ -28,7 +31,10 @@ void MainWindow::startP(long user_id)
 
         qDebug()<<">> AUTHOR"/*<<client.getName()*/<<"has been connected.";
     } else if (user.getType() == EUser::SUPPLIER) {
-
+        supplier = new ESupplier(user);
+        this->setCentralWidget(supplier->window());
+        this->setWindowTitle(QString("Supplier : \"%1\"").arg(supplier->getName()));
+        this->resize(680, 270);
         qDebug()<<">> SUPPLIER"/*<<client.getName()*/<<"has been connected.";
     } else if (user.getType() == EUser::CEO) {
 

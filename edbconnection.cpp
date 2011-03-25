@@ -56,7 +56,7 @@ EDBconnection::EDBconnection()
 
 //    QSqlDriver *driver = QSqlDatabase::database().driver();
 //    if (driver->hasFeature(QSqlDriver::Transactions)) qDebug("transaction is ok."); else qDebug("transaction is bad.");
-///    executeSqlQuery("SET AUTOCOMMIT=0;");
+//    executeSqlQuery("SET AUTOCOMMIT=0;");
 //    executeSqlQuery("COMMIT;");
 }
 
@@ -71,10 +71,16 @@ EDBconnection::~EDBconnection()
 //    if (pinstance) delete pinstance;
 //}
 
-void EDBconnection::executeSqlQuery(const QString query) const
+bool EDBconnection::executeSqlQuery(const QString query) const
 {
+    qDebug()<<"[executeSqlQuery]\nsqlQuery\t:"<<query;
     QSqlQuery sqlQuery(query, db);
-    if (!sqlQuery.isActive()) qDebug()<<"[executeSqlQuery]\nerror :"<<sqlQuery.lastError().text();
+
+    if (!sqlQuery.isActive()) {
+        qDebug()<<"error :"<<sqlQuery.lastError().text();
+        return false;
+    }
+    return true;
 }
 
 QList<QStringList> EDBconnection::executeSelQuery(const QString query) const
@@ -183,7 +189,7 @@ void EDBconnection::newAuthor(QString login,
 
     newUser(login, password, lastname, name, address, phone, email,"AUTHOR");
 
-    query.prepare("INSERT INTO authors (id, user_id, dob, sex) VALUES (NULL, LAST_INSERT_ID(), ?', ?)");
+    query.prepare("INSERT INTO authors (id, user_id, dob, sex) VALUES (NULL, LAST_INSERT_ID(), ?, ?)");
     query.bindValue(0, birth_date);
     query.bindValue(1, sex);
     query.exec();

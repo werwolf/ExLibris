@@ -27,7 +27,8 @@ private:
     Ui::ESupplier *ui;
 
     QString companyName;
-    long distnce;
+    long distance;
+    long id;
 
     QList<QTreeWidgetItem *>* type_items;
     QList<QTreeWidgetItem *>* items;
