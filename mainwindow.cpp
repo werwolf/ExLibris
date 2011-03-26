@@ -11,12 +11,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     supplier = 0;
+    client = 0;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
     delete supplier;
+    delete client;
 }
 
 void MainWindow::startP(long user_id)
@@ -25,8 +27,11 @@ void MainWindow::startP(long user_id)
     qDebug()<<">> User"<<user.getName()<<"has been connected.";
 
     if (user.getType() == EUser::CLIENT) {
-        EClient client(user);
-        qDebug()<<">> CLIENT"<<client.getName()<<"has been connected.";
+        client = new EClient(user);
+        this->setCentralWidget(client->window());
+        this->setWindowTitle(QString("Client : \"%1\"").arg(client->getName()));
+        this->resize(500, 300);
+        qDebug()<<">> CLIENT"<<client->getName()<<"has been connected.";
     } else if (user.getType() == EUser::AUTHOR) {
 
         qDebug()<<">> AUTHOR"/*<<client.getName()*/<<"has been connected.";

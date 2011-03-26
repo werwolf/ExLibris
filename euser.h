@@ -3,10 +3,8 @@
 
 #include <QtCore>
 
-class EUser// : public QObject
+class EUser
 {
-//    Q_OBJECT
-
 public:
     enum UserType {CLIENT, AUTHOR, SUPPLIER, OPERATOR, CEO, ADMIN};
 
@@ -24,9 +22,6 @@ public:
     QString getPhone (void) const { return phone; };
     QString getEmail (void) const { return email; };
     UserType getType(void ) const { return type; };
-
-//signals:
-//    void selectUser(QString);
 
 //public slots:
     void setUserInfo(QList<QStringList>);

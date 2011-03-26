@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtSql>
 #include "esupplier.h"
+#include "eclient.h"
 
 namespace Ui {
     class MainWindow;
@@ -21,6 +22,7 @@ private:
     Ui::MainWindow *ui;
 
     ESupplier *supplier;
+    EClient *client;
 
 public slots:
     void startP(long user_id);

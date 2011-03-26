@@ -1,23 +1,29 @@
 #ifndef ECLIENT_H
 #define ECLIENT_H
 
+#include <QWidget>
 #include "euser.h"
+#include "ui_eclient.h"
 
-class EClient : public EUser
+namespace Ui {
+    class EClient;
+}
+
+class EClient :  public QWidget, public EUser
 {
-public:
-//    EClient();
-    explicit EClient(long _id);
-    explicit EClient(EUser& );
-//    ~EClient;
+    Q_OBJECT
 
-//signals:
-//    void selectClient(QString);
+public:
+//    explicit EClient(long _id, QWidget *parent = 0);
+    explicit EClient(EUser& user, QWidget *parent = 0);
+    virtual ~EClient();
 
 public slots:
-    void setClientInfo(QList<QStringList>);
+//    void setClientInfo(QList<QStringList>);
 
 private:
+    Ui::EClient *ui;
+
     QString companyName;
 };
 

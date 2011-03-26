@@ -1,13 +1,20 @@
 #include "eclient.h"
 #include "edbconnection.h"
 
-EClient::EClient(long _id) : EUser(_id)
-{
-    qDebug(":TODO");
-    qDebug(": EClient >> Client [id]");
-}
+//EClient::EClient(long _id, QWidget *parent) :
+//  QWidget(parent),
+//  EUser(_id),
+//  ui(new Ui::EClientForm)
+//{
+//    qDebug(":TODO make EClient(long _id) constructor");
+//    qDebug(": EClient >> Client [id]");
+//    ui->setupUi(this);
+//}
 
-EClient::EClient(EUser& user) : EUser(user)
+EClient::EClient(EUser& user, QWidget *parent) :
+    QWidget(parent),
+    EUser(user),
+    ui(new Ui::EClient)
 {
     qDebug(": EClient >> Client [EUser]");
 
@@ -19,10 +26,13 @@ EClient::EClient(EUser& user) : EUser(user)
     } else {
         companyName = List[0].at(0);
         qDebug()<<"company name :"<<companyName;
+
+        ui->setupUi(this);
     }
 }
 
-//virtual EClient::~EClient()
-//{
-//    qDebug("EClient destructor");
-//}
+EClient::~EClient()
+{
+    qDebug("EClient destructor");
+    delete ui;
+}

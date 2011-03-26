@@ -3,7 +3,7 @@
 #include "loginform.h"
 #include "edbconnection.h"
 
-#include "esupplier.h"
+//#include "esupplier.h"
 
 int main(int argc, char *argv[])
 {
