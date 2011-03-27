@@ -35,3 +35,5 @@ FORMS    += mainwindow.ui \
 
 RESOURCES += \
     exlibris.qrc
+
+RC_FILE = exlibris.rc

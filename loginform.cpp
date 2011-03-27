@@ -14,9 +14,6 @@ LoginForm::LoginForm(QDialog *parent) : QDialog(parent), ui(new Ui::LoginForm)
     ui->loginEdit->setFocus();
 
     // i.e. "+46(0)31-445566"
-    // QRegExp regexPhone("^\\+\\d{1,2}\\([089]\\)\\d{2,5}\\-\\d+$");
-
-    // my: "+38 (ddd) ddd dd dd"
     QRegExp regexPhone("^(?!:\\A|\\s)(?!(\\d{1,6}\\s+\\D)|((\\d{1,2}\\s+){2,2}))(((\\+\\d{1,3})|(\\(\\+\\d{1,3}\\)))\\s*)?((\\d{1,6})|(\\(\\d{1,6}\\)))\\/?(([ -.]?)\\d{1,5}){1,5}((\\s*(#|x|(ext))\\.?\\s*)\\d{1,5})?(?!:(\\Z|\\w|\\b\\s))$");
     QValidator *phone_validator = new QRegExpValidator(regexPhone, 0);
     ui->phoneEdit->setValidator(phone_validator);
