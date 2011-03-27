@@ -24,7 +24,6 @@ EUser& EUser::operator=( const EUser& rhs)
 
 EUser::EUser(long user_id)
 {
-//  QString query("SELECT id, login. password, lastname, name, address, phone, email, type FROM users WHERE id='%1'").arg(user_id);
     QString query = QString("SELECT * FROM users WHERE id='%1'").arg(user_id);
     QList<QStringList> List = EDBconnection::getInstance()->executeSelQuery(query);
 

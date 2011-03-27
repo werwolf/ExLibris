@@ -56,8 +56,9 @@ EDBconnection::EDBconnection()
 
 //    QSqlDriver *driver = QSqlDatabase::database().driver();
 //    if (driver->hasFeature(QSqlDriver::Transactions)) qDebug("transaction is ok."); else qDebug("transaction is bad.");
-//    executeSqlQuery("SET AUTOCOMMIT=0;");
-//    executeSqlQuery("COMMIT;");
+    executeSqlQuery("SET NAMES 'utf8';");
+    executeSqlQuery("SET character_set_results = 'utf8';");
+    executeSqlQuery("SET AUTOCOMMIT = 0;");
 }
 
 EDBconnection::~EDBconnection()
@@ -118,6 +119,7 @@ void EDBconnection::checkUser(QString login, QString pwd)
     if (pwd != "ANY") {
         pwd.remove(QRegExp("['\"]"));
         qDebug("> login: %s\n> password: %s",qPrintable(login), qPrintable(pwd));
+        // need smth like this: "SELECT id FROM users WHERE MD5(CONCAT(login, password)) = '"+ md5(login.pwd) +"'"
         query = "SELECT id FROM users WHERE login='"+login+"' AND password=MD5('"+pwd+"')";
     }  else {
         qDebug("> login: %s",qPrintable(login));
