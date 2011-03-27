@@ -1,5 +1,4 @@
 #include "eclient.h"
-#include "edbconnection.h"
 
 //EClient::EClient(long _id, QWidget *parent) :
 //  QWidget(parent),
@@ -16,10 +15,12 @@ EClient::EClient(EUser& user, QWidget *parent) :
     EUser(user),
     ui(new Ui::EClient)
 {
+    db = EDBconnection::getInstance();
     qDebug(": EClient >> Client [EUser]");
 
-    QString query = QString("SELECT company_name FROM clients WHERE user_id='%1'").arg(user.getID());
-    QList<QStringList> List = EDBconnection::getInstance()->executeSelQuery(query);
+    QString query = QString("SELECT company_name FROM clients WHERE user_id='%1'")
+                    .arg(db->escape(QString::number( user.getID() )));  // ono takoe nado? :)
+    QList<QStringList> List = db->get(query);
 
     if (List.isEmpty()) {
         qDebug("EClient constructor error: List is empty");

@@ -13,12 +13,13 @@ public:
 //    static void destroyInstance();
     ~EDBconnection();
 
-    bool executeSqlQuery(const QString) const;
-    QList<QStringList> executeSelQuery(const QString) const;
+    QString escape(const QString q) const;
+    bool query(const QString) const;
+    QList<QStringList> get(const QString) const;
 
 public slots:
-//    void executeSqlQuery(const QString) const;
-//    void executeSelQuery(const QString);// const;
+//    void query(const QString) const;
+//    void select(const QString);// const;
     void checkUser(QString login, QString pwd = "ANY");
 
 //  newUser(login, pass, lastname, name, address, phone, email type);

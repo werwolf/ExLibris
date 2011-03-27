@@ -2,6 +2,7 @@
 #define ESUPPLIER_H
 
 #include "euser.h"
+#include "edbconnection.h"
 #include <QWidget>
 #include <QTreeWidgetItem>
 
@@ -26,6 +27,7 @@ private slots:
 private:
     Ui::ESupplier *ui;
 
+    EDBconnection* db;
     QString companyName;
     long distance;
     long id;

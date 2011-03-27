@@ -2,6 +2,7 @@
 #define EUSER_H
 
 #include <QtCore>
+#include "edbconnection.h"
 
 class EUser
 {
@@ -14,14 +15,14 @@ public:
     EUser& operator=( const EUser& );
     virtual  ~EUser();
 
-    long getID(void) const { return id; };
-    QString getLogin (void) const { return login; };
-    QString getLasname (void) const { return lasname; };
-    QString getName (void) const { return name; };
-    QString getAddress (void) const { return address; };
-    QString getPhone (void) const { return phone; };
-    QString getEmail (void) const { return email; };
-    UserType getType(void ) const { return type; };
+    long getID(void) const { return id; }
+    QString getLogin (void) const { return login; }
+    QString getlastname (void) const { return lastname; }
+    QString getName (void) const { return name; }
+    QString getAddress (void) const { return address; }
+    QString getPhone (void) const { return phone; }
+    QString getEmail (void) const { return email; }
+    UserType getType(void ) const { return type; }
 
 //public slots:
     void setUserInfo(QList<QStringList>);
@@ -34,12 +35,13 @@ private:
     long    id;
     QString login;
 //    QString password;
-    QString lasname;
+    QString lastname;
     QString name;
     QString address;
     QString phone;
     QString email;
     UserType  type;
+    EDBconnection* db;
 //    QDateTime regdate;
 };
 

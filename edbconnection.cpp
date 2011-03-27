@@ -56,15 +56,15 @@ EDBconnection::EDBconnection()
 
 //    QSqlDriver *driver = QSqlDatabase::database().driver();
 //    if (driver->hasFeature(QSqlDriver::Transactions)) qDebug("transaction is ok."); else qDebug("transaction is bad.");
-    executeSqlQuery("SET NAMES 'utf8';");
-    executeSqlQuery("SET character_set_results = 'utf8';");
-    executeSqlQuery("SET AUTOCOMMIT = 0;");
+    query("SET NAMES 'utf8'");
+    query("SET character_set_results = 'utf8'");
+    query("SET AUTOCOMMIT = 0");
 }
 
 EDBconnection::~EDBconnection()
 {
     db.close();
-    qDebug("close connection to database");
+    qDebug("\nclosed connection to database");
 }
 
 //void EDBconnection::destroyInstance()
@@ -72,39 +72,49 @@ EDBconnection::~EDBconnection()
 //    if (pinstance) delete pinstance;
 //}
 
-bool EDBconnection::executeSqlQuery(const QString query) const
+QString EDBconnection::escape(const QString q) const
 {
-    qDebug()<<"[executeSqlQuery]\nsqlQuery\t:"<<query;
+    QString res = q;
+    return res.replace("\\", "\\\\")
+              .replace("\"", "\\\"")
+              .replace("'", "\\'").replace("\n", "\\n")
+              .replace("\r", "\\r")/*.replace("\x00", "\\0")*/
+              .replace("\b", "\\b").replace("\t", "\\t")
+              .replace("\x32", "\\Z")
+              .replace("_", "\\_").replace(("%"), "\\%");
+}
+
+bool EDBconnection::query(const QString query) const
+{
+    qDebug()<<"[query]\t:"<<query;
     QSqlQuery sqlQuery(query, db);
 
     if (!sqlQuery.isActive()) {
-        qDebug()<<"error :"<<sqlQuery.lastError().text();
+        qDebug()<<"ERROR\t:"<<sqlQuery.lastError().text();
         return false;
     }
     return true;
 }
 
-QList<QStringList> EDBconnection::executeSelQuery(const QString query) const
+QList<QStringList> EDBconnection::get(const QString query) const
 {
     QList<QStringList> List;
-    QStringList fieldName;
     QSqlQuery sqlQuery(query,db);
     QSqlRecord rec = sqlQuery.record();
-    for( int i=0; i<rec.count(); ++i )
-        fieldName << rec.fieldName( i );
+    QStringList row;
 
-    foreach( QString str, fieldName ) {
-        QStringList tmpList;
-        while( sqlQuery.next() ){
-            tmpList << sqlQuery.value(rec.indexOf( str )).toString();
+    while( sqlQuery.next() ){
+        row.clear();
+        for( int i=0; i < rec.count(); ++i ) {
+            row << sqlQuery.value(i).toString();
         }
-        sqlQuery.seek(-1);  // since next at end - start at top again for next pass
-        List << tmpList;
+        List << row;
     }
+
     if (!sqlQuery.isActive()) {
-        qDebug()<<"[executeSelQuery]\nerror :"<<sqlQuery.lastError().text();
+        qDebug()<<"[select]\nerror :"<<sqlQuery.lastError().text();
     } else {
-        qDebug()<<"[executeSelQuery]\nsqlQuery\t:"<<query<<"\nreturn\t:"<<List;
+        qDebug()<<"[select]\nsqlQuery\t:"<<query<<"\nreturn\t:"<<List;
 //        emit returnSelQuery(List);
     }
     return List;

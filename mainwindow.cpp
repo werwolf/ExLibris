@@ -29,7 +29,7 @@ void MainWindow::startP(long user_id)
     if (user.getType() == EUser::CLIENT) {
         client = new EClient(user);
         this->setCentralWidget(client->window());
-        this->setWindowTitle(QString("Client : \"%1\"").arg(client->getName()));
+        this->setWindowTitle(QString("Client : \"%1 %2\"").arg(client->getName()).arg(client->getlastname()));
         this->resize(500, 300);
         qDebug()<<">> CLIENT"<<client->getName()<<"has been connected.";
     } else if (user.getType() == EUser::AUTHOR) {

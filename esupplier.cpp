@@ -1,24 +1,23 @@
 #include "esupplier.h"
 #include "ui_esupplier.h"
 
-#include "edbconnection.h"
-
 ESupplier::ESupplier(EUser& user, QWidget *parent) :
     QWidget(parent),
     EUser(user),
     ui(new Ui::ESupplier)
 {
+    db = EDBconnection::getInstance();
     qDebug(": ESupplier >> Supplier [EUser]");
 
     QString query = QString("SELECT id, distance, company_name FROM suppliers WHERE user_id='%1'").arg(user.getID());
-    QList<QStringList> List = EDBconnection::getInstance()->executeSelQuery(query);
+    QList<QStringList> List = db->get(query);
 
     if (List.isEmpty()) {
         qDebug("EClient constructor error: List is empty");
     } else {
         id = List[0].at(0).toLong();
-        distance = List[1].at(0).toLong();
-        companyName = List[2].at(0);
+        distance = List[0].at(1).toLong();
+        companyName = List[0].at(2);
         qDebug()<<"\nid :"<<id<<"\ndistnce :"<<distance<<"\ncompany name :"<<companyName;
 
         ui->setupUi(this);
@@ -44,7 +43,7 @@ bool ESupplier::readData(void)
                             "INNER JOIN resources AS r ON sr.resource_id=r.id INNER JOIN resource_types AS rt ON r.resource_type_id=rt.id " \
                             "WHERE sr.supplier_id='%1' ORDER BY rt.title, r.title").arg(id);
 
-    QList<QStringList> List = EDBconnection::getInstance()->executeSelQuery(query);
+    QList<QStringList> List = db->get(query);
 
     if (type_items->length() > 0) type_items->clear();
     if (items->length() > 0) items->clear();
@@ -53,9 +52,9 @@ bool ESupplier::readData(void)
     type_items->at(0)->setForeground(0, QBrush(QColor(0xFF, 0xAA, 0x00)));
 
     if (!List.isEmpty()) {
-        for (int i=0; i < List.at(0).length(); ++i) {
-            if (i == 0 || QString::compare(List.at(0).at(i), List.at(0).at(i-1), Qt::CaseSensitive) != 0) {
-                type_items->append(new QTreeWidgetItem(ui->treeWidget, QStringList(List[0][i])));
+        for (int i=0; i < List.length(); ++i) {
+            if (i == 0 || QString::compare(List.at(i).at(0), List.at(i-1).at(0), Qt::CaseSensitive) != 0) {
+                type_items->append(new QTreeWidgetItem(ui->treeWidget, QStringList(List[i][0])));
                 type_items->at(type_items->length()-1)->setForeground(0, QBrush(QColor(0x00, 0x2E, 0xB8)));
                 type_items->at(type_items->length()-1)->setBackgroundColor(0, QColor(0xCC, 0xD9, 0xD3, 150));
                 type_items->at(type_items->length()-1)->setBackgroundColor(1, QColor(0xCC, 0xD9, 0xD3, 150));
@@ -63,13 +62,13 @@ bool ESupplier::readData(void)
             }
 
             QStringList tmpList;
-            tmpList<<List[1][i]<<List[2][i]<<List[3][i];
+            tmpList<<List[i][1]<<List[i][2]<<List[i][3];
             QTreeWidgetItem *temp_item = new QTreeWidgetItem(type_items->at(type_items->length() - 1), tmpList);
             items->append(temp_item);
 
             // public slots inherited from QTreeView  --  void QTreeView::expandAll () [slot]
             // Warning: if the model contains a large number of items, this function will take some time to execute.
-            if (List[0].length() < 20) ui->treeWidget->expandAll();
+            if (List.length() < 20) ui->treeWidget->expandAll();
         }
     } else {
         qDebug("List is empty");
@@ -106,10 +105,10 @@ void ESupplier::on_treeWidget_itemClicked(QTreeWidgetItem* item, int column)
             ui->update_add_btn->setText(QString::fromUtf8("Добавить"));
 
             QString query = QString("SELECT title FROM resource_types ORDER BY title");
-            QList<QStringList> List = EDBconnection::getInstance()->executeSelQuery(query);
+            QList<QStringList> List = db->get(query);
 
             ui->res_type_cb->addItem("");
-            for (int i = 0; i < List[0].length(); ++i)  ui->res_type_cb->addItem(List[0].at(i));
+            for (int i = 0; i < List.length(); ++i)  ui->res_type_cb->addItem(List[i].at(0));
 
         } else {
             // resource type selected
@@ -133,7 +132,7 @@ void ESupplier::on_delete_btn_clicked()
    QString query = QString("DELETE FROM suppliers_resources WHERE " \
                           "(resource_id=(SELECT r.id FROM resources AS r JOIN resource_types AS rt WHERE rt.title='%1' AND r.title='%2') " \
                           "AND supplier_id='%3')").arg(res_type).arg(res_name).arg(id);
-    EDBconnection::getInstance()->executeSqlQuery(query);
+    db->query(query);
 
     readData();
 }
@@ -155,18 +154,18 @@ void ESupplier::on_update_add_btn_clicked()
     qDebug("Add new");
     // Insert resource type (UNIQUE)
     QString query = QString("INSERT INTO resource_types(title) VALUES('%1')").arg(res_type);
-    EDBconnection::getInstance()->executeSqlQuery(query);
+    db->query(query);
 
     // Insert resource (UNIQUE)
     query = QString("REPLACE INTO resources(title, resource_type_id) VALUES('%1', "
                     "(SELECT id FROM resource_types WHERE title='%2')) ").arg(res_name).arg(res_type);
-    EDBconnection::getInstance()->executeSqlQuery(query);
+    db->query(query);
 
     // Insert into suppliers_resources
     query = QString("REPLACE INTO suppliers_resources(resource_id, supplier_id, price, number) VALUES("
                     "(SELECT r.id FROM resources AS r JOIN resource_types AS rt WHERE rt.title='%1' AND r.title='%2'), '%3', '%4', '%5') ")
                 .arg(res_type).arg(res_name).arg(id).arg(price).arg(number);
-    EDBconnection::getInstance()->executeSqlQuery(query);
+    db->query(query);
 
     readData();
 }

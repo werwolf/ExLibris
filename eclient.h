@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "euser.h"
+#include "edbconnection.h"
 #include "ui_eclient.h"
 
 namespace Ui {
@@ -24,6 +25,7 @@ public slots:
 private:
     Ui::EClient *ui;
 
+    EDBconnection* db;
     QString companyName;
 };
 
