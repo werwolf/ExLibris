@@ -137,10 +137,12 @@ void ESupplier::on_delete_btn_clicked()
 
     if (res_type.isEmpty() || res_name.isEmpty()) return;
 
-   QString query = QString("DELETE FROM suppliers_resources WHERE " \
-                          "(resource_id=(SELECT r.id FROM resources AS r JOIN resource_types AS rt WHERE rt.title='%1' AND r.title='%2') " \
-                          "AND supplier_id='%3')").arg(res_type).arg(res_name).arg(id);
+    QString query = QString("DELETE FROM suppliers_resources WHERE resource_id='%1' AND supplier_id='%2'")
+                            .arg(ui->treeWidget->currentItem()->text(3)).arg(id);
     db->query(query);
+
+    // select 'add new' item
+//    ui->treeWidget->setCurrentItem(ui->treeWidget->currentItem()->parent());
 
     readData();
 }
@@ -170,27 +172,32 @@ void ESupplier::on_update_add_btn_clicked()
         qDebug("Add new");
 
         // Insert resource type (UNIQUE)
-        QString query = QString("REPLACE resource_types(title) VALUES('%1')").arg(res_type);
+        QString query = QString("INSERT INTO `resource_types` VALUES(NULL, '%1')").arg(res_type);
         int res_type_id = db->insert(query);
-        qDebug()<<res_type_id;
-//        readData();
-        if (res_type_id == -1) return;
-        return;
+
+        if (res_type_id == -1) {
+            // this resource type already exists
+            query = QString("SELECT id FROM `resource_types` WHERE title = '%1'").arg(res_type);
+            res_type_id = db->get(query)[0].at(0).toInt();
+        }
+        qDebug()<<"res_type_id :"<<res_type_id;
 
         // Insert resource (UNIQUE)
         query = QString("INSERT INTO resources(title, resource_type_id) VALUES('%1', '%2') ").arg(res_name).arg(res_type_id);
         int res_id = db->insert(query);
 
         if (res_id == -1) {
-            // ERROR !!!
+            // ERROR message
             return;
         }
 
         // Insert into suppliers_resources
-        query = QString("INSERT INTO suppliers_resources(resource_id, supplier_id, price, number) VALUES("
-                        "(SELECT r.id FROM resources AS r JOIN resource_types AS rt WHERE rt.title='%1' AND r.title='%2'), '%3', '%4', '%5') ")
-                .arg(res_type).arg(res_name).arg(id).arg(price).arg(number);
-        db->insert(query);
+        query = QString("INSERT INTO suppliers_resources (resource_id, supplier_id, price, number) VALUES('%1', '%2', '%3', '%4') ")
+                .arg(res_id).arg(id).arg(price).arg(number);
+        if (db->insert(query) == -1) {
+            // ERROR message
+            return;
+        }
     }
 
     readData();

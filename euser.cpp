@@ -9,7 +9,7 @@ EUser::EUser(const EUser& rhs)// : QObject()
 EUser& EUser::operator=( const EUser& rhs)
 {
     if (this == &rhs) return *this;
-    id = rhs.id;
+    user_id = rhs.user_id;
     login = rhs.login;
     lastname  = rhs.lastname;
     name = rhs.name;
@@ -21,12 +21,12 @@ EUser& EUser::operator=( const EUser& rhs)
     return *this;
 }
 
-EUser::EUser(long user_id)
+EUser::EUser(long _id)
 {
     db = EDBconnection::getInstance();
     QString query = QString("SELECT " \
                             "id, login, password, lastname, name, address, phone, email, type, reg_date " \
-                            "FROM users WHERE id='%1'").arg(user_id);
+                            "FROM users WHERE id='%1'").arg(_id);
     QList<QStringList> List = db->get(query);
 
     if (List.isEmpty()/* || List[0].isEmpty()*/) {
@@ -48,7 +48,7 @@ EUser::~EUser() {
 
 void EUser::setUserInfo(QList<QStringList> info)
 {
-    id = info[0].at(0).toLong();
+    user_id = info[0].at(0).toLong();
     login = info[0].at(1);
 //    password = info[0].at(2);
     lastname  = info[0].at(3);
@@ -67,7 +67,7 @@ void EUser::setUserInfo(QList<QStringList> info)
 
 //    regdate = QDateTime::fromString(info[0].at(9), "yyyy-MM-ddTHH:mm:ss");
 
-    qDebug()<<"\nid : "<<id<<"\nlogin : "<<login/*<<"\npassword : "<<password*/<<"\nlastname : "<<lastname<<"\nname : "<<name;
+    qDebug()<<"\nuser_id : "<<user_id<<"\nlogin : "<<login/*<<"\npassword : "<<password*/<<"\nlastname : "<<lastname<<"\nname : "<<name;
     qDebug()<<"address : "<<address<<"\nphone : "<<phone<<"\nemail : "<<email<<"\ntype : "<<str_type/*<<"\nregdate : "<<regdate*/;
     qDebug("type #%d\n",type);
 }

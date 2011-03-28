@@ -6,22 +6,309 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>550</width>
+    <height>299</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QTreeWidget" name="treeWidget">
-     <column>
-      <property name="text">
-       <string notr="true">1</string>
-      </property>
-     </column>
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
+    <widget class="QTabWidget" name="tabs">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Издания</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>Фильтровать по:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="queryFilter_cbx">
+           <item>
+            <property name="text">
+             <string>названию</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>автору</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>жанру</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>ISBN</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="queryFilter_edt"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="findQueries_bt">
+           <property name="text">
+            <string>применить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="query_tw">
+         <attribute name="horizontalHeaderMinimumSectionSize">
+          <number>20</number>
+         </attribute>
+         <column>
+          <property name="text">
+           <string>*</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Название</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Автор</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Цена (грн.)</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Кол-во</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>ISBN</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2">
+      <attribute name="title">
+       <string>Ресурсы</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>Фильтровать по:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="resourceFilter_cbx">
+           <item>
+            <property name="text">
+             <string>названию</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>типу ресурса</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="resourceFilter_edt"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="findResources_bt">
+           <property name="text">
+            <string>применить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tableWidget">
+         <column>
+          <property name="text">
+           <string>*</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Название</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Доступно (ед.)</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Цена (грн./ед.)</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Кол-во</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3">
+      <attribute name="title">
+       <string>Услуги</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Фильтровать по:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="serviceFilter_cbx">
+           <item>
+            <property name="text">
+             <string>названию</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>описанию</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="serviceFilter_edt"/>
+         </item>
+         <item>
+          <widget class="QPushButton" name="findServices_bt">
+           <property name="text">
+            <string>применить</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QTableWidget" name="tableWidget_3">
+         <column>
+          <property name="text">
+           <string>*</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Название</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Описание</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Стоимость</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <spacer name="horizontalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buy_btn">
+       <property name="text">
+        <string>Купить</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

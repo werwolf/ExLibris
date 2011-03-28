@@ -22,11 +22,24 @@ public:
 public slots:
 //    void setClientInfo(QList<QStringList>);
 
+private slots:
+    void on_findQueries_bt_clicked();
+
+    void on_tabs_currentChanged(int index);
+
+    void on_buy_btn_clicked();
+
 private:
     Ui::EClient *ui;
 
     EDBconnection* db;
+    long id;
     QString companyName;
+
+    // private methods
+    void readQueryData(QString cond = QString("1"));
+    void readResourcesData(QString cond = QString("1"));
+    void readServicesData(QString cond = QString("1"));
 };
 
 #endif // ECLIENT_H
