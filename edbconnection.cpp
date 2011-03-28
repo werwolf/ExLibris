@@ -58,7 +58,7 @@ EDBconnection::EDBconnection()
 //    if (driver->hasFeature(QSqlDriver::Transactions)) qDebug("transaction is ok."); else qDebug("transaction is bad.");
     query("SET NAMES 'utf8'");
     query("SET character_set_results = 'utf8'");
-    query("SET AUTOCOMMIT = 0");
+//    query("SET AUTOCOMMIT = 0");
 }
 
 EDBconnection::~EDBconnection()
@@ -98,6 +98,7 @@ bool EDBconnection::query(const QString query) const
 
 QList<QStringList> EDBconnection::get(const QString query) const
 {
+    qDebug()<<"[get]\t:"<<query;
     QList<QStringList> List;
     QSqlQuery sqlQuery(query,db);
     QSqlRecord rec = sqlQuery.record();
@@ -112,12 +113,24 @@ QList<QStringList> EDBconnection::get(const QString query) const
     }
 
     if (!sqlQuery.isActive()) {
-        qDebug()<<"[select]\nerror :"<<sqlQuery.lastError().text();
+        qDebug()<<"ERROR\t:"<<sqlQuery.lastError().text();
     } else {
-        qDebug()<<"[select]\nsqlQuery\t:"<<query<<"\nreturn\t:"<<List;
+        qDebug()<<"return\t:"<<List;
 //        emit returnSelQuery(List);
     }
     return List;
+}
+
+int EDBconnection::insert(const QString query) const
+{
+    qDebug()<<"[insert]\t:"<<query;
+    QSqlQuery sqlQuery(query, db);
+
+    if (!sqlQuery.isActive()) {
+        qDebug()<<"error :"<<sqlQuery.lastError().text();
+        return -1;
+    }
+    return QVariant(sqlQuery.lastInsertId()).toInt();
 }
 
 void EDBconnection::checkUser(QString login, QString pwd)
@@ -153,104 +166,73 @@ void EDBconnection::checkUser(QString login, QString pwd)
     }
 }
 
-void EDBconnection::newUser(QString login,
-                            QString password,
-                            QString lastname,
-                            QString name,
-                            QString address = "",
-                            QString phone = "",
-                            QString email = "",
-                            QString type = "CLIENT")
+int EDBconnection::newUser(QString login,
+                           QString password,
+                           QString lastname,
+                           QString name,
+                           QString address = "",
+                           QString phone = "",
+                           QString email = "",
+                           QString type = "CLIENT")
 {
     QDateTime regdate = QDateTime::currentDateTime();
     qDebug()<<regdate;
 
-    QSqlQuery sqlQuery(db);
-    sqlQuery.prepare("INSERT INTO users (id, login, password, lastname, name, address, phone, email, type, reg_date)"
-        "VALUES (NULL, ?, MD5(?), ?, ?, ?, ?, ?, ?, ?)");
-    sqlQuery.bindValue(0, login);
-    sqlQuery.bindValue(1, password);
-    sqlQuery.bindValue(2, lastname);
-    sqlQuery.bindValue(3, name);
-    sqlQuery.bindValue(4, address);
-    sqlQuery.bindValue(5, phone);
-    sqlQuery.bindValue(6, email);
-    sqlQuery.bindValue(7, type);
-    sqlQuery.bindValue(8, regdate);
-    sqlQuery.exec();
-
-    // if error
-    if (!sqlQuery.isActive()) qDebug()<<sqlQuery.lastError().text();
+    QString sqlQuery = QString("INSERT INTO users " \
+                               "(login, password, lastname, name, address, phone, email, type, reg_date) " \
+                               "VALUES ('%1', MD5('%2'), '%3', '%4', '%5', '%6', '%7', '%8', '%9')")
+                       .arg(login).arg(password).arg(lastname).arg(name).arg(address)
+                       .arg(phone).arg(email).arg(type).arg(regdate.toString("yyyy-MM-dd HH-m-s"));
+    return insert(sqlQuery);
 }
 
 void EDBconnection::newAuthor(QString login,
-                            QString password,
-                            QString lastname,
-                            QString name,
-                            QDate   birth_date,
-                            QString sex,
-                            QString address = "",
-                            QString phone = "",
-                            QString email = "")
+                              QString password,
+                              QString lastname,
+                              QString name,
+                              QDate   birth_date,
+                              QString sex,
+                              QString address = "",
+                              QString phone = "",
+                              QString email = "")
 {
-    QSqlQuery query(db);
-
     // :TODO make transaction
 //    query.exec("START TRANSACTION;"); if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
-    QSqlDatabase::database().transaction();
+//    QSqlDatabase::database().transaction();
 
-    newUser(login, password, lastname, name, address, phone, email,"AUTHOR");
+    int user_id = newUser(login, password, lastname, name, address, phone, email,"AUTHOR");
+    insert(QString("INSERT INTO authors (user_id, dob, sex) VALUES ('%1', '%2', '%3')")
+           .arg(user_id).arg(birth_date.toString("yyyy-MM-dd")).arg(sex));
 
-    query.prepare("INSERT INTO authors (id, user_id, dob, sex) VALUES (NULL, LAST_INSERT_ID(), ?, ?)");
-    query.bindValue(0, birth_date);
-    query.bindValue(1, sex);
-    query.exec();
-    // if error
-    if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
-
-    QSqlDatabase::database().commit();
+//    QSqlDatabase::database().commit();
 //    query.exec("COMMIT;"); if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
 }
 
 void EDBconnection::newClient(QString login,
-                            QString password,
-                            QString lastname,
-                            QString name,
-                            QString company_name,
-                            QString address = "",
-                            QString phone = "",
-                            QString email = "")
+                              QString password,
+                              QString lastname,
+                              QString name,
+                              QString company_name,
+                              QString address = "",
+                              QString phone = "",
+                              QString email = "")
 {
-    QSqlQuery query(db);
-
-    newUser(login, password, lastname, name, address, phone, email,"CLIENT");
-
-    query.prepare("INSERT INTO clients (id, user_id, company_name) VALUES (NULL, LAST_INSERT_ID(), ?)");
-    query.bindValue(0, company_name);
-    query.exec();
-    // if error
-    if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
-
+    int user_id = newUser(login, password, lastname, name, address, phone, email,"CLIENT");
+    insert(QString("INSERT INTO clients (user_id, company_name) VALUES ('%1', '%2')")
+           .arg(user_id).arg(company_name));
 }
 
 void EDBconnection::newSupplier(QString login,
-                            QString password,
-                            QString lastname,
-                            QString name,
-                            unsigned int dist,
-                            QString company_name,
-                            QString address = "",
-                            QString phone = "",
-                            QString email = "")
+                                QString password,
+                                QString lastname,
+                                QString name,
+                                unsigned int dist,
+                                QString company_name,
+                                QString address = "",
+                                QString phone = "",
+                                QString email = "")
 {
-    QSqlQuery query(db);
-
-    newUser(login, password, lastname, name, address, phone, email,"SUPPLIER");
-
-    query.prepare("INSERT INTO suppliers (id, user_id, distance, company_name) VALUES (NULL, LAST_INSERT_ID(), ?, ?)");
-    query.bindValue(0, dist);
-    query.bindValue(1, company_name);
-    query.exec();
-    // if error
-    if (!query.isActive()) qDebug()<<"error: "<<query.lastError().text();
+    int user_id = newUser(login, password, lastname, name, address, phone, email,"SUPPLIER");
+    insert(QString("INSERT INTO suppliers (user_id, distance, company_name) VALUES ('%1', '%2', '%3')")
+           .arg(user_id).arg(dist).arg(company_name));
 }

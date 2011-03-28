@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     login.show();
 
 //    test supplier
-//    EUser user(19);
+//    EUser user(1);
 //    ESupplier supplier(user);
 //    supplier.show();
 

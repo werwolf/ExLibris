@@ -13,8 +13,9 @@ public:
 //    static void destroyInstance();
     ~EDBconnection();
 
-    QString escape(const QString q) const;
+    QString escape(const QString) const;
     bool query(const QString) const;
+    int insert(const QString) const;
     QList<QStringList> get(const QString) const;
 
 public slots:
@@ -23,7 +24,7 @@ public slots:
     void checkUser(QString login, QString pwd = "ANY");
 
 //  newUser(login, pass, lastname, name, address, phone, email type);
-    void newUser(QString, QString, QString, QString, QString, QString, QString, QString);
+    int newUser(QString, QString, QString, QString, QString, QString, QString, QString);
     void newAuthor(QString, QString, QString, QString, QDate, QString, QString, QString, QString);
     void newClient(QString, QString, QString, QString, QString, QString, QString, QString);
     void newSupplier(QString, QString, QString, QString, unsigned int, QString, QString, QString, QString);

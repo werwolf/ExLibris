@@ -23,6 +23,10 @@ ESupplier::ESupplier(EUser& user, QWidget *parent) :
         ui->setupUi(this);
         type_items = new QList<QTreeWidgetItem *>();
         items = new QList<QTreeWidgetItem *>();
+
+        // hide id column
+        ui->treeWidget->hideColumn(3);
+
         readData();
         on_treeWidget_itemClicked(type_items->at(0), 0);
     }
@@ -31,14 +35,14 @@ ESupplier::ESupplier(EUser& user, QWidget *parent) :
 ESupplier::~ESupplier()
 {
     qDebug("ESupplier destructor.");
-    delete items;
-    delete type_items;
-    delete ui;
+//    delete items;
+//    delete type_items;
+//    delete ui;
 }
 
 bool ESupplier::readData(void)
 {
-    QString query = QString("SELECT rt.title as `type`, r.title as `title`, sr.price as `price`, sr.number as `number` " \
+    QString query = QString("SELECT rt.title as `type`, r.title as `title`, sr.price as `price`, sr.number as `number`, r.id as `id` " \
                             "FROM suppliers_resources AS sr " \
                             "INNER JOIN resources AS r ON sr.resource_id=r.id INNER JOIN resource_types AS rt ON r.resource_type_id=rt.id " \
                             "WHERE sr.supplier_id='%1' ORDER BY rt.title, r.title").arg(id);
@@ -62,7 +66,7 @@ bool ESupplier::readData(void)
             }
 
             QStringList tmpList;
-            tmpList<<List[i][1]<<List[i][2]<<List[i][3];
+            tmpList<<List[i][1]<<List[i][2]<<List[i][3]<<List[i][4];
             QTreeWidgetItem *temp_item = new QTreeWidgetItem(type_items->at(type_items->length() - 1), tmpList);
             items->append(temp_item);
 
@@ -90,6 +94,8 @@ void ESupplier::on_treeWidget_itemClicked(QTreeWidgetItem* item, int column)
         ui->quantity_spb->setValue(item->text(2).toLong());
         ui->update_add_btn->setText(QString::fromUtf8("Изменить"));
         ui->delete_btn->setEnabled(true);
+        ui->res_type_cb->setEnabled(false);
+        ui->res_name_cb->setEnabled(false);
     } else {
         // resource type or 'Add New' selected
         ui->res_name_cb->clear();
@@ -99,6 +105,8 @@ void ESupplier::on_treeWidget_itemClicked(QTreeWidgetItem* item, int column)
         ui->price_dspb->setValue(0.0);
         ui->quantity_spb->setValue(0);
         ui->delete_btn->setEnabled(false);
+        ui->res_type_cb->setEnabled(true);
+        ui->res_name_cb->setEnabled(true);
 
         if (ui->treeWidget->indexOfTopLevelItem(item) == 0) {
             // 'Add New' selected
@@ -150,22 +158,40 @@ void ESupplier::on_update_add_btn_clicked()
 
     if (res_type.isEmpty() || res_name.isEmpty() || price == 0.0 || number == 0) return;
 
-    // 'Add New' selected
-    qDebug("Add new");
-    // Insert resource type (UNIQUE)
-    QString query = QString("INSERT INTO resource_types(title) VALUES('%1')").arg(res_type);
-    db->query(query);
+    if (ui->treeWidget->currentItem()->parent() != 0) {
+        qDebug("Update");
 
-    // Insert resource (UNIQUE)
-    query = QString("REPLACE INTO resources(title, resource_type_id) VALUES('%1', "
-                    "(SELECT id FROM resource_types WHERE title='%2')) ").arg(res_name).arg(res_type);
-    db->query(query);
+        // Update suppliers_resources
+        QString query = QString("UPDATE suppliers_resources SET price = '%1', number = '%2'" \
+                                "WHERE resource_id = '%3' AND supplier_id = '%4' ")
+                                .arg(price).arg(number).arg(ui->treeWidget->currentItem()->text(3)).arg(id);
+        db->query(query);
+    } else if (ui->treeWidget->indexOfTopLevelItem(ui->treeWidget->currentItem()) == 0) {
+        qDebug("Add new");
 
-    // Insert into suppliers_resources
-    query = QString("REPLACE INTO suppliers_resources(resource_id, supplier_id, price, number) VALUES("
-                    "(SELECT r.id FROM resources AS r JOIN resource_types AS rt WHERE rt.title='%1' AND r.title='%2'), '%3', '%4', '%5') ")
+        // Insert resource type (UNIQUE)
+        QString query = QString("REPLACE resource_types(title) VALUES('%1')").arg(res_type);
+        int res_type_id = db->insert(query);
+        qDebug()<<res_type_id;
+//        readData();
+        if (res_type_id == -1) return;
+        return;
+
+        // Insert resource (UNIQUE)
+        query = QString("INSERT INTO resources(title, resource_type_id) VALUES('%1', '%2') ").arg(res_name).arg(res_type_id);
+        int res_id = db->insert(query);
+
+        if (res_id == -1) {
+            // ERROR !!!
+            return;
+        }
+
+        // Insert into suppliers_resources
+        query = QString("INSERT INTO suppliers_resources(resource_id, supplier_id, price, number) VALUES("
+                        "(SELECT r.id FROM resources AS r JOIN resource_types AS rt WHERE rt.title='%1' AND r.title='%2'), '%3', '%4', '%5') ")
                 .arg(res_type).arg(res_name).arg(id).arg(price).arg(number);
-    db->query(query);
+        db->insert(query);
+    }
 
     readData();
 }

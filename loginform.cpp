@@ -27,8 +27,8 @@ LoginForm::LoginForm(QDialog *parent) : QDialog(parent), ui(new Ui::LoginForm)
     QValidator *password_validator = new QRegExpValidator(regexVal, 0);
     ui->regPwdEdit->setValidator(password_validator);
 
-    ui->lastnameEdit->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z\s-']{3,45}$"), 0));
-    ui->nameEdit->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z\s-']{3,45}$"), 0));
+    ui->lastnameEdit->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z\\s-']{3,45}$"), 0));
+    ui->nameEdit->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z\\s-']{3,45}$"), 0));
     ui->distanceEdit->setValidator(new QIntValidator(this));
 
     QObject::connect(this, SIGNAL(checkUser(QString, QString)), EDBconnection::getInstance(), SLOT(checkUser(QString, QString)));

@@ -31,25 +31,31 @@ void MainWindow::startP(long user_id)
         this->setCentralWidget(client->window());
         this->setWindowTitle(QString("Client : \"%1 %2\"").arg(client->getName()).arg(client->getlastname()));
         this->resize(500, 300);
-        qDebug()<<">> CLIENT"<<client->getName()<<"has been connected.";
+        qDebug()<<">> CLIENT has been connected.";
+
     } else if (user.getType() == EUser::AUTHOR) {
 
-        qDebug()<<">> AUTHOR"/*<<client.getName()*/<<"has been connected.";
+        qDebug()<<">> AUTHOR has been connected.";
+
     } else if (user.getType() == EUser::SUPPLIER) {
         supplier = new ESupplier(user);
         this->setCentralWidget(supplier->window());
-        this->setWindowTitle(QString("Supplier : \"%1\"").arg(supplier->getName()));
+        this->setWindowTitle(QString("Supplier : \"%1 %2\"").arg(supplier->getName()).arg(supplier->getlastname()));
         this->resize(680, 270);
-        qDebug()<<">> SUPPLIER"/*<<client.getName()*/<<"has been connected.";
+        qDebug()<<">> SUPPLIER has been connected.";
+
     } else if (user.getType() == EUser::CEO) {
 
-        qDebug()<<">> CEO"/*<<client.getName()*/<<"has been connected.";
+        qDebug()<<">> CEO has been connected.";
+
     } else if (user.getType() == EUser::OPERATOR) {
 
-        qDebug()<<">> OPERATOR"/*<<client.getName()*/<<"has been connected.";
+        qDebug()<<">> OPERATOR has been connected.";
+
     } else if (EUser::ADMIN) {
 
-        qDebug()<<">> ADMIN"/*<<client.getName()*/<<"has been connected.";
+        qDebug()<<">> ADMIN has been connected.";
+
     }
 
     show();

@@ -58,6 +58,11 @@
        <string>Количество</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>id</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>
