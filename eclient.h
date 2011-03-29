@@ -30,6 +30,8 @@ public slots:
 //    void setClientInfo(QList<QStringList>);
 
 private slots:
+    void on_findServices_bt_clicked();
+    void on_findResources_bt_clicked();
     void on_findQueries_bt_clicked();
     void on_tabs_currentChanged(int index);
     void on_buy_btn_clicked();

@@ -148,7 +148,7 @@ void ESupplier::on_delete_btn_clicked()
     res_name.remove(QRegExp("['\"]"));
 
     if (res_type.isEmpty() || res_name.isEmpty()) {
-        QMessageBox::warning(0, "Worning", tr("Необходимо заполнить все поля."));
+        QMessageBox::warning(0, "Warning", tr("Необходимо заполнить все поля."));
         return;
     }
 
@@ -197,7 +197,7 @@ void ESupplier::on_update_add_btn_clicked()
 
         if (res_id == -1) {
             // ERROR message
-            QMessageBox::warning(0, "Worning", tr("Ошибка при добавлении ресурса."));
+            QMessageBox::warning(0, "Warning", tr("Ошибка при добавлении ресурса."));
             return;
         }
 
@@ -206,7 +206,7 @@ void ESupplier::on_update_add_btn_clicked()
                 .arg(res_id).arg(id).arg(price).arg(number);
         if (db->insert(query) == -1) {
             // ERROR message
-            QMessageBox::warning(0, "Worning", tr("Ошибка при занисении данных в БД."));
+            QMessageBox::warning(0, "Warning", tr("Ошибка при занесении данных в БД."));
             return;
         }
     }
@@ -221,7 +221,7 @@ void ESupplier::on_report_btn_clicked()
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         // show ERROR message
-        QMessageBox::warning(0, "Worning", tr("Ошибка.\nНельзя создать (открыть) файл."));
+        QMessageBox::warning(0, "Warning", tr("Ошибка.\nНельзя создать (открыть) файл."));
         return;
     }
 
@@ -258,6 +258,6 @@ void ESupplier::on_report_btn_clicked()
          }
     } else {
          // show ERROR message
-        QMessageBox::warning(0, "Worning", tr("В таблице нету записей."));
+        QMessageBox::warning(0, "Warning", tr("В таблице нет записей."));
      }
 }

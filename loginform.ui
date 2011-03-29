@@ -315,7 +315,7 @@ QLineEdit:hover {
 }</string>
          </property>
          <property name="maxLength">
-          <number>20</number>
+          <number>45</number>
          </property>
         </widget>
        </item>
@@ -348,7 +348,7 @@ QLineEdit:hover {
 }</string>
          </property>
          <property name="maxLength">
-          <number>20</number>
+          <number>45</number>
          </property>
         </widget>
        </item>

@@ -62,7 +62,7 @@ void MainWindow::startP(long user_id)
     } else if (EUser::ADMIN) {
         admin = new EAdmin(user);
         this->setCentralWidget(admin->window());
-        this->setWindowTitle(QString("Client : \"%1 %2\"").arg(admin->getName()).arg(admin->getlastname()));
+        this->setWindowTitle(QString("Admin : \"%1 %2\"").arg(admin->getName()).arg(admin->getlastname()));
 //        this->resize(680, 270);
         qDebug()<<">> ADMIN has been connected.";
     }

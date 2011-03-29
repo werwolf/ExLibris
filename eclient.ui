@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>299</height>
+    <width>602</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabs">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -109,6 +109,14 @@
           <property name="text">
            <string>*</string>
           </property>
+          <property name="textAlignment">
+           <set>AlignHCenter|AlignVCenter|AlignCenter</set>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>ISBN</string>
+          </property>
          </column>
          <column>
           <property name="text">
@@ -128,11 +136,6 @@
          <column>
           <property name="text">
            <string>Кол-во</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>ISBN</string>
           </property>
          </column>
         </widget>
@@ -193,7 +196,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QTableWidget" name="tableWidget">
+        <widget class="QTableWidget" name="resource_tw">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -215,6 +218,16 @@
          <column>
           <property name="text">
            <string>*</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>id</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Тип</string>
           </property>
          </column>
          <column>
@@ -262,11 +275,6 @@
              <string>названию</string>
             </property>
            </item>
-           <item>
-            <property name="text">
-             <string>описанию</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item>
@@ -295,7 +303,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QTableWidget" name="tableWidget_3">
+        <widget class="QTableWidget" name="service_tw">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -321,12 +329,12 @@
          </column>
          <column>
           <property name="text">
-           <string>Название</string>
+           <string>id</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Описание</string>
+           <string>Название</string>
           </property>
          </column>
          <column>
