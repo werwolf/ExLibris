@@ -50,7 +50,6 @@ void EAdmin::on_execute_btn_clicked()
                 html_table += "</table><br/><br/><br/>";
                 ui->result_te->insertHtml(html_table);
             }
-
         }
 
     } else if (QString::compare(query_type, QString("INSERT"), Qt::CaseInsensitive) == 0
@@ -63,13 +62,14 @@ void EAdmin::on_execute_btn_clicked()
 
     } else if (QString::compare(query_type, QString("UPDATE"), Qt::CaseInsensitive) == 0) {
 
-    }  else if (QString::compare(query_type, QString("DELETE"), Qt::CaseInsensitive) == 0) {
-
     } else {
-        // other queries
-
+        // other queries {DELETE, i.e.}
+        QString query = ui->query_tx->toPlainText().trimmed();
+        qDebug()<<"query :"<<query;
+        ui->result_te->append(query);
+        bool error = EDBconnection::getInstance()->query(query);
+        if (error) ui->result_te->append("Error : EDBconnection::query(QString) return false;");
     }
-
 }
 
 void EAdmin::on_backup_btn_clicked()
