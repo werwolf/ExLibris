@@ -141,8 +141,10 @@ void ESupplier::on_delete_btn_clicked()
                             .arg(ui->treeWidget->currentItem()->text(3)).arg(id);
     db->query(query);
 
-    // select 'add new' item
-//    ui->treeWidget->setCurrentItem(ui->treeWidget->currentItem()->parent());
+    // select, click & focus 'add new' item
+    ui->treeWidget->setCurrentItem(ui->treeWidget->topLevelItem(0));
+    on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
+    ui->treeWidget->setFocus();
 
     readData();
 }

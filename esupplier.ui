@@ -31,8 +31,11 @@
      <property name="allColumnsShowFocus">
       <bool>false</bool>
      </property>
-     <attribute name="headerVisible">
+     <property name="headerHidden">
       <bool>false</bool>
+     </property>
+     <attribute name="headerVisible">
+      <bool>true</bool>
      </attribute>
      <attribute name="headerCascadingSectionResizes">
       <bool>false</bool>
