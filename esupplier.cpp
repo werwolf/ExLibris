@@ -1,5 +1,7 @@
 #include "esupplier.h"
 #include "ui_esupplier.h"
+#include <QFileDialog>
+#include <QMessageBox>
 
 ESupplier::ESupplier(EUser& user, QWidget *parent) :
     QWidget(parent),
@@ -9,7 +11,7 @@ ESupplier::ESupplier(EUser& user, QWidget *parent) :
     db = EDBconnection::getInstance();
     qDebug(": ESupplier >> Supplier [EUser]");
 
-    QString query = QString("SELECT id, distance, company_name FROM suppliers WHERE user_id='%1'").arg(user.getID());
+    QString query = QString("SELECT id, distance, company_name FROM suppliers WHERE user_id='%1'").arg(user.getUserID());
     QList<QStringList> List = db->get(query);
 
     if (List.isEmpty()) {
@@ -35,9 +37,9 @@ ESupplier::ESupplier(EUser& user, QWidget *parent) :
 ESupplier::~ESupplier()
 {
     qDebug("ESupplier destructor.");
-//    delete items;
-//    delete type_items;
-//    delete ui;
+    delete items;
+    delete type_items;
+    delete ui;
 }
 
 bool ESupplier::readData(void)
@@ -78,6 +80,12 @@ bool ESupplier::readData(void)
         qDebug("List is empty");
         return false;
     }
+
+    // select, click & focus 'add new' item
+    ui->treeWidget->setCurrentItem(ui->treeWidget->topLevelItem(0));
+    on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
+    ui->treeWidget->setFocus();
+
     return true;
 }
 
@@ -96,6 +104,10 @@ void ESupplier::on_treeWidget_itemClicked(QTreeWidgetItem* item, int column)
         ui->delete_btn->setEnabled(true);
         ui->res_type_cb->setEnabled(false);
         ui->res_name_cb->setEnabled(false);
+//        ui->res_type_cb->addItem(item->parent()->text(0));
+//        ui->res_type_cb->addItem(item->text(0));
+//        ui->res_type_cb->setEditable(false);
+//        ui->res_name_cb->setEditable(false);
     } else {
         // resource type or 'Add New' selected
         ui->res_name_cb->clear();
@@ -135,16 +147,14 @@ void ESupplier::on_delete_btn_clicked()
     res_type.remove(QRegExp("['\"]"));
     res_name.remove(QRegExp("['\"]"));
 
-    if (res_type.isEmpty() || res_name.isEmpty()) return;
+    if (res_type.isEmpty() || res_name.isEmpty()) {
+        QMessageBox::warning(0, "Worning", tr("Необходимо заполнить все поля."));
+        return;
+    }
 
     QString query = QString("DELETE FROM suppliers_resources WHERE resource_id='%1' AND supplier_id='%2'")
                             .arg(ui->treeWidget->currentItem()->text(3)).arg(id);
     db->query(query);
-
-    // select, click & focus 'add new' item
-    ui->treeWidget->setCurrentItem(ui->treeWidget->topLevelItem(0));
-    on_treeWidget_itemClicked(ui->treeWidget->currentItem(), 0);
-    ui->treeWidget->setFocus();
 
     readData();
 }
@@ -152,13 +162,10 @@ void ESupplier::on_delete_btn_clicked()
 void ESupplier::on_update_add_btn_clicked()
 {
     // Add / Update resources info
-    QString res_type   = ui->res_type_cb->currentText();
-    QString res_name = ui->res_name_cb->currentText();
+    QString res_type   = EDBconnection::escape(ui->res_type_cb->currentText());
+    QString res_name = EDBconnection::escape(ui->res_name_cb->currentText());
     double  price = ui->price_dspb->value();
     long      number = ui->quantity_spb->value();
-
-    res_type.remove(QRegExp("['\"]"));
-    res_name.remove(QRegExp("['\"]"));
 
     if (res_type.isEmpty() || res_name.isEmpty() || price == 0.0 || number == 0) return;
 
@@ -166,7 +173,7 @@ void ESupplier::on_update_add_btn_clicked()
         qDebug("Update");
 
         // Update suppliers_resources
-        QString query = QString("UPDATE suppliers_resources SET price = '%1', number = '%2'" \
+        QString query = QString("UPDATE suppliers_resources SET price = '%1', number = '%2' " \
                                 "WHERE resource_id = '%3' AND supplier_id = '%4' ")
                                 .arg(price).arg(number).arg(ui->treeWidget->currentItem()->text(3)).arg(id);
         db->query(query);
@@ -190,6 +197,7 @@ void ESupplier::on_update_add_btn_clicked()
 
         if (res_id == -1) {
             // ERROR message
+            QMessageBox::warning(0, "Worning", tr("Ошибка при добавлении ресурса."));
             return;
         }
 
@@ -198,9 +206,58 @@ void ESupplier::on_update_add_btn_clicked()
                 .arg(res_id).arg(id).arg(price).arg(number);
         if (db->insert(query) == -1) {
             // ERROR message
+            QMessageBox::warning(0, "Worning", tr("Ошибка при занисении данных в БД."));
             return;
         }
     }
 
     readData();
+}
+
+void ESupplier::on_report_btn_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Report"), "", tr("Save Reports (*.html)"));
+    qDebug()<<"filename :"<<fileName;
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        // show ERROR message
+        QMessageBox::warning(0, "Worning", tr("Ошибка.\nНельзя создать (открыть) файл."));
+        return;
+    }
+
+    QString query = QString("SELECT id, resource_id, supplier_id, garage_id, number, sum, deal_date, deliver_date " \
+                                            "FROM `buy_log` WHERE supplier_id = '%1'").arg(this->id);
+    QList<QStringList> List = db->get(query);
+
+     if (!List.isEmpty()) {
+         QTextStream out(&file);
+
+         out << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
+         out << "<html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
+         out << "<title>Report : 'resource_sell_log' table.</title> </head> <body>";
+
+         out << "<p color=\"blue\">" + query + "</p>";
+
+         // :TODO добавление названия колонок
+         if (List.length() == 1 && List[0].length() == 1) {
+             out << List[0].at(0);
+         } else {
+             QString html_table = "<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"4\">";
+             for (int i = 0; i < List.length(); ++i) {
+                 QString row;
+                 for (int j = 0; j < List[0].length(); ++j) {
+                     row += "<td>" + List[i].at(j) + "</td>";
+                 }
+                 html_table += "<tr>"+row+"</tr>";
+             }
+             html_table += "</table>";
+
+             out<<html_table;
+
+             out << "</body> </html>";
+         }
+    } else {
+         // show ERROR message
+        QMessageBox::warning(0, "Worning", tr("В таблице нету записей."));
+     }
 }

@@ -10,15 +10,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    e_operator = 0;
     supplier = 0;
     client = 0;
+    admin = 0;
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete e_operator;
     delete supplier;
     delete client;
+    delete admin;
 }
 
 void MainWindow::startP(long user_id)
@@ -30,7 +34,7 @@ void MainWindow::startP(long user_id)
         client = new EClient(user);
         this->setCentralWidget(client->window());
         this->setWindowTitle(QString("Client : \"%1 %2\"").arg(client->getName()).arg(client->getlastname()));
-        this->resize(550, 260);
+        this->resize(680, 270);
         qDebug()<<">> CLIENT has been connected.";
 
     } else if (user.getType() == EUser::AUTHOR) {
@@ -49,13 +53,18 @@ void MainWindow::startP(long user_id)
         qDebug()<<">> CEO has been connected.";
 
     } else if (user.getType() == EUser::OPERATOR) {
-
+        e_operator = new EOperator(user);
+        this->setCentralWidget(e_operator->window());
+        this->setWindowTitle(QString("Operator : \"%1 %2\"").arg(e_operator->getName()).arg(e_operator->getlastname()));
+        this->resize(680, 270);
         qDebug()<<">> OPERATOR has been connected.";
 
     } else if (EUser::ADMIN) {
-
+        admin = new EAdmin(user);
+        this->setCentralWidget(admin->window());
+        this->setWindowTitle(QString("Client : \"%1 %2\"").arg(admin->getName()).arg(admin->getlastname()));
+//        this->resize(680, 270);
         qDebug()<<">> ADMIN has been connected.";
-
     }
 
     show();

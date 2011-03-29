@@ -72,15 +72,15 @@ EDBconnection::~EDBconnection()
 //    if (pinstance) delete pinstance;
 //}
 
-QString EDBconnection::escape(const QString q) const
+QString EDBconnection::escape(const QString q)
 {
-    QString res = q;
+    QString res = q.trimmed();
     return res.replace("\\", "\\\\")
               .replace("\"", "\\\"")
               .replace("'", "\\'").replace("\n", "\\n")
               .replace("\r", "\\r")/*.replace("\x00", "\\0")*/
               .replace("\b", "\\b").replace("\t", "\\t")
-              .replace("\x32", "\\Z")
+              /*.replace("\x32", "\\Z")*/
               .replace("_", "\\_").replace(("%"), "\\%");
 }
 
@@ -89,8 +89,11 @@ bool EDBconnection::query(const QString query) const
     qDebug()<<"[query]\t:"<<query;
     QSqlQuery sqlQuery(query, db);
 
+//    setLastError(sqlQuery.lastError().text());
     if (!sqlQuery.isActive()) {
-        qDebug()<<"ERROR\t:"<<sqlQuery.lastError().text();
+        QString error = sqlQuery.lastError().text();
+        qDebug()<<"ERROR\t:"<< error;
+        emit EDBconnection::getInstance()->returnLastError(error);
         return false;
     }
     return true;
@@ -112,8 +115,11 @@ QList<QStringList> EDBconnection::get(const QString query) const
         List << row;
     }
 
+//    lastError = sqlQuery.lastError().text();
     if (!sqlQuery.isActive()) {
-        qDebug()<<"ERROR\t:"<<sqlQuery.lastError().text();
+        QString error = sqlQuery.lastError().text();
+        qDebug()<<"ERROR\t:"<< error;
+        emit EDBconnection::getInstance()->returnLastError(error);
     } else {
         qDebug()<<"return\t:"<<List;
 //        emit returnSelQuery(List);
@@ -126,8 +132,11 @@ int EDBconnection::insert(const QString query) const
     qDebug()<<"[insert]\t:"<<query;
     QSqlQuery sqlQuery(query, db);
 
+//    lastError = sqlQuery.lastError().text();
     if (!sqlQuery.isActive()) {
-        qDebug()<<"error :"<<sqlQuery.lastError().text();
+        QString error = sqlQuery.lastError().text();
+        qDebug()<<"ERROR\t:"<< error;
+        emit EDBconnection::getInstance()->returnLastError(error);
         return -1;
     }
     return QVariant(sqlQuery.lastInsertId()).toInt();
@@ -182,7 +191,7 @@ int EDBconnection::newUser(QString login,
                                "(login, password, lastname, name, address, phone, email, type, reg_date) " \
                                "VALUES ('%1', MD5('%2'), '%3', '%4', '%5', '%6', '%7', '%8', '%9')")
                        .arg(login).arg(password).arg(lastname).arg(name).arg(address)
-                       .arg(phone).arg(email).arg(type).arg(regdate.toString("yyyy-MM-dd HH-m-s"));
+                       .arg(phone).arg(email).arg(type).arg(regdate.toString("yyyy-MM-dd HH-mm-ss"));
     return insert(sqlQuery);
 }
 

@@ -24,6 +24,8 @@ private slots:
 
     void on_update_add_btn_clicked();
 
+    void on_report_btn_clicked();
+
 private:
     Ui::ESupplier *ui;
 

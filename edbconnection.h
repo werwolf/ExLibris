@@ -13,10 +13,13 @@ public:
 //    static void destroyInstance();
     ~EDBconnection();
 
-    QString escape(const QString) const;
+    static QString escape(const QString q);
     bool query(const QString) const;
     int insert(const QString) const;
     QList<QStringList> get(const QString) const;
+
+//    QString getLastError(void) const { return lastError; }
+//    void setLastError(const QString error) { EDBconnection::getInstance()->lastError = error;}
 
 public slots:
 //    void query(const QString) const;
@@ -31,6 +34,7 @@ public slots:
 
 signals:
     void setUserId(long);
+    void returnLastError(QString);
 //    void returnSelQuery(QList<QStringList>);
 
 protected:
@@ -46,6 +50,8 @@ private:
     QString dbName;
     QString dbUser;
     QString dbPass;
+
+//    QString lastError;
 };
 
 #endif // EDBCONNECTION_H

@@ -17,23 +17,28 @@ class EClient :  public QWidget, public EUser
 public:
 //    explicit EClient(long _id, QWidget *parent = 0);
     explicit EClient(EUser& user, QWidget *parent = 0);
+//    explicit EClient( const EClient& );
+//    EClient& operator=( const EClient& );
     virtual ~EClient();
+
+    long getClientID(void) const { return client_id; }
+    QString getCompanyName (void) const { return companyName; }
+
+    QWidget* getParent(void) { return this->window(); }
 
 public slots:
 //    void setClientInfo(QList<QStringList>);
 
 private slots:
     void on_findQueries_bt_clicked();
-
     void on_tabs_currentChanged(int index);
-
     void on_buy_btn_clicked();
 
 private:
     Ui::EClient *ui;
 
     EDBconnection* db;
-    long id;
+    long client_id;
     QString companyName;
 
     // private methods

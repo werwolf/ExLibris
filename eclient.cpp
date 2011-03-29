@@ -12,6 +12,30 @@
 //    ui->setupUi(this);
 //}
 
+//EClient::EClient(const EClient& rhs)/* : QWidget(rhs.parentWidget()), EUser(rhs.getUserID())*/
+//{
+//    operator =(rhs);
+//}
+
+//EClient& EClient::operator=( const EClient& rhs) : QWidget(rhs.parentWidget()), EUser(rhs.getUserID())
+//{
+//    if (this == &rhs) return *this;
+
+//    client_id = rhs.client_id;
+//    companyName = rhs.companyName;
+
+//    this->setUserID( rhs.getUserID() );
+//    this->setLogin( rhs.getLogin() );
+//    this->setlastname( rhs.getlastname() );
+//    this->setName( rhs.getName() );
+//    this->setAddress( rhs.getAddress() );
+//    this->setPhone( rhs.getPhone() );
+//    this->setEmail( rhs.getEmail() );
+//    this->setType( rhs.getType() );
+////    qDebug()<<login;
+//    return *this;
+//}
+
 EClient::EClient(EUser& user, QWidget *parent) :
     QWidget(parent),
     EUser(user),
@@ -20,16 +44,15 @@ EClient::EClient(EUser& user, QWidget *parent) :
     db = EDBconnection::getInstance();
     qDebug(": EClient >> Client [EUser]");
 
-    QString query = QString("SELECT id, company_name FROM clients WHERE user_id='%1'")
-                    .arg(db->escape(QString::number( user.getID() )));  // ono takoe nado? :)
+    QString query = QString("SELECT id, company_name FROM clients WHERE user_id='%1'").arg(this->getUserID());
     QList<QStringList> List = db->get(query);
 
     if (List.isEmpty()) {
         qDebug("EClient constructor error: List is empty");
     } else {
-        id = List[0].at(0).toInt();
+        client_id = List[0].at(0).toInt();
         companyName = List[0].at(1);
-        qDebug()<<"Client ID :"<<id<<"company name :"<<companyName;
+        qDebug()<<"Client ID :"<<client_id<<"company name :"<<companyName;
 
         ui->setupUi(this);
     }

@@ -15,7 +15,7 @@ public:
     EUser& operator=( const EUser& );
     virtual  ~EUser();
 
-    long getID(void) const { return user_id; }
+    long getUserID(void) const { return user_id; }
     QString getLogin (void) const { return login; }
     QString getlastname (void) const { return lastname; }
     QString getName (void) const { return name; }
@@ -23,6 +23,15 @@ public:
     QString getPhone (void) const { return phone; }
     QString getEmail (void) const { return email; }
     UserType getType(void ) const { return type; }
+
+    void setUserID(const long _user_id) { user_id = _user_id; }
+    void setLogin (const QString _login) { login = _login; }
+    void setlastname (const QString _lastname) { lastname = _lastname; }
+    void setName (const QString _name) { name = _name; }
+    void setAddress (const QString _address) { address = _address; }
+    void setPhone (const QString _phone) { phone = _phone; }
+    void setEmail (const QString _email) { email = _email; }
+    void setType(const UserType _type) { type = _type; }
 
 //public slots:
     void setUserInfo(QList<QStringList>);
