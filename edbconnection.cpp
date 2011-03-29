@@ -76,12 +76,11 @@ QString EDBconnection::escape(const QString q)
 {
     QString res = q.trimmed();
     return res.replace("\\", "\\\\")
-              .replace("\"", "\\\"")
-              .replace("'", "\\'").replace("\n", "\\n")
-              .replace("\r", "\\r")/*.replace("\x00", "\\0")*/
-              .replace("\b", "\\b").replace("\t", "\\t")
-              /*.replace("\x32", "\\Z")*/
-              .replace("_", "\\_").replace(("%"), "\\%");
+              .replace("\"", "\\\"").replace("'", "\\'")
+              .replace("\n", "\\n").replace("\t", "\\t")
+              .replace("\r", "\\r").replace("\b", "\\b")
+              /*.replace("\x00", "\\0").replace("\x32", "\\Z")*/
+              /*.replace("_", "\\_").replace("%", "\\%")*/;
 }
 
 bool EDBconnection::query(const QString query) const
