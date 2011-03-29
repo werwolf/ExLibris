@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>TabWidget</string>
   </property>
+  <property name="currentIndex">
+   <number>1</number>
+  </property>
   <widget class="QWidget" name="admin_tab">
    <attribute name="title">
     <string>SQL</string>
@@ -83,8 +86,44 @@
   </widget>
   <widget class="QWidget" name="tab">
    <attribute name="title">
-    <string>Tab 2</string>
+    <string>Control</string>
    </attribute>
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <widget class="QTextEdit" name="info_te"/>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="backup_btn">
+        <property name="text">
+         <string>Backup DB</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="restore_btn">
+        <property name="text">
+         <string>Restore DB</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

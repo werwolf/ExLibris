@@ -18,8 +18,10 @@ public:
     int insert(const QString) const;
     QList<QStringList> get(const QString) const;
 
-//    QString getLastError(void) const { return lastError; }
-//    void setLastError(const QString error) { EDBconnection::getInstance()->lastError = error;}
+    QString get_dbHost(void) const { return dbHost; }
+    QString get_dbName(void) const { return dbName; }
+    QString get_dbUser(void) const { return dbUser; }
+    QString get_dbPass(void) const { return dbPass; }
 
 public slots:
 //    void query(const QString) const;

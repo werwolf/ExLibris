@@ -218,6 +218,7 @@ void ESupplier::on_report_btn_clicked()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save Report"), "", tr("Save Reports (*.html)"));
     qDebug()<<"filename :"<<fileName;
+    if (fileName.isEmpty()) return;
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         // show ERROR message

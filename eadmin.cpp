@@ -1,5 +1,7 @@
 #include "eadmin.h"
 #include "ui_eadmin.h"
+#include <QMessageBox>
+#include <QFileDialog>
 
 EAdmin::EAdmin(EUser& user, QWidget *parent) :
     QTabWidget(parent),
@@ -9,6 +11,8 @@ EAdmin::EAdmin(EUser& user, QWidget *parent) :
     ui->setupUi(this);
     qDebug("EAdmin constructor");
     connect(EDBconnection::getInstance(), SIGNAL(returnLastError(QString)), ui->result_te, SLOT(append(QString)));
+
+    process = new QProcess;
 }
 
 EAdmin::~EAdmin()
@@ -66,4 +70,76 @@ void EAdmin::on_execute_btn_clicked()
 
     }
 
+}
+
+void EAdmin::on_backup_btn_clicked()
+{
+    // execute "mysqldump exlibris --user=root --password=********* > ./sql_log2.sql"
+    //    QString param;
+    //    param += " mysqldump ";
+    //    param += db->get_dbName();
+    //    param += " --host=" + db->get_dbHost();
+    //    param += " --user=" + db->get_dbUser();
+    //    param += " --password=" + db->get_dbPass();
+    //    param += " --add-drop-table";
+    //    param += " --complete-insert";
+    //    param += " --triggers ";
+
+    QString fileName = QFileDialog::getSaveFileName(this, QObject::trUtf8("Save Backup"), "", QObject::trUtf8("Save Backup (*.sql)"));
+    qDebug()<<"filename :"<<fileName;
+    if (fileName.isEmpty()) return;
+
+    EDBconnection *db = EDBconnection::getInstance();
+
+    QStringList param;
+    param << db->get_dbName();
+    param << db->get_dbHost();
+    param << db->get_dbUser();
+    param << db->get_dbPass();
+    param << fileName;
+
+    qDebug()<<param;
+
+    process->execute("./dump_db", param);
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        // show ERROR message
+        QMessageBox::warning(0, "Worning", "Ошибка.\nНельзя открыть файл.");
+        return;
+    }
+
+    QByteArray db_data = file.readAll();
+    ui->info_te->append(db_data);
+}
+
+void EAdmin::on_restore_btn_clicked()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, trUtf8("Restore from Backup"), "", trUtf8("Load Backup (*.sql)"));
+    qDebug()<<"filename :"<<fileName;
+
+    if (fileName.isEmpty()) return;
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        // show ERROR message
+        QMessageBox::warning(0, "Worning", trUtf8("Ошибка.\nНельзя открыть файл."));
+        return;
+    }
+
+    QByteArray db_data = file.readAll();
+    ui->info_te->setPlainText(db_data);
+
+    EDBconnection *db = EDBconnection::getInstance();
+
+    QStringList param;
+    param << db->get_dbName();
+    param << db->get_dbHost();
+    param << db->get_dbUser();
+    param << db->get_dbPass();
+    param << fileName;
+
+    qDebug()<<param;
+
+    process->execute("./restore_db", param);
 }
