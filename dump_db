@@ -1,0 +1,5 @@
+#! /bin/sh
+
+#mysqldump exlibris --host=localhost --user=e_admin --password=admin_pwd --add-drop-table --complete-insert --triggers
+echo mysqldump $1 --host=$2 --user=$3 --password=$4 --add-drop-table --complete-insert --triggers __ $5
+mysqldump $1 --host=$2 --user=$3 --password=$4 --add-drop-table --complete-insert --triggers > $5
