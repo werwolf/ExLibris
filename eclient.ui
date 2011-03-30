@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>602</width>
+    <width>640</width>
     <height>300</height>
    </rect>
   </property>
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabs">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -42,7 +42,7 @@
            </item>
            <item>
             <property name="text">
-             <string>автору</string>
+             <string>авторам</string>
             </property>
            </item>
            <item>
@@ -126,6 +126,11 @@
          <column>
           <property name="text">
            <string>Автор</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Жанр</string>
           </property>
          </column>
          <column>

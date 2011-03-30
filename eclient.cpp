@@ -58,7 +58,6 @@ EClient::EClient(EUser& user, QWidget *parent) :
     }
 
 
-//    readQueryData();
     switch (ui->tabs->currentIndex()) {
     case 0:
         readQueryData();
@@ -82,17 +81,8 @@ EClient::~EClient()
 
 void EClient::readQueryData(QString cond)
 {
-    // :TODO: getBookPrice()
-    QString query = QString("SELECT q.id, q.title, " \
-                            "GROUP_CONCAT(DISTINCT CONCAT(u.lastname, ' ', u.name) ORDER BY u.lastname SEPARATOR ', '),  " \
-                            "100, 0 " \
-                            "FROM queries as q " \
-                            "INNER JOIN genres as g ON g.id = q.genre_id " \
-                            "INNER JOIN authors_queries as aq ON q.id = aq.query_id " \
-                            "INNER JOIN authors as a ON aq.author_id = a.id " \
-                            "INNER JOIN users as u ON u.id = a.user_id " \
-                            "WHERE %1 " \
-                            "GROUP BY q.id").arg(cond);
+    QString query = QString("SELECT * from queries_view " \
+                            "WHERE %1 ").arg(cond);
 
     QList<QStringList> List = db->get(query);
 
@@ -100,8 +90,9 @@ void EClient::readQueryData(QString cond)
     ui->query_tw->setRowCount(List.length());
 
     for (int i = 0; i < List.length(); ++i) {
-        ui->query_tw->setCellWidget(i, 5, new QSpinBox);
+        ui->query_tw->setCellWidget(i, 6, new QSpinBox);
         ui->query_tw->setCellWidget(i, 0, new QCheckBox);
+
 
         for (int j = 0; j < List[0].length(); ++j) {
             ui->query_tw->setItem(i, j+1, new QTableWidgetItem(List[i].at(j)));
@@ -109,18 +100,16 @@ void EClient::readQueryData(QString cond)
     }
 
     ui->query_tw->setColumnWidth(0, 35);    // checkbox
-    ui->query_tw->setColumnWidth(2, 130);   // title
-    ui->query_tw->setColumnWidth(3, 120);   // author
-    ui->query_tw->setColumnWidth(4, 80);    // price
-    ui->query_tw->setColumnWidth(5, 60);    // count
+    ui->query_tw->setColumnWidth(2, 100);   // title
+    ui->query_tw->setColumnWidth(3, 100);   // author
+    ui->query_tw->setColumnWidth(4, 80);    // genre
+    ui->query_tw->setColumnWidth(5, 80);    // price
+    ui->query_tw->setColumnWidth(6, 60);    // count
 }
 
 void EClient::readResourcesData(QString cond)
 {
-    QString query = QString("SELECT r.id, rt.title, r.title, s.number, r.price, 0 " \
-                            "FROM resources as r " \
-                            "INNER JOIN stock as s ON s.resource_id = r.id " \
-                            "INNER JOIN resource_types as rt ON rt.id = r.resource_type_id " \
+    QString query = QString("SELECT * FROM resources_view " \
                             "WHERE %1").arg(cond);
 
     QList<QStringList> List = db->get(query);
@@ -136,6 +125,9 @@ void EClient::readResourcesData(QString cond)
         for (int j = 0; j < List[0].length(); ++j) {
             ui->resource_tw->setItem(i, j+1, new QTableWidgetItem(List[i].at(j)));
         }
+
+        QSpinBox *temp_spnb = qobject_cast<QSpinBox*>(ui->resource_tw->cellWidget(i, 6));
+        temp_spnb->setMaximum(ui->resource_tw->item(i, 4)->text().toInt());
     }
 
     ui->resource_tw->setColumnWidth(0, 35);
@@ -148,10 +140,7 @@ void EClient::readResourcesData(QString cond)
 
 void EClient::readServicesData(QString cond)
 {
-    QString query = QString("SELECT s.id, s.title, s.price " \
-                            "FROM services AS s " \
-                            "INNER JOIN personnel_services AS ps ON ps.service_id = s.id " \
-                            "INNER JOIN personnel AS p ON ps.personnel_id = p.id " \
+    QString query = QString("SELECT * from services_view " \
                             "WHERE %1").arg(cond);
 
     QList<QStringList> List = db->get(query);
@@ -177,24 +166,27 @@ void EClient::on_findQueries_bt_clicked()
 {
     // find
     QString cond = ui->queryFilter_edt->text().trimmed();
-    if (cond.isEmpty()) readQueryData();
 
-    switch (ui->queryFilter_cbx->currentIndex()) {
-    case 0:
-        readQueryData(QString("q.title LIKE '%%1%'").arg(cond));
-        break;
+    if (cond.isEmpty()) {
+        readQueryData();
+    } else {
+        switch (ui->queryFilter_cbx->currentIndex()) {
+        case 0:
+            readQueryData(QString("title LIKE '%%1%'").arg(cond));
+            break;
 
-    case 1:
-        readQueryData(QString("(u.type = 'AUTHOR') AND ((u.name LIKE '%%1%') OR (u.lastname LIKE '%%1%'))").arg(cond));
-        break;
+        case 1:
+            readQueryData(QString("authors LIKE '%%1%'").arg(cond));
+            break;
 
-    case 2:
-        readQueryData(QString("g.title LIKE '%%1%'").arg(cond));
-        break;
+        case 2:
+            readQueryData(QString("genre LIKE '%%1%'").arg(cond));
+            break;
 
-    case 3:
-        readQueryData(QString("q.id LIKE '%%1%'").arg(cond));
-        break;
+        case 3:
+            readQueryData(QString("id LIKE '%%1%'").arg(cond));
+            break;
+        }
     }
 }
 
@@ -202,16 +194,19 @@ void EClient::on_findResources_bt_clicked()
 {
     // find
     QString cond = ui->resourceFilter_edt->text().trimmed();
-    if (cond.isEmpty()) readResourcesData();
 
-    switch (ui->resourceFilter_cbx->currentIndex()) {
-    case 0:
-        readResourcesData(QString("r.title LIKE '%%1%'").arg(cond));
-        break;
+    if (cond.isEmpty()) {
+        readResourcesData();
+    } else {
+        switch (ui->resourceFilter_cbx->currentIndex()) {
+        case 0:
+            readResourcesData(QString("title LIKE '%%1%'").arg(cond));
+            break;
 
-    case 1:
-        readResourcesData(QString("rt.title LIKE '%%1%'").arg(cond));
-        break;
+        case 1:
+            readResourcesData(QString("type LIKE '%%1%'").arg(cond));
+            break;
+        }
     }
 }
 
@@ -219,12 +214,15 @@ void EClient::on_findServices_bt_clicked()
 {
     // find
     QString cond = ui->serviceFilter_edt->text().trimmed();
-    if (cond.isEmpty()) readResourcesData();
 
-    switch (ui->serviceFilter_cbx->currentIndex()) {
-    case 0:
-        readServicesData(QString("s.title LIKE '%%1%'").arg(cond));
-        break;
+    if (cond.isEmpty()) {
+        readServicesData();
+    } else {
+        switch (ui->serviceFilter_cbx->currentIndex()) {
+        case 0:
+            readServicesData(QString("title LIKE '%%1%'").arg(cond));
+            break;
+        }
     }
 }
 
@@ -256,29 +254,95 @@ void EClient::on_buy_btn_clicked()
         for (int i = 0; i < ui->query_tw->rowCount(); ++i) {
             QCheckBox *temp_chb = qobject_cast<QCheckBox*>(ui->query_tw->cellWidget(i, 0));
             if (temp_chb->isChecked()) {
-                QString book_id =ui->query_tw->item(i, 5)->text();
+                QString book_id =ui->query_tw->item(i, 1)->text();
                 qDebug()<<">>i :"<<i<<" book_id :"<<book_id;
 
-                QSpinBox *temp_spnb = qobject_cast<QSpinBox*>(ui->query_tw->cellWidget(i, 4));
+                QSpinBox *temp_spnb = qobject_cast<QSpinBox*>(ui->query_tw->cellWidget(i, 6));
                 long number = temp_spnb->value();
-
                 qDebug()<<"number :"<<number;
-//                QString query = QString("%1").arg(number);
-//                if (db->insert(query) == -1) {
-//                    // show Error.
-//                }
+                if (number == 0) continue;
+
+                QString query = QString("INSERT INTO book_sell_log" \
+                                            "(client_id,query_id,sum,number,income_date," \
+                                            "start_print_date,end_print_date) " \
+                                        "VALUES ("
+                                            "'%1', '%2', getBookCost('%2'), '%3'," \
+                                            "NOW(),NOW(),DATE_ADD(NOW(), INTERVAL 3 DAY)"
+                                        ")").arg(this->getClientID()).arg(book_id).arg(number);
+                if (db->insert(query) == -1) {
+                    // show Error.
+                    return;
+                } else {
+                    query = QString("SELECT resource_id, number FROM queries_resources WHERE query_id = '%1'")
+                            .arg(book_id);
+                    QList<QStringList> List = db->get(query);
+
+                    // remove from stock (resources for printing)
+                    for (int i = 0; i < List.length(); ++i) {
+                        db->query(QString("UPDATE stock SET number = number - '%1' WHERE resource_id = '%2'")
+                                .arg(List[i].at(1)).arg(List[i].at(0)));
+                    }
+                }
             }
         }
         break;
+
     case 1:
         if (ui->resource_tw->rowCount() == 0) return;
 
+        for (int i = 0; i < ui->resource_tw->rowCount(); ++i) {
+            QCheckBox *temp_chb = qobject_cast<QCheckBox*>(ui->resource_tw->cellWidget(i, 0));
+            if (temp_chb->isChecked()) {
+                QString resource_id = ui->resource_tw->item(i, 1)->text();
+                qDebug()<<">>i :"<<i<<" res_id :"<<resource_id;
+
+                QString price = ui->resource_tw->item(i, 5)->text();
+
+                QSpinBox *temp_spnb = qobject_cast<QSpinBox*>(ui->resource_tw->cellWidget(i, 6));
+                long number = temp_spnb->value();
+                qDebug()<<"number :"<<number;
+                if (number == 0) continue;
+
+                QString query = QString("INSERT INTO resource_sell_log" \
+                                            "(client_id,resource_id,sum,number,income_date,deal_date) " \
+                                        "VALUES ("
+                                            "'%1', '%2', '%3', '%4', NOW(),DATE_ADD(NOW(), INTERVAL 1 DAY)"
+                                        ")").arg(this->getClientID()).arg(resource_id).arg(price).arg(number);
+                if (db->insert(query) == -1) {
+                    // show Error.
+                    return;
+                } else {
+                    // remove from stock
+                    db->query(QString("UPDATE stock SET number = number - '%1' WHERE resource_id = '%2'")
+                            .arg(number).arg(resource_id));
+                }
+            }
+        }
         break;
+
     case 2:
         if (ui->service_tw->rowCount() == 0) return;
 
+        for (int i = 0; i < ui->service_tw->rowCount(); ++i) {
+            QCheckBox *temp_chb = qobject_cast<QCheckBox*>(ui->service_tw->cellWidget(i, 0));
+            if (temp_chb->isChecked()) {
+                QString service_id = ui->service_tw->item(i, 1)->text();
+                qDebug()<<">>i :"<<i<<" service_id :"<<service_id;
+
+                QString price = ui->service_tw->item(i, 3)->text();
+
+                QString query = QString("INSERT INTO service_sell_log" \
+                                            "(client_id,service_id,sum,income_date,deal_date) " \
+                                        "VALUES ("
+                                            "'%1', '%2', '%3', NOW(),DATE_ADD(NOW(), INTERVAL 1 DAY)"
+                                        ")").arg(this->getClientID()).arg(service_id).arg(price);
+                if (db->insert(query) == -1) {
+                    // show Error.
+                    return;
+                }
+            }
+        }
         break;
     }
-
     on_tabs_currentChanged(tab_index);
 }

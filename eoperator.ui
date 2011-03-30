@@ -29,7 +29,13 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="resourceType_cbx"/>
+        <widget class="QComboBox" name="resourceType_cbx">
+         <item>
+          <property name="text">
+           <string>все</string>
+          </property>
+         </item>
+        </widget>
        </item>
        <item>
         <spacer name="horizontalSpacer">
@@ -55,6 +61,16 @@
        </column>
        <column>
         <property name="text">
+         <string>id</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>supplier_id</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
          <string>Тип</string>
         </property>
        </column>
@@ -66,6 +82,11 @@
        <column>
         <property name="text">
          <string>Поставщик</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Дистанция</string>
         </property>
        </column>
        <column>
@@ -98,14 +119,14 @@
         <item>
          <widget class="QLabel" name="balance_lbl">
           <property name="text">
-           <string>Лимит: $1000</string>
+           <string>Баланс: 1000</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="sum_lbl">
           <property name="text">
-           <string>Сумма: $100</string>
+           <string>Сумма: 100</string>
           </property>
          </widget>
         </item>

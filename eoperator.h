@@ -16,8 +16,18 @@ public:
     explicit EOperator(EUser& user, QWidget* parent = 0);
     ~EOperator();
 
+    long getOperatorID(void) const { return this->getUserID(); }
+
 private:
     Ui::EOperator *ui;
+    EDBconnection* db;
+
+    // private methods
+    void readResourcesData(QString cond = "1");
+
+private slots:
+    void on_buy_resources_btn_clicked();
+    void on_resourceType_cbx_currentIndexChanged(QString );
 };
 
 #endif // EOPERATOR_H

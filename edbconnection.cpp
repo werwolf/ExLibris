@@ -91,7 +91,7 @@ bool EDBconnection::query(const QString query) const
 //    setLastError(sqlQuery.lastError().text());
     if (!sqlQuery.isActive()) {
         QString error = sqlQuery.lastError().text();
-        qDebug()<<"ERROR\t:"<< error;
+        qDebug()<<"ERROR\t:"<< error<<"\n";
         emit EDBconnection::getInstance()->returnLastError(error);
         return false;
     }
@@ -117,10 +117,10 @@ QList<QStringList> EDBconnection::get(const QString query) const
 //    lastError = sqlQuery.lastError().text();
     if (!sqlQuery.isActive()) {
         QString error = sqlQuery.lastError().text();
-        qDebug()<<"ERROR\t:"<< error;
+        qDebug()<<"ERROR\t:"<< error<<"\n";
         emit EDBconnection::getInstance()->returnLastError(error);
     } else {
-        qDebug()<<"return\t:"<<List;
+        qDebug()<<"return\t:"<<List<<"\n";
 //        emit returnSelQuery(List);
     }
     return List;
@@ -134,7 +134,7 @@ int EDBconnection::insert(const QString query) const
 //    lastError = sqlQuery.lastError().text();
     if (!sqlQuery.isActive()) {
         QString error = sqlQuery.lastError().text();
-        qDebug()<<"ERROR\t:"<< error;
+        qDebug()<<"ERROR\t:"<< error<<"\n";
         emit EDBconnection::getInstance()->returnLastError(error);
         return -1;
     }
