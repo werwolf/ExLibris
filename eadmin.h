@@ -20,8 +20,8 @@ public:
 private slots:
     void on_execute_btn_clicked();
     void on_backup_btn_clicked();
-
     void on_restore_btn_clicked();
+    void showError(QString);
 
 private:
     Ui::EAdmin *ui;

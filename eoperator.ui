@@ -16,142 +16,60 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout_2">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>Тип ресурса:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="resourceType_cbx">
-         <item>
-          <property name="text">
-           <string>все</string>
-          </property>
-         </item>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QTableWidget" name="res_tw">
-       <column>
-        <property name="text">
-         <string>*</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>id</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>supplier_id</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Тип</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Название</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Поставщик</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Дистанция</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Доступно (ед.)</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Цена (грн./ед.)</string>
-        </property>
-       </column>
-       <column>
-        <property name="text">
-         <string>Кол-во</string>
-        </property>
-       </column>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string/>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Тип ресурса:</string>
        </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QLabel" name="balance_lbl">
-          <property name="text">
-           <string>Баланс: 1000</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="sum_lbl">
-          <property name="text">
-           <string>Сумма: 100</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer">
+      <widget class="QComboBox" name="resourceType_cbx">
+       <item>
+        <property name="text">
+         <string>все</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Vertical</enum>
+        <enum>Qt::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>20</width>
-         <height>40</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QLabel" name="balance_lbl">
+       <property name="styleSheet">
+        <string notr="true">color: rgb(227, 173, 0);</string>
+       </property>
        <property name="text">
-        <string>Предложить  план</string>
+        <string>Баланс: 1000</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
       <widget class="QPushButton" name="buy_resources_btn">
@@ -161,6 +79,60 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="res_tw">
+     <column>
+      <property name="text">
+       <string>*</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>id</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>supplier_id</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Тип</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Название</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Поставщик</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Дистанция</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Доступно (ед.)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Цена (грн./ед.)</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Кол-во</string>
+      </property>
+     </column>
+    </widget>
    </item>
   </layout>
  </widget>

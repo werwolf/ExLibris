@@ -36,6 +36,8 @@ private slots:
     void on_tabs_currentChanged(int index);
     void on_buy_btn_clicked();
 
+    void on_report_btn_clicked();
+
 private:
     Ui::EClient *ui;
 

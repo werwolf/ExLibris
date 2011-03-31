@@ -10,7 +10,10 @@ EAdmin::EAdmin(EUser& user, QWidget *parent) :
 {
     ui->setupUi(this);
     qDebug("EAdmin constructor");
-    connect(EDBconnection::getInstance(), SIGNAL(returnLastError(QString)), ui->result_te, SLOT(append(QString)));
+//    connect(EDBconnection::getInstance(), SIGNAL(returnLastError(QString)), ui->result_te, SLOT(insertHtml(QString)));
+    connect(EDBconnection::getInstance(), SIGNAL(returnLastError(QString)), this, SLOT(showError(QString)));
+
+//    ui->result_te->insertHtml("<style type=”text/css”>p { line-height: 100px;}</style>");
 
     process = new QProcess;
 }
@@ -25,7 +28,10 @@ void EAdmin::on_execute_btn_clicked()
     if (ui->query_tx->document()->isEmpty()) return;
 
     QString query = ui->query_tx->toPlainText().trimmed();
+    // show query
     qDebug()<<"query :"<<query;
+    ui->result_te->insertHtml("<p style=\"color: blue;\">"+query+" : </p>");
+
     QString query_type = query.section(" ", 0, 0);
     if (QString::compare(query_type, QString("SELECT"), Qt::CaseInsensitive) == 0) {
         qDebug()<<"query_type :"<<query_type;
@@ -33,11 +39,9 @@ void EAdmin::on_execute_btn_clicked()
 
         // :TODO добавить вывод названия колонок
         if (!List.isEmpty()) {
-            // show query
-            ui->result_te->insertHtml("<p color=\"blue\">"+query+"</p>");
 
             if (List.length() == 1 && List[0].length() == 1) {
-                ui->result_te->append(List[0].at(0));
+                ui->result_te->insertHtml("<p>"+List[0].at(0)+"</p>");
             } else {
                 QString html_table = "<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"4\">";
                 for (int i = 0; i < List.length(); ++i) {
@@ -57,7 +61,7 @@ void EAdmin::on_execute_btn_clicked()
 
         // show last insert id
         if (int last_id = EDBconnection::getInstance()->insert(query) != -1)
-            ui->result_te->insertHtml(QString("<p color=\"blue\">Last insert ID = %1 </p>").arg(last_id));
+            ui->result_te->insertHtml(QString("<p style=\"color: green;\">Last insert ID = %1 </p><br/><br/>").arg(last_id));
 
 
     } else if (QString::compare(query_type, QString("UPDATE"), Qt::CaseInsensitive) == 0) {
@@ -65,10 +69,8 @@ void EAdmin::on_execute_btn_clicked()
     } else {
         // other queries {DELETE, i.e.}
         QString query = ui->query_tx->toPlainText().trimmed();
-        qDebug()<<"query :"<<query;
-        ui->result_te->append(query);
         bool error = EDBconnection::getInstance()->query(query);
-        if (error) ui->result_te->append("Error : EDBconnection::query(QString) return false;");
+        if (error) ui->result_te->insertHtml("<p style=\"color: red;\">Error : EDBconnection::query(QString) return false;</p><br/><br/>");
     }
 }
 
@@ -142,4 +144,9 @@ void EAdmin::on_restore_btn_clicked()
     qDebug()<<param;
 
     process->execute("./restore_db", param);
+}
+
+void EAdmin::showError(QString error)
+{
+    ui->result_te->insertHtml("<p style=\"color: red; line-height: 10px;\">"+error+"</p><br/><br/>");
 }

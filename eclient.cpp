@@ -1,6 +1,8 @@
 #include "eclient.h"
 #include <QSpinBox>
 #include <QCheckBox>
+#include <QFileDialog>
+#include <QMessageBox>
 
 //EClient::EClient(long _id, QWidget *parent) :
 //  QWidget(parent),
@@ -57,7 +59,6 @@ EClient::EClient(EUser& user, QWidget *parent) :
         ui->setupUi(this);
     }
 
-
     switch (ui->tabs->currentIndex()) {
     case 0:
         readQueryData();
@@ -81,8 +82,7 @@ EClient::~EClient()
 
 void EClient::readQueryData(QString cond)
 {
-    QString query = QString("SELECT * from queries_view " \
-                            "WHERE %1 ").arg(cond);
+    QString query = QString("SELECT * from queries_view WHERE %1 ").arg(cond);
 
     QList<QStringList> List = db->get(query);
 
@@ -109,8 +109,7 @@ void EClient::readQueryData(QString cond)
 
 void EClient::readResourcesData(QString cond)
 {
-    QString query = QString("SELECT * FROM resources_view " \
-                            "WHERE %1").arg(cond);
+    QString query = QString("SELECT * FROM resources_view WHERE %1").arg(cond);
 
     QList<QStringList> List = db->get(query);
 
@@ -140,8 +139,7 @@ void EClient::readResourcesData(QString cond)
 
 void EClient::readServicesData(QString cond)
 {
-    QString query = QString("SELECT * from services_view " \
-                            "WHERE %1").arg(cond);
+    QString query = QString("SELECT * from services_view WHERE %1").arg(cond);
 
     QList<QStringList> List = db->get(query);
 
@@ -271,6 +269,7 @@ void EClient::on_buy_btn_clicked()
                                         ")").arg(this->getClientID()).arg(book_id).arg(number);
                 if (db->insert(query) == -1) {
                     // show Error.
+                    QMessageBox::warning(0, "Warning", trUtf8("Ошибка при совершении покупки."));
                     return;
                 } else {
                     query = QString("SELECT resource_id, number FROM queries_resources WHERE query_id = '%1'")
@@ -304,12 +303,14 @@ void EClient::on_buy_btn_clicked()
                 if (number == 0) continue;
 
                 QString query = QString("INSERT INTO resource_sell_log" \
-                                            "(client_id,resource_id,sum,number,income_date,deal_date) " \
-                                        "VALUES ("
-                                            "'%1', '%2', '%3', '%4', NOW(),DATE_ADD(NOW(), INTERVAL 1 DAY)"
-                                        ")").arg(this->getClientID()).arg(resource_id).arg(price).arg(number);
+                                                                 "(client_id,resource_id,sum,number,income_date,deal_date) " \
+                                                             "VALUES ("
+                                                                 "'%1', '%2', '%3', '%4', NOW(),DATE_ADD(NOW(), INTERVAL 1 DAY)"
+                                                             ")").arg(this->getClientID()).arg(resource_id).arg(price).arg(number);
+
                 if (db->insert(query) == -1) {
                     // show Error.
+                    QMessageBox::warning(0, "Warning", trUtf8("Ошибка при совершении покупки."));
                     return;
                 } else {
                     // remove from stock
@@ -338,11 +339,69 @@ void EClient::on_buy_btn_clicked()
                                         ")").arg(this->getClientID()).arg(service_id).arg(price);
                 if (db->insert(query) == -1) {
                     // show Error.
+                    QMessageBox::warning(0, "Warning", trUtf8("Ошибка при совершении покупки."));
                     return;
                 }
             }
         }
         break;
     }
+
+    QMessageBox::information(0, "Congratulation", trUtf8("Покупка совершена."));
     on_tabs_currentChanged(tab_index);
+}
+
+void EClient::on_report_btn_clicked()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, trUtf8("Save Report"), "", trUtf8("Save Reports (*.html)"));
+    qDebug()<<"filename :"<<fileName;
+    if (fileName.isEmpty()) return;
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        // show ERROR message
+        QMessageBox::warning(0, "Warning", trUtf8("Ошибка.\nНельзя создать (открыть) файл."));
+        return;
+    }
+
+    QString query;
+
+    switch (ui->tabs->currentIndex()) {
+    case 0 : query = QString("SELECT * from queries_view"); break;
+    case 1 : query = QString("SELECT * from resources_view");  break;
+    case 2 : query = QString("SELECT * from services_view");  break;
+    }
+
+    QList<QStringList> List = db->get(query);
+
+     if (!List.isEmpty()) {
+         QTextStream out(&file);
+
+         out << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
+         out << "<html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
+         out << "<title>Report : 'resource_sell_log' table.</title> </head> <body>";
+
+         out << "<p color=\"blue\">" + query + "</p>";
+
+         // :TODO добавление названия колонок
+         if (List.length() == 1 && List[0].length() == 1) {
+             out << List[0].at(0);
+         } else {
+             QString html_table = "<table width=\"100%\" border=\"1\" cellspacing=\"0\" cellpadding=\"4\">";
+             for (int i = 0; i < List.length(); ++i) {
+                 QString row;
+                 for (int j = 0; j < List[0].length(); ++j) {
+                     row += "<td>" + List[i].at(j) + "</td>";
+                 }
+                 html_table += "<tr>"+row+"</tr>";
+             }
+             html_table += "</table>";
+
+             out<<html_table;
+
+             out << "</body> </html>";
+         }
+    } else {
+         // show ERROR message
+        QMessageBox::warning(0, "Warning", trUtf8("В таблице нет записей."));
+     }
 }

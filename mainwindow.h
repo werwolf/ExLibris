@@ -30,6 +30,10 @@ private:
 
 public slots:
     void startP(long user_id);
+    void closeEvent(QCloseEvent *event);
+
+signals:
+    void exitWorkplace(void);
 };
 
 #endif // MAINWINDOW_H

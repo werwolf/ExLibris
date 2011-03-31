@@ -155,6 +155,12 @@
             <height>0</height>
            </size>
           </property>
+          <property name="prefix">
+           <string/>
+          </property>
+          <property name="suffix">
+           <string> (грн.)</string>
+          </property>
           <property name="maximum">
            <double>999999999.990000009536743</double>
           </property>
@@ -180,6 +186,12 @@
             <width>100</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="suffix">
+           <string/>
+          </property>
+          <property name="prefix">
+           <string/>
           </property>
           <property name="maximum">
            <number>999999999</number>

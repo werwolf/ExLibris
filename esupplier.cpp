@@ -23,8 +23,8 @@ ESupplier::ESupplier(EUser& user, QWidget *parent) :
         qDebug()<<"\nid :"<<id<<"\ndistnce :"<<distance<<"\ncompany name :"<<companyName;
 
         ui->setupUi(this);
-        type_items = new QList<QTreeWidgetItem *>();
-        items = new QList<QTreeWidgetItem *>();
+        type_items = new QList<QTreeWidgetItem *>;
+        items = new QList<QTreeWidgetItem *>;
 
         // hide id column
         ui->treeWidget->hideColumn(3);
@@ -44,17 +44,15 @@ ESupplier::~ESupplier()
 
 bool ESupplier::readData(void)
 {
-    QString query = QString("SELECT rt.title as `type`, r.title as `title`, sr.price as `price`, sr.number as `number`, r.id as `id` " \
-                            "FROM suppliers_resources AS sr " \
-                            "INNER JOIN resources AS r ON sr.resource_id=r.id INNER JOIN resource_types AS rt ON r.resource_type_id=rt.id " \
-                            "WHERE sr.supplier_id='%1' ORDER BY rt.title, r.title").arg(id);
+    QString query = QString("SELECT `type`, `title`, `price`, `number`, `res_id`" \
+                            " FROM suppliers_resources_view WHERE supplier_id='%1' ORDER BY type, title").arg(id);
 
     QList<QStringList> List = db->get(query);
 
     if (type_items->length() > 0) type_items->clear();
     if (items->length() > 0) items->clear();
     ui->treeWidget->clear();
-    type_items->append(new QTreeWidgetItem(ui->treeWidget, QStringList(QObject::tr("Add new"))));
+    type_items->append(new QTreeWidgetItem(ui->treeWidget, QStringList(QObject::trUtf8("Add new"))));
     type_items->at(0)->setForeground(0, QBrush(QColor(0xFF, 0xAA, 0x00)));
 
     if (!List.isEmpty()) {
@@ -147,10 +145,14 @@ void ESupplier::on_delete_btn_clicked()
     res_type.remove(QRegExp("['\"]"));
     res_name.remove(QRegExp("['\"]"));
 
-    if (res_type.isEmpty() || res_name.isEmpty()) {
-        QMessageBox::warning(0, "Warning", tr("Необходимо заполнить все поля."));
-        return;
-    }
+    if (res_type.isEmpty() || res_name.isEmpty()) return;
+
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(trUtf8("Внимание"));
+    msgBox.setInformativeText(trUtf8("Вы действительно хотите удалить этот ресурс?"));
+    msgBox.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+
+    if (msgBox.exec() == QMessageBox::No) return;
 
     QString query = QString("DELETE FROM suppliers_resources WHERE resource_id='%1' AND supplier_id='%2'")
                             .arg(ui->treeWidget->currentItem()->text(3)).arg(id);
@@ -197,7 +199,7 @@ void ESupplier::on_update_add_btn_clicked()
 
         if (res_id == -1) {
             // ERROR message
-            QMessageBox::warning(0, "Warning", tr("Ошибка при добавлении ресурса."));
+            QMessageBox::warning(0, "Warning", trUtf8("Ошибка при добавлении ресурса."));
             return;
         }
 
@@ -206,7 +208,7 @@ void ESupplier::on_update_add_btn_clicked()
                 .arg(res_id).arg(id).arg(price).arg(number);
         if (db->insert(query) == -1) {
             // ERROR message
-            QMessageBox::warning(0, "Warning", tr("Ошибка при занесении данных в БД."));
+            QMessageBox::warning(0, "Warning", trUtf8("Ошибка при занесении данных в БД."));
             return;
         }
     }
@@ -216,13 +218,13 @@ void ESupplier::on_update_add_btn_clicked()
 
 void ESupplier::on_report_btn_clicked()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Report"), "", tr("Save Reports (*.html)"));
+    QString fileName = QFileDialog::getSaveFileName(this, trUtf8("Save Report"), "", trUtf8("Save Reports (*.html)"));
     qDebug()<<"filename :"<<fileName;
     if (fileName.isEmpty()) return;
     QFile file(fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         // show ERROR message
-        QMessageBox::warning(0, "Warning", tr("Ошибка.\nНельзя создать (открыть) файл."));
+        QMessageBox::warning(0, "Warning", trUtf8("Ошибка.\nНельзя создать (открыть) файл."));
         return;
     }
 
@@ -259,6 +261,6 @@ void ESupplier::on_report_btn_clicked()
          }
     } else {
          // show ERROR message
-        QMessageBox::warning(0, "Warning", tr("В таблице нет записей."));
+        QMessageBox::warning(0, "Warning", trUtf8("В таблице нет записей."));
      }
 }

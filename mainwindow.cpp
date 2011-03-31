@@ -4,6 +4,8 @@
 #include "euser.h"
 #include "eclient.h"
 //#include "esupplier.h"
+#include <QMessageBox>
+#include <QCloseEvent>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -18,11 +20,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
+    qDebug("MainWindow destructor");
     delete e_operator;
     delete supplier;
     delete client;
     delete admin;
+    delete ui;
 }
 
 void MainWindow::startP(long user_id)
@@ -45,7 +48,7 @@ void MainWindow::startP(long user_id)
         supplier = new ESupplier(user);
         this->setCentralWidget(supplier->window());
         this->setWindowTitle(QString("Supplier : \"%1 %2\"").arg(supplier->getName()).arg(supplier->getlastname()));
-        this->resize(680, 270);
+        this->resize(700, 280);
         qDebug()<<">> SUPPLIER has been connected.";
 
     } else if (user.getType() == EUser::CEO) {
@@ -56,16 +59,36 @@ void MainWindow::startP(long user_id)
         e_operator = new EOperator(user);
         this->setCentralWidget(e_operator->window());
         this->setWindowTitle(QString("Operator : \"%1 %2\"").arg(e_operator->getName()).arg(e_operator->getlastname()));
-        this->resize(680, 270);
+        this->resize(780, 270);
         qDebug()<<">> OPERATOR has been connected.";
 
     } else if (EUser::ADMIN) {
         admin = new EAdmin(user);
         this->setCentralWidget(admin->window());
         this->setWindowTitle(QString("Admin : \"%1 %2\"").arg(admin->getName()).arg(admin->getlastname()));
-//        this->resize(680, 270);
+        this->resize(550, 400);
         qDebug()<<">> ADMIN has been connected.";
     }
 
     show();
+}
+
+//обработчик выхода
+void MainWindow::closeEvent(QCloseEvent* event)
+{
+    //выдаём сообщение
+    int result =QMessageBox::question(0, trUtf8("Питання"),
+                                                                  trUtf8("Ви точно хочете вийти з робочого місця?"),
+                                                                  QMessageBox::Ok, QMessageBox::Cancel);
+
+    //анализируем ответ
+    if (result == QMessageBox::Ok){
+        //выходим
+        emit exitWorkplace();
+        event->accept();
+    }
+    else{
+        //остаёмся
+        event->ignore();
+    }
 }

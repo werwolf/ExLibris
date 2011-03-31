@@ -52,8 +52,7 @@ EOperator::~EOperator()
 
 void EOperator::readResourcesData(QString cond)
 {
-    QString query = QString("SELECT * FROM op_resources_view " \
-                            "WHERE %1").arg(cond);
+    QString query = QString("SELECT * FROM op_resources_view WHERE %1").arg(cond);
 
     QList<QStringList> List = db->get(query);
 
@@ -63,15 +62,15 @@ void EOperator::readResourcesData(QString cond)
     ui->res_tw->hideColumn(2);
 
     for (int i = 0; i < List.length(); ++i) {
-        ui->res_tw->setCellWidget(i, 9, new QSpinBox);
+        QSpinBox *temp_spnb = new QSpinBox;
+        temp_spnb->setMaximum(List[i].at(6).toInt());
+
+        ui->res_tw->setCellWidget(i, 9, temp_spnb);
         ui->res_tw->setCellWidget(i, 0, new QCheckBox);
 
         for (int j = 0; j < List[0].length(); ++j) {
             ui->res_tw->setItem(i, j+1, new QTableWidgetItem(List[i].at(j)));
         }
-
-        QSpinBox *temp_spnb = qobject_cast<QSpinBox*>(ui->res_tw->cellWidget(i, 9));
-        temp_spnb->setMaximum(ui->res_tw->item(i, 7)->text().toInt());
     }
 
     ui->res_tw->setColumnWidth(0, 35);
@@ -114,8 +113,8 @@ void EOperator::on_buy_resources_btn_clicked()
             QString query = QString("INSERT INTO buy_log" \
                                         "(resource_id,supplier_id,garage_id,number," \
                                         "SUM,deal_date,deliver_date) " \
-                                    "VALUES ("
-                                        "'%1', '%2', '%3','%4', '%5', NOW(),DATE_ADD(NOW(), INTERVAL 5 DAY)"
+                                    "VALUES (" \
+                                        "'%1', '%2', '%3','%4', '%5', NOW(),DATE_ADD(NOW(), INTERVAL 5 DAY)" \
                                     ")").arg(resource_id).arg(supplier_id).arg(garage_id).arg(number).arg(price);
             if (db->insert(query) == -1) {
                 // show Error.
@@ -131,4 +130,5 @@ void EOperator::on_buy_resources_btn_clicked()
             }
         }
     }
+    readResourcesData();
 }
