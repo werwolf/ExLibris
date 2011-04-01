@@ -4,40 +4,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-//EClient::EClient(long _id, QWidget *parent) :
-//  QWidget(parent),
-//  EUser(_id),
-//  ui(new Ui::EClientForm)
-//{
-//    qDebug(":TODO make EClient(long _id) constructor");
-//    qDebug(": EClient >> Client [id]");
-//    ui->setupUi(this);
-//}
-
-//EClient::EClient(const EClient& rhs)/* : QWidget(rhs.parentWidget()), EUser(rhs.getUserID())*/
-//{
-//    operator =(rhs);
-//}
-
-//EClient& EClient::operator=( const EClient& rhs) : QWidget(rhs.parentWidget()), EUser(rhs.getUserID())
-//{
-//    if (this == &rhs) return *this;
-
-//    client_id = rhs.client_id;
-//    companyName = rhs.companyName;
-
-//    this->setUserID( rhs.getUserID() );
-//    this->setLogin( rhs.getLogin() );
-//    this->setlastname( rhs.getlastname() );
-//    this->setName( rhs.getName() );
-//    this->setAddress( rhs.getAddress() );
-//    this->setPhone( rhs.getPhone() );
-//    this->setEmail( rhs.getEmail() );
-//    this->setType( rhs.getType() );
-////    qDebug()<<login;
-//    return *this;
-//}
-
 EClient::EClient(EUser& user, QWidget *parent) :
     QWidget(parent),
     EUser(user),

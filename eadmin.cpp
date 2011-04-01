@@ -8,10 +8,11 @@ EAdmin::EAdmin(EUser& user, QWidget *parent) :
     EUser(user),
     ui(new Ui::EAdmin)
 {
+    db = EDBconnection::getInstance();
     ui->setupUi(this);
     qDebug("EAdmin constructor");
-//    connect(EDBconnection::getInstance(), SIGNAL(returnLastError(QString)), ui->result_te, SLOT(insertHtml(QString)));
-    connect(EDBconnection::getInstance(), SIGNAL(returnLastError(QString)), this, SLOT(showError(QString)));
+//    connect(db, SIGNAL(returnLastError(QString)), ui->result_te, SLOT(insertHtml(QString)));
+    connect(db, SIGNAL(returnLastError(QString)), this, SLOT(showError(QString)));
 
 //    ui->result_te->insertHtml("<style type=”text/css”>p { line-height: 100px;}</style>");
 
@@ -35,7 +36,7 @@ void EAdmin::on_execute_btn_clicked()
     QString query_type = query.section(" ", 0, 0);
     if (QString::compare(query_type, QString("SELECT"), Qt::CaseInsensitive) == 0) {
         qDebug()<<"query_type :"<<query_type;
-        QList<QStringList> List = EDBconnection::getInstance()->get(query);
+        QList<QStringList> List = db->get(query);
 
         // :TODO добавить вывод названия колонок
         if (!List.isEmpty()) {
@@ -60,7 +61,7 @@ void EAdmin::on_execute_btn_clicked()
                || QString::compare(query_type, QString("REPLACE"), Qt::CaseInsensitive) == 0) {
 
         // show last insert id
-        if (int last_id = EDBconnection::getInstance()->insert(query) != -1)
+        if (int last_id = db->insert(query) != -1)
             ui->result_te->insertHtml(QString("<p style=\"color: green;\">Last insert ID = %1 </p><br/><br/>").arg(last_id));
 
 
@@ -69,7 +70,7 @@ void EAdmin::on_execute_btn_clicked()
     } else {
         // other queries {DELETE, i.e.}
         QString query = ui->query_tx->toPlainText().trimmed();
-        bool error = EDBconnection::getInstance()->query(query);
+        bool error = db->query(query);
         if (error) ui->result_te->insertHtml("<p style=\"color: red;\">Error : EDBconnection::query(QString) return false;</p><br/><br/>");
     }
 }
@@ -90,8 +91,6 @@ void EAdmin::on_backup_btn_clicked()
     QString fileName = QFileDialog::getSaveFileName(this, QObject::trUtf8("Save Backup"), "", QObject::trUtf8("Save Backup (*.sql)"));
     qDebug()<<"filename :"<<fileName;
     if (fileName.isEmpty()) return;
-
-    EDBconnection *db = EDBconnection::getInstance();
 
     QStringList param;
     param << db->get_dbName();
@@ -131,8 +130,6 @@ void EAdmin::on_restore_btn_clicked()
 
     QByteArray db_data = file.readAll();
     ui->info_te->setPlainText(db_data);
-
-    EDBconnection *db = EDBconnection::getInstance();
 
     QStringList param;
     param << db->get_dbName();

@@ -26,6 +26,8 @@ private slots:
 private:
     Ui::EAdmin *ui;
 
+    EDBconnection* db;
+
     QProcess *process;
 };
 

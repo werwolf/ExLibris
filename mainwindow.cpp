@@ -77,12 +77,12 @@ void MainWindow::startP(long user_id)
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     //выдаём сообщение
-    int result =QMessageBox::question(0, trUtf8("Питання"),
-                                                                  trUtf8("Ви точно хочете вийти з робочого місця?"),
-                                                                  QMessageBox::Ok, QMessageBox::Cancel);
+    int result = QMessageBox::question(0, trUtf8("Предупреждние"),
+                                       trUtf8("Вы действительно хотите выйти?"),
+                                       QMessageBox::Yes, QMessageBox::No);
 
     //анализируем ответ
-    if (result == QMessageBox::Ok){
+    if (result == QMessageBox::Yes){
         //выходим
         emit exitWorkplace();
         event->accept();
