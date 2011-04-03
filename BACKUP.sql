@@ -1,6 +1,6 @@
 /* ZERO LEVEL */
 alter table `exlibris`.`amort_log` 
-   change `sum` `sum` float(10,2) UNSIGNED ZEROFILL NOT NULL;
+   change `sum` `sum` float(10,2) UNSIGNED NOT NULL;
    
 INSERT INTO balance_log(`sum`, `date`) VALUES('10000', DATE_SUB(NOW(), INTERVAL 1 DAY));
 
