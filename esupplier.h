@@ -21,10 +21,10 @@ public:
 private slots:
     void on_treeWidget_itemClicked(QTreeWidgetItem* item, int column);
     void on_delete_btn_clicked();
-
     void on_update_add_btn_clicked();
-
     void on_report_btn_clicked();
+    bool readData(void);
+    void selfDestruct(void);
 
 private:
     Ui::ESupplier *ui;
@@ -36,9 +36,6 @@ private:
 
     QList<QTreeWidgetItem *>* type_items;
     QList<QTreeWidgetItem *>* items;
-
-    // methods
-    bool readData(void);
 };
 
 #endif // ESUPPLIER_H

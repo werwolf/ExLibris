@@ -15,10 +15,7 @@ class EClient :  public QWidget, public EUser
     Q_OBJECT
 
 public:
-//    explicit EClient(long _id, QWidget *parent = 0);
     explicit EClient(EUser& user, QWidget *parent = 0);
-//    explicit EClient( const EClient& );
-//    EClient& operator=( const EClient& );
     virtual ~EClient();
 
     long getClientID(void) const { return client_id; }
@@ -33,10 +30,25 @@ private slots:
     void on_findServices_bt_clicked();
     void on_findResources_bt_clicked();
     void on_findQueries_bt_clicked();
-    void on_tabs_currentChanged(int index);
+
+    void on_tabs_currentChanged(int index = -1);
+
     void on_buy_btn_clicked();
 
     void on_report_btn_clicked();
+
+//    void on_queryUpdate_btn_clicked();
+//    void on_resourceUpdate_btn_clicked();
+//    void on_serviceUpdate_btn_clicked();
+//    void on_logUpdate_btn_clicked();
+
+    void on_logFilter_cbx_currentIndexChanged(int index);
+
+    void on_accEdit_btn_clicked();
+
+    void on_company_edt_returnPressed();
+
+    void selfDestruct();
 
 private:
     Ui::EClient *ui;

@@ -59,7 +59,7 @@ void MainWindow::startP(long user_id)
         e_operator = new EOperator(user);
         this->setCentralWidget(e_operator->window());
         this->setWindowTitle(QString("Operator : \"%1 %2\"").arg(e_operator->getName()).arg(e_operator->getlastname()));
-        this->resize(780, 270);
+        this->resize(790, 270);
         qDebug()<<">> OPERATOR has been connected.";
 
     } else if (EUser::ADMIN) {

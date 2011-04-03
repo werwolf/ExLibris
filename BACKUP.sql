@@ -4,7 +4,7 @@ alter table `exlibris`.`amort_log`
    
 INSERT INTO balance_log(`sum`, `date`) VALUES('10000', DATE_SUB(NOW(), INTERVAL 1 DAY));
 
-
+CREATE UNIQUE INDEX login_unique ON users (login)
 
 
 
@@ -86,8 +86,7 @@ SELECT
   GROUP_CONCAT(DISTINCT CONCAT(`u`.`lastname`,_utf8' ',`u`.`name`) ORDER BY `u`.`lastname` ASC SEPARATOR ', ') AS `authors`,
   `g`.`title` AS `genre`,
   `getBookCost`(
-`q`.`id`)  AS `price`,
-  0           AS `count`
+`q`.`id`)  AS `price`
 FROM ((((`queries` `q`
       JOIN `genres` `g`
         ON ((`g`.`id` = `q`.`genre_id`)))
@@ -108,8 +107,7 @@ SELECT
   `rt`.`title` AS `type`,
   `r`.`title`  AS `title`,
   `s`.`number` AS `number`,
-  `r`.`price`  AS `price`,
-  0            AS `0`
+  `r`.`price`  AS `price`
 FROM ((`resources` `r`
     JOIN `stock` `s`
       ON ((`s`.`resource_id` = `r`.`id`)))
@@ -142,8 +140,7 @@ SELECT
   CONCAT(`u`.`lastname`,_utf8' ',`u`.`name`) AS `CONCAT(u.lastname, ' ', u.name)`,
   `s`.`distance` AS `distance`,
   `sr`.`number`  AS `number`,
-  `sr`.`price`   AS `price`,
-  0              AS `0`
+  `sr`.`price`   AS `price`
 FROM ((((`resources` `r`
       JOIN `suppliers_resources` `sr`
         ON ((`sr`.`resource_id` = `r`.`id`)))
@@ -167,8 +164,7 @@ SELECT
     ORDER BY u.lastname SEPARATOR ', '
   ) as authors,
   g.title AS genre,
-  getBookCost(q.id) as price,
-  0 as count
+  getBookCost(q.id) as price
 FROM
   queries AS q 
   INNER JOIN genres AS g 
@@ -188,8 +184,7 @@ SELECT
   rt.title AS TYPE,
   r.title,
   s.number,
-  r.price,
-  0 
+  r.price
 FROM
   resources AS r 
   INNER JOIN stock AS s 
@@ -220,8 +215,7 @@ SELECT
   CONCAT(u.lastname, ' ', u.name),
   s.distance,
   sr.number,
-  sr.price,
-  0 
+  sr.price
 FROM
   resources AS r 
   INNER JOIN suppliers_resources AS sr 
@@ -251,7 +245,7 @@ CREATE
     TRIGGER `book_sell_log_after_insert` AFTER INSERT ON `book_sell_log` 
     FOR EACH ROW BEGIN
     SET @old_balance = (SELECT SUM FROM balance_log ORDER BY DATE DESC LIMIT 1);
-	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance - new.sum*new.number), NOW());
+	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance + new.sum*new.number), NOW());
     END;
 $$
 
@@ -263,7 +257,7 @@ CREATE
     TRIGGER `resource_sell_log_after_insert` AFTER INSERT ON `resource_sell_log` 
     FOR EACH ROW BEGIN
     SET @old_balance = (SELECT SUM FROM balance_log ORDER BY DATE DESC LIMIT 1);
-	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance - new.sum*new.number), NOW());
+	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance + new.sum*new.number), NOW());
     END;
 $$
 
@@ -275,7 +269,7 @@ CREATE
     TRIGGER `service_sell_log_after_insert` AFTER INSERT ON `service_sell_log` 
     FOR EACH ROW BEGIN
     SET @old_balance = (SELECT SUM FROM balance_log ORDER BY DATE DESC LIMIT 1);
-	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance - new.sum), NOW());
+	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance + new.sum), NOW());
     END;
 $$
 

@@ -22,6 +22,7 @@ public:
     QString get_dbName(void) const { return dbName; }
     QString get_dbUser(void) const { return dbUser; }
     QString get_dbPass(void) const { return dbPass; }
+    bool deleteUser(int);
 
 public slots:
 //    void query(const QString) const;

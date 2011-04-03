@@ -169,6 +169,7 @@ int LoginForm::on_enterButton_clicked()
         emit loginning(user_id);
         close();
     }
+    ui->pwdEdit->setText("");
     return 0;
 }
 

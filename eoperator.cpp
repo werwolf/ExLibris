@@ -11,30 +11,11 @@ EOperator::EOperator(EUser& user, QWidget* parent) :
     db = EDBconnection::getInstance();
     qDebug(": EOperator >> Operator [EOperator]");
 
-//    QString query = QString("SELECT id, distance, company_name FROM suppliers WHERE user_id='%1'").arg(user.getUserID());
-//    QList<QStringList> List = db->get(query);
-
-//    if (List.isEmpty()) {
-//        qDebug("EClient constructor error: List is empty");
-//    } else {
-//        id = List[0].at(0).toLong();
-//        distance = List[0].at(1).toLong();
-//        companyName = List[0].at(2);
-//        qDebug()<<"\nid :"<<id<<"\ndistnce :"<<distance<<"\ncompany name :"<<companyName;
-
-//        ui->setupUi(this);
-//        type_items = new QList<QTreeWidgetItem *>();
-//        items = new QList<QTreeWidgetItem *>();
-
-//        // hide id column
-//        ui->treeWidget->hideColumn(3);
-
-//        readData();
-//        on_treeWidget_itemClicked(type_items->at(0), 0);
-//    }
     ui->setupUi(this);
 
     readResourcesData();
+
+    connect(ui->update_btn, SIGNAL(clicked()), this, SLOT(readResourcesData()));
 
     // res_types
     QString query = QString("SELECT title FROM resource_types ORDER BY title");
@@ -112,10 +93,9 @@ void EOperator::on_buy_resources_btn_clicked()
 
             QString query = QString("INSERT INTO buy_log" \
                                         "(resource_id,supplier_id,garage_id,number," \
-                                        "SUM,deal_date,deliver_date) " \
-                                    "VALUES (" \
-                                        "'%1', '%2', '%3','%4', '%5', NOW(),DATE_ADD(NOW(), INTERVAL 5 DAY)" \
-                                    ")").arg(resource_id).arg(supplier_id).arg(garage_id).arg(number).arg(price);
+                                        "SUM,deal_date) " \
+                                    "VALUES ('%1', '%2', '%3','%4', '%5', NOW())")
+                            .arg(resource_id).arg(supplier_id).arg(garage_id).arg(number).arg(price);
             if (db->insert(query) == -1) {
                 // show Error.
                 return;
@@ -131,4 +111,12 @@ void EOperator::on_buy_resources_btn_clicked()
         }
     }
     readResourcesData();
+}
+
+void EOperator::on_tabs_wg_currentChanged(int index)
+{
+    switch (index) {
+    case 0 : readResourcesData(); break;
+    case 2 : break;
+    }
 }

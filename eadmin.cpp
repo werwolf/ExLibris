@@ -106,7 +106,7 @@ void EAdmin::on_backup_btn_clicked()
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         // show ERROR message
-        QMessageBox::warning(0, "Worning", "Ошибка.\nНельзя открыть файл.");
+        QMessageBox::warning(0, "Warning", "Ошибка.\nНельзя открыть файл.");
         return;
     }
 
@@ -124,7 +124,7 @@ void EAdmin::on_restore_btn_clicked()
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         // show ERROR message
-        QMessageBox::warning(0, "Worning", trUtf8("Ошибка.\nНельзя открыть файл."));
+        QMessageBox::warning(0, "Warning", trUtf8("Ошибка.\nНельзя открыть файл."));
         return;
     }
 

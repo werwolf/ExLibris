@@ -32,6 +32,9 @@ ESupplier::ESupplier(EUser& user, QWidget *parent) :
         readData();
         on_treeWidget_itemClicked(type_items->at(0), 0);
     }
+
+    connect(ui->update_btn, SIGNAL(clicked()), this, SLOT(readData()));    
+    connect(ui->self_destruct_btn, SIGNAL(clicked()), this, SLOT(selfDestruct()));
 }
 
 ESupplier::~ESupplier()
@@ -40,6 +43,20 @@ ESupplier::~ESupplier()
     delete items;
     delete type_items;
     delete ui;
+}
+
+void ESupplier::selfDestruct()
+{
+    QString query = QString("SELECT id FROM buy_log WHERE deliver_date = '0000-00-00 00:00:00' " \
+                            "AND supplier_id = '%1' LIMIT 1").arg(id);
+
+    QList<QStringList> List = db->get(query);
+    if (List.isEmpty()) {
+        db->deleteUser(this->getUserID());
+    } else {
+        QMessageBox::warning(0, "Warning", trUtf8("Невозможно удалиться из системы!\n" \
+                                                  "Дождитесь окончания всех перевозок."));
+    }
 }
 
 bool ESupplier::readData(void)

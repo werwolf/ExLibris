@@ -23,11 +23,14 @@ private:
     EDBconnection* db;
 
     // private methods
-    void readResourcesData(QString cond = "1");
+//    void readResourcesData(QString cond = "1");
 
 private slots:
     void on_buy_resources_btn_clicked();
     void on_resourceType_cbx_currentIndexChanged(QString );
+
+    void readResourcesData(QString cond = "1");
+    void on_tabs_wg_currentChanged(int index);
 };
 
 #endif // EOPERATOR_H

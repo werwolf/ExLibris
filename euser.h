@@ -41,7 +41,7 @@ public:
 //    EUser& operator=( const EUser& );
 
 private:
-    long    user_id;
+    int    user_id;
     QString login;
 //    QString password;
     QString lastname;

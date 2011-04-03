@@ -244,3 +244,19 @@ void EDBconnection::newSupplier(QString login,
     insert(QString("INSERT INTO suppliers (user_id, distance, company_name) VALUES ('%1', '%2', '%3')")
            .arg(user_id).arg(dist).arg(company_name));
 }
+
+bool EDBconnection::deleteUser(int user_id)
+{
+    int result = QMessageBox::question(0, trUtf8("Предупреждние"),
+                                       trUtf8("Вы действительно хотите удалить свою запись из системы?\n" \
+                                       "Это необратимое действие!"),
+                                       QMessageBox::Yes, QMessageBox::No);
+
+    if (result == QMessageBox::Yes){
+//        query(QString("DELETE FROM users WHERE id = '%1' LIMIT 1").arg(user_id));
+        query(QString("DELETE FROM users WHERE id = '%1' LIMIT 1").arg(user_id));
+        return true;
+    } else {
+        return false;
+    }
+}

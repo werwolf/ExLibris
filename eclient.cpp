@@ -20,30 +20,33 @@ EClient::EClient(EUser& user, QWidget *parent) :
     } else {
         client_id = List[0].at(0).toInt();
         companyName = List[0].at(1);
-        qDebug()<<"Client ID :"<<client_id<<"company name :"<<companyName;
+        qDebug()<<"Client ID :"<<client_id<<" company name :"<<companyName;
 
         ui->setupUi(this);
     }
 
-    switch (ui->tabs->currentIndex()) {
-    case 0:
-        readQueryData();
-        break;
+    ui->company_lbl->setText(trUtf8("Компания: \"")+ companyName + "\"");
+    ui->company_edt->setVisible(false);
 
-    case 1:
-        readResourcesData();
-        break;
+    on_tabs_currentChanged(ui->tabs->currentIndex());
 
-    case 2:
-        readServicesData();
-        break;
-    }
+    connect(ui->self_destruct_btn, SIGNAL(clicked()), this, SLOT(selfDestruct()));
+
+    connect(ui->queryUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
+    connect(ui->resourceUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
+    connect(ui->serviceUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
+    connect(ui->logUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
 }
 
 EClient::~EClient()
 {
     qDebug("EClient destructor");
     delete ui;
+}
+
+void EClient::selfDestruct()
+{
+    db->deleteUser(this->getUserID());
 }
 
 void EClient::readQueryData(QString cond)
@@ -128,7 +131,6 @@ void EClient::readServicesData(QString cond)
 
 void EClient::on_findQueries_bt_clicked()
 {
-    // find
     QString cond = ui->queryFilter_edt->text().trimmed();
 
     if (cond.isEmpty()) {
@@ -156,7 +158,6 @@ void EClient::on_findQueries_bt_clicked()
 
 void EClient::on_findResources_bt_clicked()
 {
-    // find
     QString cond = ui->resourceFilter_edt->text().trimmed();
 
     if (cond.isEmpty()) {
@@ -176,7 +177,6 @@ void EClient::on_findResources_bt_clicked()
 
 void EClient::on_findServices_bt_clicked()
 {
-    // find
     QString cond = ui->serviceFilter_edt->text().trimmed();
 
     if (cond.isEmpty()) {
@@ -190,9 +190,17 @@ void EClient::on_findServices_bt_clicked()
     }
 }
 
+void EClient::on_logFilter_cbx_currentIndexChanged(int index)
+{
+    // :TODO: writeme
+    qDebug()<<index;
+}
+
 void EClient::on_tabs_currentChanged(int index)
 {
-    switch (index) {
+    Q_UNUSED(index);
+    ui->buy_btn->setEnabled(true);
+    switch (ui->tabs->currentIndex()) {
     case 0:
         on_findQueries_bt_clicked();
         break;
@@ -203,6 +211,10 @@ void EClient::on_tabs_currentChanged(int index)
 
     case 2:
         on_findServices_bt_clicked();
+        break;
+    case 3:
+        on_logFilter_cbx_currentIndexChanged(ui->logFilter_cbx->currentIndex());
+        ui->buy_btn->setEnabled(false);
         break;
     }
 }
@@ -227,25 +239,42 @@ void EClient::on_buy_btn_clicked()
                 if (number == 0) continue;
 
                 QString query = QString("INSERT INTO book_sell_log" \
-                                            "(client_id,query_id,sum,number,income_date," \
-                                            "start_print_date,end_print_date) " \
-                                        "VALUES ("
-                                            "'%1', '%2', getBookCost('%2'), '%3'," \
-                                            "NOW(),NOW(),DATE_ADD(NOW(), INTERVAL 3 DAY)"
-                                        ")").arg(this->getClientID()).arg(book_id).arg(number);
+                                            "(client_id,query_id,sum,number,income_date) " \
+                                        "VALUES ('%1', '%2', getBookCost('%2'), '%3', NOW())")
+                                .arg(this->getClientID()).arg(book_id).arg(number);
                 if (db->insert(query) == -1) {
                     // show Error.
                     QMessageBox::warning(0, "Warning", trUtf8("Ошибка при совершении покупки."));
                     return;
                 } else {
-                    query = QString("SELECT resource_id, number FROM queries_resources WHERE query_id = '%1'")
-                            .arg(book_id);
-                    QList<QStringList> List = db->get(query);
+                    query = QString("SELECT qr.resource_id, qr.number, s.number - 10 " \
+                                    "FROM queries_resources AS qr " \
+                                    "INNER JOIN stock AS s ON s.resource_id = qr.resource_id " \
+                                    "WHERE query_id = '%1'").arg(book_id);
+                    QList<QStringList> res_list = db->get(query);
 
                     // remove from stock (resources for printing)
-                    for (int i = 0; i < List.length(); ++i) {
-                        db->query(QString("UPDATE stock SET number = number - '%1' WHERE resource_id = '%2'")
-                                .arg(List[i].at(1)).arg(List[i].at(0)));
+                    bool got_resources = true;
+                    for (int i = 0; i < res_list.length(); ++i) {
+                        if (res_list[i].at(1) > res_list[i].at(2)) {
+                            got_resources = false;
+                            break;
+                        }
+                    }
+                    if (got_resources) {
+                        for (int i = 0; i < res_list.length(); ++i) {
+                            db->query(QString("UPDATE stock SET number = number - '%1' WHERE resource_id = '%2'")
+                                      .arg(res_list[i].at(1)).arg(res_list[i].at(0)));
+                        }
+                        db->query(QString("UPDATE book_sell_log " \
+                                          "SET start_print_date = NOW(), " \
+                                          "end_print_date = DATE_ADD(NOW(), INTERVAL 1 WEEK) " \
+                                          "WHERE query_id = '%1'").arg(book_id));
+                    } else {
+                        QMessageBox::warning(0, "Warning",
+                                             trUtf8("На данный момент недостаточно ресурсов на складе.\n" \
+                                                    "Ваша заявка будет обработана в ближайщем будущем."));
+                        return;
                     }
                 }
             }
@@ -269,10 +298,10 @@ void EClient::on_buy_btn_clicked()
                 if (number == 0) continue;
 
                 QString query = QString("INSERT INTO resource_sell_log" \
-                                                                 "(client_id,resource_id,sum,number,income_date,deal_date) " \
-                                                             "VALUES ("
-                                                                 "'%1', '%2', '%3', '%4', NOW(),DATE_ADD(NOW(), INTERVAL 1 DAY)"
-                                                             ")").arg(this->getClientID()).arg(resource_id).arg(price).arg(number);
+                                            "(client_id,resource_id,sum,number,income_date) " \
+                                        "VALUES ("
+                                            "'%1', '%2', '%3', '%4', NOW()"
+                                        ")").arg(this->getClientID()).arg(resource_id).arg(price).arg(number);
 
                 if (db->insert(query) == -1) {
                     // show Error.
@@ -301,7 +330,7 @@ void EClient::on_buy_btn_clicked()
                 QString query = QString("INSERT INTO service_sell_log" \
                                             "(client_id,service_id,sum,income_date,deal_date) " \
                                         "VALUES ("
-                                            "'%1', '%2', '%3', NOW(),DATE_ADD(NOW(), INTERVAL 1 DAY)"
+                                            "'%1', '%2', '%3', NOW(),DATE_ADD(NOW(), INTERVAL 3 DAY)"
                                         ")").arg(this->getClientID()).arg(service_id).arg(price);
                 if (db->insert(query) == -1) {
                     // show Error.
@@ -367,7 +396,48 @@ void EClient::on_report_btn_clicked()
              out << "</body> </html>";
          }
     } else {
-         // show ERROR message
+        // show ERROR message
         QMessageBox::warning(0, "Warning", trUtf8("В таблице нет записей."));
-     }
+    }
+}
+
+//void EClient::on_queryUpdate_btn_clicked()
+//{
+//    on_tabs_currentChanged(ui->tabs->currentIndex());
+//}
+
+//void EClient::on_resourceUpdate_btn_clicked()
+//{
+//    on_tabs_currentChanged(ui->tabs->currentIndex());
+//}
+
+//void EClient::on_serviceUpdate_btn_clicked()
+//{
+//    on_tabs_currentChanged(ui->tabs->currentIndex());
+//}
+
+//void EClient::on_logUpdate_btn_clicked()
+//{
+//    on_tabs_currentChanged(ui->tabs->currentIndex());
+//}
+
+void EClient::on_accEdit_btn_clicked()
+{
+    ui->company_lbl->setText(trUtf8("Компания: "));
+    ui->company_edt->setVisible(true);
+    ui->company_edt->setFocus();
+    ui->accEdit_btn->setVisible(false);
+    ui->company_edt->setText(companyName);
+}
+
+void EClient::on_company_edt_returnPressed()
+{
+    QString new_company_name = ui->company_edt->text();
+    this->companyName = new_company_name;
+    ui->company_lbl->setText(trUtf8("Компания: \"")+ companyName + "\"");
+    ui->company_edt->setVisible(false);
+    ui->accEdit_btn->setVisible(true);
+
+    db->query(QString("UPDATE clients SET company_name = '%1' WHERE id = '%2'")
+              .arg(new_company_name).arg(this->getClientID()));
 }
