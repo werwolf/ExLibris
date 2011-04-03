@@ -302,7 +302,7 @@ CREATE TABLE `queries_resources` (
 
 /*Data for the table `queries_resources` */
 
-insert  into `queries_resources`(`query_id`,`resource_id`,`number`) values ('978-182-1-25-9',9,1600),('978-182-1-25-9',10,1),('978-182-1-25-9',13,1600),('978-630-1-25-7',8,1600),('978-630-1-25-7',10,1),('978-630-1-25-7',12,1600);
+insert  into `queries_resources`(`query_id`,`resource_id`,`number`) values ('978-182-1-25-9',9,1600),('978-182-1-25-9',10,1),('978-630-1-25-7',8,1600),('978-630-1-25-7',10,1),('978-630-1-25-7',12,1600);
 
 /*Table structure for table `queries_services` */
 
@@ -350,11 +350,11 @@ CREATE TABLE `resource_types` (
   `title` varchar(45) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `title_UNIQUE` (`title`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
 
 /*Data for the table `resource_types` */
 
-insert  into `resource_types`(`id`,`title`) values (5,'Cover'),(48,'Cover_666'),(54,'Cover_777'),(55,'Cover_new'),(61,'MY_Paper'),(15,'new_type'),(4,'Paper'),(6,'Print'),(7,'some_res_type'),(9,'type1'),(57,'type\\_new'),(56,'\\%1\Z3\'\'45');
+insert  into `resource_types`(`id`,`title`) values (4,'Бумага'),(7,'Мягкий переплет'),(5,'Обложка'),(9,'Переплет на пружину'),(6,'Печать'),(8,'Твердый переплет');
 
 /*Table structure for table `resources` */
 
@@ -369,11 +369,11 @@ CREATE TABLE `resources` (
   UNIQUE KEY `title_UNIQUE` (`title`,`resource_type_id`),
   KEY `fk_resource_resourcetype_id` (`resource_type_id`),
   CONSTRAINT `fk_resource_resourcetype_id` FOREIGN KEY (`resource_type_id`) REFERENCES `resource_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 /*Data for the table `resources` */
 
-insert  into `resources`(`id`,`resource_type_id`,`title`,`price`) values (8,4,'белая бумага',1),(9,4,'глянцевая бумага',2),(10,5,'твердая обложка',1),(11,5,'мягкая обложка',0.5),(12,6,'лазерная печать',2),(13,6,'хреновая печать',5),(39,5,'\"\"\\\\\\',0),(40,48,'www',0),(41,5,'new_cover',0),(42,61,'paper_new',0);
+insert  into `resources`(`id`,`resource_type_id`,`title`,`price`) values (8,4,'белая бумага',1),(9,4,'глянцевая бумага',2),(10,5,'твердая обложка',1),(11,5,'мягкая обложка',0.5),(12,6,'лазерная печать',2),(43,7,'клеевое бесшвейное скрепление',3),(44,7,'скрепка',0.4),(45,7,'каналы металбинд',4),(46,8,'твердый переплет',2),(47,8,'металбинд',3),(48,8,'интегральный переплет',1),(49,9,'металлическая пружина',3.1),(50,9,'пластиковая пружина',2.7),(51,9,'канал металбинд',3);
 
 /*Table structure for table `salary_log` */
 
@@ -390,8 +390,6 @@ CREATE TABLE `salary_log` (
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 /*Data for the table `salary_log` */
-
-insert  into `salary_log`(`id`,`personnel_id`,`sum`,`date`) values (1,11,2000,'2011-03-30 00:00:00'),(2,11,2000,'2011-03-30 00:00:00');
 
 /*Table structure for table `service_sell_log` */
 
@@ -478,8 +476,6 @@ CREATE TABLE `suppliers_resources` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `suppliers_resources` */
-
-insert  into `suppliers_resources`(`supplier_id`,`resource_id`,`price`,`number`) values (1,40,1,800),(1,41,4.5,10510),(1,42,3.5,212);
 
 /*Table structure for table `users` */
 
