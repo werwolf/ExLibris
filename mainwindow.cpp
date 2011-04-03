@@ -77,7 +77,7 @@ void MainWindow::startP(long user_id)
 void MainWindow::closeEvent(QCloseEvent* event)
 {
     //выдаём сообщение
-    int result = QMessageBox::question(0, trUtf8("Предупреждние"),
+    int result = QMessageBox::question(0, trUtf8("Предупреждение"),
                                        trUtf8("Вы действительно хотите выйти?"),
                                        QMessageBox::Yes, QMessageBox::No);
 

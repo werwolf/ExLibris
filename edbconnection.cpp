@@ -247,13 +247,12 @@ void EDBconnection::newSupplier(QString login,
 
 bool EDBconnection::deleteUser(int user_id)
 {
-    int result = QMessageBox::question(0, trUtf8("Предупреждние"),
+    int result = QMessageBox::critical(0, trUtf8("Предупреждение"),
                                        trUtf8("Вы действительно хотите удалить свою запись из системы?\n" \
                                        "Это необратимое действие!"),
                                        QMessageBox::Yes, QMessageBox::No);
 
     if (result == QMessageBox::Yes){
-//        query(QString("DELETE FROM users WHERE id = '%1' LIMIT 1").arg(user_id));
         query(QString("DELETE FROM users WHERE id = '%1' LIMIT 1").arg(user_id));
         return true;
     } else {

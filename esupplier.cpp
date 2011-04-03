@@ -31,10 +31,10 @@ ESupplier::ESupplier(EUser& user, QWidget *parent) :
 
         readData();
         on_treeWidget_itemClicked(type_items->at(0), 0);
-    }
 
-    connect(ui->update_btn, SIGNAL(clicked()), this, SLOT(readData()));    
-    connect(ui->self_destruct_btn, SIGNAL(clicked()), this, SLOT(selfDestruct()));
+        connect(ui->update_btn, SIGNAL(clicked()), this, SLOT(readData()));
+        connect(ui->self_destruct_btn, SIGNAL(clicked()), this, SLOT(selfDestruct()));
+    }    
 }
 
 ESupplier::~ESupplier()

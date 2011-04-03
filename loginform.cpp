@@ -250,12 +250,12 @@ int LoginForm::on_registrationButton_clicked()
     //
     emit checkUser(ui->regLoginEdit->text());
     if (user_id > 0) {
-        qDebug("user with this login is already exist\n");
+        qDebug("user with this login already exists\n");
         ui->regLoginEdit->setStyleSheet(error_imp_field);
         ui->regLoginEdit->setFocus();
         return -1;
     } else {
-        qDebug("registration data is correc\n");
+        qDebug("registration data is correct\n");
 
         QString login = ui->regLoginEdit->text();
         QString pwd = ui->regPwdEdit->text();
@@ -286,6 +286,21 @@ int LoginForm::on_registrationButton_clicked()
             break;
         default: break;
         }
+
+        ui->regLoginEdit->setText("");
+        ui->regPwdEdit->setText("");
+        ui->lastnameEdit->setText("");
+        ui->nameEdit->setText("");
+        ui->addressEdit->setText("");
+        ui->phoneEdit->setText("");
+        ui->emailEdit->setText("");
+        ui->companyNameEdit->setText("");
+        ui->distanceEdit->setText("");
+        ui->birthdayDEdit->clear();
+        ui->toolBox->setCurrentIndex(0);
+        ui->loginEdit->setText(login);
+        ui->pwdEdit->setText("");
+        ui->pwdEdit->setFocus();
     }
 
     return 0;

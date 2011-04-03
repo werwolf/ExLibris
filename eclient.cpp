@@ -23,19 +23,19 @@ EClient::EClient(EUser& user, QWidget *parent) :
         qDebug()<<"Client ID :"<<client_id<<" company name :"<<companyName;
 
         ui->setupUi(this);
+
+        ui->company_lbl->setText(trUtf8("Компания: \"")+ companyName + "\"");
+        ui->company_edt->setVisible(false);
+
+        on_tabs_currentChanged(ui->tabs->currentIndex());
+
+        connect(ui->self_destruct_btn, SIGNAL(clicked()), this, SLOT(selfDestruct()));
+
+        connect(ui->queryUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
+        connect(ui->resourceUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
+        connect(ui->serviceUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
+        connect(ui->logUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
     }
-
-    ui->company_lbl->setText(trUtf8("Компания: \"")+ companyName + "\"");
-    ui->company_edt->setVisible(false);
-
-    on_tabs_currentChanged(ui->tabs->currentIndex());
-
-    connect(ui->self_destruct_btn, SIGNAL(clicked()), this, SLOT(selfDestruct()));
-
-    connect(ui->queryUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
-    connect(ui->resourceUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
-    connect(ui->serviceUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
-    connect(ui->logUpdate_btn, SIGNAL(clicked()), this, SLOT(on_tabs_currentChanged()));
 }
 
 EClient::~EClient()
@@ -192,8 +192,18 @@ void EClient::on_findServices_bt_clicked()
 
 void EClient::on_logFilter_cbx_currentIndexChanged(int index)
 {
-    // :TODO: writeme
     qDebug()<<index;
+    switch (index) {
+        case 0:
+
+            break;
+        case 1:
+
+            break;
+        case 2:
+
+            break;
+    }
 }
 
 void EClient::on_tabs_currentChanged(int index)
@@ -362,8 +372,8 @@ void EClient::on_report_btn_clicked()
 
     switch (ui->tabs->currentIndex()) {
     case 0 : query = QString("SELECT * from queries_view"); break;
-    case 1 : query = QString("SELECT * from resources_view");  break;
-    case 2 : query = QString("SELECT * from services_view");  break;
+    case 1 : query = QString("SELECT * from resources_view"); break;
+    case 2 : query = QString("SELECT * from services_view"); break;
     }
 
     QList<QStringList> List = db->get(query);
@@ -372,7 +382,7 @@ void EClient::on_report_btn_clicked()
          QTextStream out(&file);
 
          out << "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">";
-         out << "<html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">";
+         out << "<html> <head> <meta http-equiv=\"Content-Type\" content=\"text/html; charset=win-1251\">";
          out << "<title>Report : 'resource_sell_log' table.</title> </head> <body>";
 
          out << "<p color=\"blue\">" + query + "</p>";
