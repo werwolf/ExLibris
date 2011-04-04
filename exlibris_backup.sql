@@ -163,7 +163,7 @@ CREATE TABLE `garage` (
 
 /*Data for the table `garage` */
 
-insert  into `garage`(`id`,`model_id`,`driver`,`amort_quot`,`last_amort_date`) values (1,1,'Petrov',0.999,'2011-03-29 11:43:01'),(2,2,'Pechkin',0.71,'2011-04-03 23:26:58');
+insert  into `garage`(`id`,`model_id`,`driver`,`amort_quot`,`last_amort_date`) values (1,1,'Petrov',0.959635,'2011-03-29 11:43:01'),(2,2,'Pechkin',0.71,'2011-04-03 23:26:58');
 
 /*Table structure for table `genres` */
 
@@ -479,7 +479,7 @@ CREATE TABLE `suppliers_resources` (
 
 /*Data for the table `suppliers_resources` */
 
-insert  into `suppliers_resources`(`supplier_id`,`resource_id`,`price`,`number`) values (1,52,2.5,50),(1,54,3,300),(1,55,5,100);
+insert  into `suppliers_resources`(`supplier_id`,`resource_id`,`price`,`number`) values (1,43,2,4),(1,52,2.5,45),(1,54,3,300),(1,55,5,100);
 
 /*Table structure for table `users` */
 
