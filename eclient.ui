@@ -406,27 +406,54 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox">
+          <widget class="QComboBox" name="logResFilter_cbx">
            <property name="minimumSize">
             <size>
-             <width>120</width>
+             <width>90</width>
              <height>0</height>
             </size>
            </property>
            <item>
             <property name="text">
-             <string>(на складе)</string>
+             <string>все</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>(все)</string>
+             <string>требуют вывоза</string>
             </property>
            </item>
           </widget>
          </item>
          <item>
           <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="exportRes_btn">
+           <property name="text">
+            <string>Вывезти все</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="refuseRes_btn">
+           <property name="text">
+            <string>Отказаться</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_8">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -582,7 +609,7 @@
      <item>
       <widget class="QLabel" name="sum_lbl">
        <property name="text">
-        <string>Сумма: 0 грн.</string>
+        <string>Сумма: 0.00 грн.</string>
        </property>
       </widget>
      </item>

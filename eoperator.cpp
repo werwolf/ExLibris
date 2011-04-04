@@ -57,7 +57,7 @@ void EOperator::readResourcesData(QString cond)
     ui->res_tw->setColumnWidth(0, 35);
 
     // balance
-    List = db->get(QString("SELECT SUM FROM balance_log ORDER BY DATE DESC LIMIT 1"));
+    List = db->get(QString("SELECT currentBalance()"));
     ui->balance_lbl->setText(QString::fromUtf8("Баланс: ")+List[0].at(0));
 }
 

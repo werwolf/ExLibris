@@ -210,18 +210,21 @@ void ESupplier::on_update_add_btn_clicked()
         }
         qDebug()<<"res_type_id :"<<res_type_id;
 
+
         // Insert resource (UNIQUE)
-        query = QString("INSERT INTO resources(title, resource_type_id) VALUES('%1', '%2') ").arg(res_name).arg(res_type_id);
+        query = QString("INSERT INTO resources(resource_type_id, title, price) VALUES('%1', '%2', '%3') ")
+                .arg(res_type_id).arg(res_name).arg(price);
         int res_id = db->insert(query);
 
         if (res_id == -1) {
-            // ERROR message
-            QMessageBox::warning(0, "Warning", trUtf8("Ошибка при добавлении ресурса."));
-            return;
+            // this resource already exists
+            query = QString("SELECT id FROM `resources` WHERE title = '%1'").arg(res_name);
+            res_id = db->get(query)[0].at(0).toInt();
         }
+        qDebug()<<"res_id :"<<res_id;
 
         // Insert into suppliers_resources
-        query = QString("INSERT INTO suppliers_resources (resource_id, supplier_id, price, number) VALUES('%1', '%2', '%3', '%4') ")
+        query = QString("REPLACE INTO suppliers_resources (resource_id, supplier_id, price, number) VALUES('%1', '%2', '%3', '%4') ")
                 .arg(res_id).arg(id).arg(price).arg(number);
         if (db->insert(query) == -1) {
             // ERROR message

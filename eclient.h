@@ -37,18 +37,17 @@ private slots:
 
     void on_report_btn_clicked();
 
-//    void on_queryUpdate_btn_clicked();
-//    void on_resourceUpdate_btn_clicked();
-//    void on_serviceUpdate_btn_clicked();
-//    void on_logUpdate_btn_clicked();
-
     void on_logFilter_cbx_currentIndexChanged(int index);
 
     void on_accEdit_btn_clicked();
-
     void on_company_edt_returnPressed();
 
     void selfDestruct();
+
+    void on_exportRes_btn_clicked();
+    void on_refuseRes_btn_clicked();
+
+    void recalcSum(int c = 0);
 
 private:
     Ui::EClient *ui;

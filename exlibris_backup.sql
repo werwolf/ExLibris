@@ -66,7 +66,7 @@ CREATE TABLE `authors_queries` (
 
 /*Data for the table `authors_queries` */
 
-insert  into `authors_queries`(`author_id`,`query_id`) values (4,'978-182-1-25-9'),(4,'978-551-1-16-6'),(4,'978-630-1-25-7');
+insert  into `authors_queries`(`author_id`,`query_id`) values (4,'978-182-1-25-9'),(4,'978-551-1-16-6'),(4,'978-630-1-25-7'),(5,'978-321-1-19-1'),(6,'978-584-1-37-5'),(6,'978-906-1-40-2'),(7,'978-733-1-21-3');
 
 /*Table structure for table `balance_log` */
 
@@ -101,7 +101,7 @@ CREATE TABLE `book_sell_log` (
   KEY `fk_book_sell_log_clients1` (`client_id`),
   CONSTRAINT `fk_bookselllog_query_id` FOREIGN KEY (`query_id`) REFERENCES `queries` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_book_sell_log_clients1` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `book_sell_log` */
 
@@ -125,7 +125,7 @@ CREATE TABLE `buy_log` (
   CONSTRAINT `fk_buylog_garage_id` FOREIGN KEY (`garage_id`) REFERENCES `garage` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_buylog_resource_id` FOREIGN KEY (`resource_id`) REFERENCES `resources` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_buy_log_suppliers1` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `buy_log` */
 
@@ -302,7 +302,7 @@ CREATE TABLE `queries_resources` (
 
 /*Data for the table `queries_resources` */
 
-insert  into `queries_resources`(`query_id`,`resource_id`,`number`) values ('978-182-1-25-9',9,1600),('978-182-1-25-9',10,1),('978-630-1-25-7',8,1600),('978-630-1-25-7',10,1),('978-630-1-25-7',12,1600);
+insert  into `queries_resources`(`query_id`,`resource_id`,`number`) values ('978-182-1-25-9',11,1),('978-182-1-25-9',43,1),('978-182-1-25-9',52,1),('978-182-1-25-9',54,1),('978-321-1-19-1',43,1),('978-321-1-19-1',52,1),('978-584-1-37-5',48,1),('978-584-1-37-5',52,1),('978-630-1-25-7',10,1),('978-630-1-25-7',47,1),('978-630-1-25-7',52,1),('978-630-1-25-7',55,1),('978-906-1-40-2',44,1),('978-906-1-40-2',52,1),('978-906-1-40-2',54,1);
 
 /*Table structure for table `queries_services` */
 
@@ -350,7 +350,7 @@ CREATE TABLE `resource_types` (
   `title` varchar(45) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `title_UNIQUE` (`title`)
-) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 /*Data for the table `resource_types` */
 
@@ -369,11 +369,11 @@ CREATE TABLE `resources` (
   UNIQUE KEY `title_UNIQUE` (`title`,`resource_type_id`),
   KEY `fk_resource_resourcetype_id` (`resource_type_id`),
   CONSTRAINT `fk_resource_resourcetype_id` FOREIGN KEY (`resource_type_id`) REFERENCES `resource_types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
 
 /*Data for the table `resources` */
 
-insert  into `resources`(`id`,`resource_type_id`,`title`,`price`) values (8,4,'белая бумага',1),(9,4,'глянцевая бумага',2),(10,5,'твердая обложка',1),(11,5,'мягкая обложка',0.5),(12,6,'лазерная печать',2),(43,7,'клеевое бесшвейное скрепление',3),(44,7,'скрепка',0.4),(45,7,'каналы металбинд',4),(46,8,'твердый переплет',2),(47,8,'металбинд',3),(48,8,'интегральный переплет',1),(49,9,'металлическая пружина',3.1),(50,9,'пластиковая пружина',2.7),(51,9,'канал металбинд',3);
+insert  into `resources`(`id`,`resource_type_id`,`title`,`price`) values (10,5,'твердая обложка',1),(11,5,'мягкая обложка',0.5),(43,7,'клеевое бесшвейное скрепление',3),(44,7,'скрепка',0.4),(45,7,'каналы металбинд',4),(46,8,'твердый переплет',2),(47,8,'металбинд',3),(48,8,'интегральный переплет',1),(49,9,'металлическая пружина',3.1),(50,9,'пластиковая пружина',2.7),(51,9,'канал металбинд',3),(52,4,'белая бумага',1),(54,6,'обычная печать',1),(55,6,'лазерная печать',5);
 
 /*Table structure for table `salary_log` */
 
@@ -407,7 +407,7 @@ CREATE TABLE `service_sell_log` (
   KEY `fk_service_sell_log_clients1` (`client_id`),
   CONSTRAINT `fk_serviceselllog_service_id` FOREIGN KEY (`service_id`) REFERENCES `services` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_service_sell_log_clients1` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Data for the table `service_sell_log` */
 
@@ -477,6 +477,8 @@ CREATE TABLE `suppliers_resources` (
 
 /*Data for the table `suppliers_resources` */
 
+insert  into `suppliers_resources`(`supplier_id`,`resource_id`,`price`,`number`) values (1,52,2.5,50),(1,54,3,300),(1,55,5,100);
+
 /*Table structure for table `users` */
 
 DROP TABLE IF EXISTS `users`;
@@ -498,59 +500,7 @@ CREATE TABLE `users` (
 
 /*Data for the table `users` */
 
-insert  into `users`(`id`,`login`,`password`,`lastname`,`name`,`address`,`phone`,`email`,`type`,`reg_date`) values (5,'client','62608e08adc29a8d6dbc9754e659f125','lll','kjkljk','','','','CLIENT','2011-03-23 13:34:31'),(6,'author','02bd92faa38aaa6cc0ea75e59937a1ef','last','first','','','','AUTHOR','2011-03-23 13:46:29'),(19,'supplier','99b0e8da24e29e4ccb5d7d76e677c2ac','(Sklad #1)','Nikolay Petrovich','','','','SUPPLIER','2011-03-24 23:08:57'),(23,'operator','4b583376b2767b923c3e1da60d10de59','(Operator #1)','Ivan',NULL,NULL,NULL,'OPERATOR','2011-03-29 13:16:04'),(24,'admin','21232f297a57a5a743894a0e4a801fc3','lname','name',NULL,NULL,NULL,'ADMIN','2011-03-29 14:00:56'),(25,'manager','1d0258c2440a8d19e716292b231e3190','Trukhan','Svetlana',NULL,NULL,NULL,'CEO','2011-03-30 13:21:45'),(27,'author2','02bd92faa38aaa6cc0ea75e59937a1ef','Pis','David','','','','AUTHOR','2011-04-03 23:03:24'),(28,'author3','02bd92faa38aaa6cc0ea75e59937a1ef','Alexander','Dagan','','','','AUTHOR','2011-04-03 23:08:00'),(29,'supplier2','99b0e8da24e29e4ccb5d7d76e677c2ac','Denisenko','CH P','','','','SUPPLIER','2011-04-03 23:09:47'),(30,'author4','02bd92faa38aaa6cc0ea75e59937a1ef','Jackson','Natali','','','','AUTHOR','2011-04-03 23:21:36');
-
-/* Trigger structure for table `authors_queries` */
-
-DELIMITER $$
-
-/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `changeBalance` */$$
-
-/*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `changeBalance` AFTER INSERT ON `authors_queries` FOR EACH ROW BEGIN
-    DECLARE resourcePrice FLOAT;
-    DECLARE servicePrice FLOAT;
-    DECLARE quot FLOAT;
-    SET quot=(SELECT quot_author FROM limits WHERE id=3);
-    SET resourcePrice = (SELECT (SELECT MAX(number)
-                        FROM queries_resources JOIN resources
-                        ON resource_id=id AND queries_resources.query_id=NEW.query_id)*SUM(price)
-            FROM
-                (SELECT resources.id, price
-                 FROM resource_types JOIN resources
-                    ON resource_type_id=resource_types.id
-                        AND resource_types.title IN ('Paper', 'Print')
-                ) titles
-            JOIN queries_resources
-                ON titles.id=resource_id
-                    AND query_id=NEW.query_id);
-    SET servicePrice=(SELECT SUM(price)
-        FROM
-            (SELECT price
-            FROM
-                (SELECT resources.id, price
-                 FROM resource_types JOIN resources
-                    ON resource_type_id=resource_types.id
-                        AND resource_types.title=('Cover')
-                ) covers
-            JOIN queries_resources
-                ON covers.id=resource_id
-                    AND query_id=NEW.query_id
-            UNION ALL
-            SELECT price
-            FROM services JOIN queries_services
-                ON services.id=service_id
-                    AND query_id=NEW.query_id) cov
-        );
-    SET servicePrice = servicePrice + quot*(resourcePrice+servicePrice);
-    SET servicePrice = servicePrice +
-        (SELECT sum FROM balance_log WHERE id=1);
-    INSERT INTO balance_log VALUES ((SELECT COUNT(*)+1 FROM balance_log b),
-        servicePrice,
-        CURRENT_DATE);
-END */$$
-
-
-DELIMITER ;
+insert  into `users`(`id`,`login`,`password`,`lastname`,`name`,`address`,`phone`,`email`,`type`,`reg_date`) values (5,'client','62608e08adc29a8d6dbc9754e659f125','Bubnov','Andrey','','','','CLIENT','2011-03-23 13:34:31'),(6,'author','02bd92faa38aaa6cc0ea75e59937a1ef','Shostak','Sergey','','','','AUTHOR','2011-03-23 13:46:29'),(19,'supplier','99b0e8da24e29e4ccb5d7d76e677c2ac','(Sklad #1)','Nikolay Petrovich','','','','SUPPLIER','2011-03-24 23:08:57'),(23,'operator','4b583376b2767b923c3e1da60d10de59','(Operator #1)','Ivan',NULL,NULL,NULL,'OPERATOR','2011-03-29 13:16:04'),(24,'admin','21232f297a57a5a743894a0e4a801fc3','ADMIN','THE BEST',NULL,NULL,NULL,'ADMIN','2011-03-29 14:00:56'),(25,'manager','1d0258c2440a8d19e716292b231e3190','Trukhan','Svetlana',NULL,NULL,NULL,'CEO','2011-03-30 13:21:45'),(27,'author2','02bd92faa38aaa6cc0ea75e59937a1ef','Pis','David','','','','AUTHOR','2011-04-03 23:03:24'),(28,'author3','02bd92faa38aaa6cc0ea75e59937a1ef','Alexander','Dagan','','','','AUTHOR','2011-04-03 23:08:00'),(29,'supplier2','99b0e8da24e29e4ccb5d7d76e677c2ac','Denisenko','CH P','','','','SUPPLIER','2011-04-03 23:09:47'),(30,'author4','02bd92faa38aaa6cc0ea75e59937a1ef','Jackson','Natali','','','','AUTHOR','2011-04-03 23:21:36');
 
 /* Trigger structure for table `book_sell_log` */
 
@@ -559,8 +509,7 @@ DELIMITER $$
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `book_sell_log_after_insert` */$$
 
 /*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `book_sell_log_after_insert` AFTER INSERT ON `book_sell_log` FOR EACH ROW BEGIN
-    SET @old_balance = (SELECT SUM FROM balance_log ORDER BY DATE DESC LIMIT 1);
-	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance + new.sum*new.number), NOW());
+	INSERT INTO balance_log(SUM, DATE) VALUES((currentBalance() + new.sum*new.number), NOW());
     END */$$
 
 
@@ -573,8 +522,7 @@ DELIMITER $$
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `buy_log_after_insert` */$$
 
 /*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `buy_log_after_insert` AFTER INSERT ON `buy_log` FOR EACH ROW BEGIN
-    SET @old_balance = (SELECT SUM FROM balance_log ORDER BY DATE DESC LIMIT 1);
-	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance - new.sum*new.number), NOW());
+    	INSERT INTO balance_log(SUM, DATE) VALUES((currentBalance() - new.sum*new.number), NOW());
 	UPDATE garage SET amort_quot = amort_quot * 0.99 WHERE id = new.garage_id;
     END */$$
 
@@ -588,8 +536,7 @@ DELIMITER $$
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `resource_sell_log_after_insert` */$$
 
 /*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `resource_sell_log_after_insert` AFTER INSERT ON `resource_sell_log` FOR EACH ROW BEGIN
-    SET @old_balance = (SELECT SUM FROM balance_log ORDER BY DATE DESC LIMIT 1);
-	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance + new.sum*new.number), NOW());
+    	INSERT INTO balance_log(SUM, DATE) VALUES((currentBalance() + new.sum*new.number), NOW());
     END */$$
 
 
@@ -616,11 +563,25 @@ DELIMITER $$
 /*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `service_sell_log_after_insert` */$$
 
 /*!50003 CREATE */ /*!50017 DEFINER = 'root'@'localhost' */ /*!50003 TRIGGER `service_sell_log_after_insert` AFTER INSERT ON `service_sell_log` FOR EACH ROW BEGIN
-    SET @old_balance = (SELECT SUM FROM balance_log ORDER BY DATE DESC LIMIT 1);
-	INSERT INTO balance_log(SUM, DATE) VALUES((@old_balance + new.sum), NOW());
+    	INSERT INTO balance_log(SUM, DATE) VALUES((currentBalance() + new.sum), NOW());
     END */$$
 
 
+DELIMITER ;
+
+/* Function  structure for function  `currentBalance` */
+
+/*!50003 DROP FUNCTION IF EXISTS `currentBalance` */;
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `currentBalance`() RETURNS float
+    DETERMINISTIC
+BEGIN
+  DECLARE c float ;
+  SELECT SUM into c FROM balance_log ORDER BY DATE DESC LIMIT 1;
+  set c = if(c is null, 0, c);
+  RETURN c ;
+END */$$
 DELIMITER ;
 
 /* Function  structure for function  `getBookCost` */
@@ -631,7 +592,7 @@ DELIMITER $$
 /*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `getBookCost`(book_id VARCHAR (17)) RETURNS float
     DETERMINISTIC
 BEGIN
-  DECLARE cost INT ;
+  DECLARE cost float ;
   SELECT
     SUM(qr.number * r.price) INTO cost
   FROM
@@ -643,6 +604,71 @@ BEGIN
   WHERE q.id = book_id
   GROUP BY q.id ;
   RETURN cost ;
+END */$$
+DELIMITER ;
+
+/* Function  structure for function  `getResourceBookedCount` */
+
+/*!50003 DROP FUNCTION IF EXISTS `getResourceBookedCount` */;
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `getResourceBookedCount`(res_id VARCHAR (17)) RETURNS int(11)
+    DETERMINISTIC
+BEGIN
+  DECLARE c INT ;
+  SELECT 
+    SUM(number) into c
+  FROM
+    resource_sell_log 
+  WHERE deal_date = '0000-00-00 00:00:00' 
+    AND resource_id = res_id ;
+  SET c = IF(c IS NULL, 0, c);
+  RETURN c ;
+END */$$
+DELIMITER ;
+
+/* Function  structure for function  `getSellBookQuot` */
+
+/*!50003 DROP FUNCTION IF EXISTS `getSellBookQuot` */;
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `getSellBookQuot`() RETURNS float
+    DETERMINISTIC
+BEGIN
+  DECLARE c FLOAT ;
+  SELECT quot_sell_book into c FROM limits ORDER BY DATE DESC LIMIT 1;
+  SET c = IF(c IS NULL, 1, c);
+  RETURN c ;
+END */$$
+DELIMITER ;
+
+/* Function  structure for function  `getSellResQuot` */
+
+/*!50003 DROP FUNCTION IF EXISTS `getSellResQuot` */;
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `getSellResQuot`() RETURNS float
+    DETERMINISTIC
+BEGIN
+  DECLARE c FLOAT ;
+  SELECT quot_sell_resource INTO c FROM limits ORDER BY DATE DESC LIMIT 1;
+  SET c = IF(c IS NULL, 1, c);
+  RETURN c ;
+END */$$
+DELIMITER ;
+
+/* Function  structure for function  `getSellServQuot` */
+
+/*!50003 DROP FUNCTION IF EXISTS `getSellServQuot` */;
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `getSellServQuot`() RETURNS float
+    DETERMINISTIC
+BEGIN
+  DECLARE c FLOAT ;
+  SELECT quot_sell_service INTO c FROM limits ORDER BY DATE DESC LIMIT 1;
+  SET c = IF(c IS NULL, 1, c);
+  RETURN c ;
 END */$$
 DELIMITER ;
 
@@ -811,8 +837,7 @@ DROP TABLE IF EXISTS `queries_view`;
  `title` varchar(45) ,
  `authors` varchar(341) ,
  `genre` varchar(45) ,
- `price` double ,
- `count` int(1) 
+ `price` double(23,2) 
 )*/;
 
 /*Table structure for table `resources_view` */
@@ -826,9 +851,8 @@ DROP TABLE IF EXISTS `resources_view`;
  `id` int(11) ,
  `type` varchar(45) ,
  `title` varchar(45) ,
- `number` int(11) ,
- `price` float unsigned ,
- `0` int(1) 
+ `number` bigint(13) ,
+ `price` double(23,2) 
 )*/;
 
 /*Table structure for table `services_view` */
@@ -841,7 +865,7 @@ DROP TABLE IF EXISTS `services_view`;
 /*!50001 CREATE TABLE  `services_view`(
  `id` int(11) ,
  `title` varchar(45) ,
- `price` float unsigned 
+ `price` double(23,2) 
 )*/;
 
 /*Table structure for table `suppliers_resources_view` */
@@ -928,21 +952,21 @@ DROP TABLE IF EXISTS `suppliers_resources_view`;
 /*!50001 DROP TABLE IF EXISTS `queries_view` */;
 /*!50001 DROP VIEW IF EXISTS `queries_view` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `queries_view` AS select `q`.`id` AS `id`,`q`.`title` AS `title`,group_concat(distinct concat(`u`.`lastname`,_utf8' ',`u`.`name`) order by `u`.`lastname` ASC separator ', ') AS `authors`,`g`.`title` AS `genre`,`getBookCost`(`q`.`id`) AS `price`,0 AS `count` from ((((`queries` `q` join `genres` `g` on((`g`.`id` = `q`.`genre_id`))) join `authors_queries` `aq` on((`q`.`id` = `aq`.`query_id`))) join `authors` `a` on((`aq`.`author_id` = `a`.`id`))) join `users` `u` on((`u`.`id` = `a`.`user_id`))) group by `q`.`id` */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `queries_view` AS select `q`.`id` AS `id`,`q`.`title` AS `title`,group_concat(distinct concat(`u`.`lastname`,_utf8' ',`u`.`name`) order by `u`.`lastname` ASC separator ', ') AS `authors`,`g`.`title` AS `genre`,round((`getBookCost`(`q`.`id`) * `getSellBookQuot`()),2) AS `price` from ((((`queries` `q` join `genres` `g` on((`g`.`id` = `q`.`genre_id`))) join `authors_queries` `aq` on((`q`.`id` = `aq`.`query_id`))) join `authors` `a` on((`aq`.`author_id` = `a`.`id`))) join `users` `u` on((`u`.`id` = `a`.`user_id`))) where (`getBookCost`(`q`.`id`) > 0) group by `q`.`id` */;
 
 /*View structure for view resources_view */
 
 /*!50001 DROP TABLE IF EXISTS `resources_view` */;
 /*!50001 DROP VIEW IF EXISTS `resources_view` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `resources_view` AS select `r`.`id` AS `id`,`rt`.`title` AS `type`,`r`.`title` AS `title`,`s`.`number` AS `number`,`r`.`price` AS `price`,0 AS `0` from ((`resources` `r` join `stock` `s` on((`s`.`resource_id` = `r`.`id`))) join `resource_types` `rt` on((`rt`.`id` = `r`.`resource_type_id`))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `resources_view` AS select `r`.`id` AS `id`,`rt`.`title` AS `type`,`r`.`title` AS `title`,((`s`.`number` - 10) - `getResourceBookedCount`(`r`.`id`)) AS `number`,round((`r`.`price` * `getSellResQuot`()),2) AS `price` from ((`resources` `r` join `stock` `s` on((`s`.`resource_id` = `r`.`id`))) join `resource_types` `rt` on((`rt`.`id` = `r`.`resource_type_id`))) where (`s`.`number` > (10 + `getResourceBookedCount`(`r`.`id`))) */;
 
 /*View structure for view services_view */
 
 /*!50001 DROP TABLE IF EXISTS `services_view` */;
 /*!50001 DROP VIEW IF EXISTS `services_view` */;
 
-/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `services_view` AS select `s`.`id` AS `id`,`s`.`title` AS `title`,`s`.`price` AS `price` from ((`services` `s` join `personnel_services` `ps` on((`ps`.`service_id` = `s`.`id`))) join `personnel` `p` on((`ps`.`personnel_id` = `p`.`id`))) */;
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `services_view` AS select `s`.`id` AS `id`,`s`.`title` AS `title`,round((`s`.`price` * `getSellServQuot`()),2) AS `price` from ((`services` `s` join `personnel_services` `ps` on((`ps`.`service_id` = `s`.`id`))) join `personnel` `p` on((`ps`.`personnel_id` = `p`.`id`))) */;
 
 /*View structure for view suppliers_resources_view */
 
