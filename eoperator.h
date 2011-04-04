@@ -24,6 +24,7 @@ private:
 
     // private methods
 //    void readResourcesData(QString cond = "1");
+    void completePrinting(void);
 
 private slots:
     void on_buy_resources_btn_clicked();

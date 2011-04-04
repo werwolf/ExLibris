@@ -110,6 +110,7 @@ void EOperator::on_buy_resources_btn_clicked()
             }
         }
     }
+    completePrinting();     // try to complete printing after buying resources
     readResourcesData();
 }
 
@@ -118,5 +119,59 @@ void EOperator::on_tabs_wg_currentChanged(int index)
     switch (index) {
     case 0 : readResourcesData(); break;
     case 2 : break;
+    }
+}
+
+void EOperator::completePrinting()
+{
+
+    QString query = QString("SELECT id FROM book_sell_log WHERE start_print_date = '0000-00-00 00:00:00' ");
+    QList<QStringList> book_items = db->get(query);
+
+    for (int num = 0; num < book_items.length(); ++num) {
+        int book_id = book_items[num].at(0).toInt();
+        query = QString("SELECT " \
+                                "  r.id AS res_id, " \
+                                "  bsl.number, " \
+                                "  qr.number AS res_number, " \
+                                "  IF(st.number IS NULL, 0, st.number) AS available, " \
+                                "  getResourceBookedCount(r.id) AS booked " \
+                                "FROM" \
+                                "  book_sell_log AS bsl " \
+                                "  INNER JOIN queries_resources AS qr " \
+                                "    ON qr.query_id = bsl.query_id " \
+                                "  INNER JOIN resources AS r " \
+                                "    ON r.id = qr.resource_id " \
+                                "  LEFT JOIN stock AS st " \
+                                "    ON st.resource_id = r.id " \
+                                "WHERE bsl.id = '%1'").arg(book_id);
+        QList<QStringList> res_needed = db->get(query);
+
+        int books_number = 0;
+        int res_number = 0;
+        bool got_resources = true;
+        for (int i = 0; i < res_needed.length(); ++i) {
+            books_number = res_needed[i].at(1).toInt();
+            res_number = res_needed[i].at(2).toInt();
+            int res_in_stock = res_needed[i].at(3).toInt();
+            int res_booked = res_needed[i].at(4).toInt();
+
+            if (books_number * res_number > res_in_stock - 10 - res_booked) {
+                got_resources = false;
+                break;
+            }
+        }
+
+        if (got_resources) {
+            for (int j = 0; j < res_needed.length(); ++j) {
+                int res_id = res_needed[j].at(0).toInt();
+                db->query(QString("UPDATE stock SET number = number - '%1' WHERE resource_id = '%2'")
+                          .arg(books_number * res_number).arg(res_id));
+            }
+            db->query(QString("UPDATE book_sell_log " \
+                              "SET start_print_date = NOW(), " \
+                              "end_print_date = DATE_ADD(NOW(), INTERVAL 1 WEEK) " \
+                              "WHERE id = '%1'").arg(book_id));
+        }
     }
 }
