@@ -320,6 +320,8 @@ CREATE TABLE `queries_services` (
 
 /*Data for the table `queries_services` */
 
+insert  into `queries_services`(`query_id`,`service_id`) values ('978-182-1-25-9',4);
+
 /*Table structure for table `resource_sell_log` */
 
 DROP TABLE IF EXISTS `resource_sell_log`;
@@ -593,16 +595,31 @@ DELIMITER $$
     DETERMINISTIC
 BEGIN
   DECLARE cost float ;
-  SELECT
-    SUM(qr.number * r.price) INTO cost
+  DECLARE s1 FLOAT ;
+  DECLARE s2 FLOAT ;
+  SELECT 
+    SUM(qr.number * r.price) INTO s1 
   FROM
-    resources AS r
-    INNER JOIN queries_resources AS qr
-      ON qr.resource_id = r.id
-    INNER JOIN queries AS q
-      ON qr.query_id = q.id
-  WHERE q.id = book_id
+    resources AS r 
+    INNER JOIN queries_resources AS qr 
+      ON qr.resource_id = r.id 
+    INNER JOIN queries AS q 
+      ON qr.query_id = q.id 
+  WHERE q.id = book_id 
   GROUP BY q.id ;
+  SELECT 
+    SUM(s.price) INTO s2 
+  FROM
+    services AS s 
+    INNER JOIN queries_services AS qs 
+      ON qs.service_id = s.id 
+    INNER JOIN queries AS q 
+      ON qs.query_id = q.id 
+  WHERE q.id = book_id 
+  GROUP BY q.id ;
+  set s1 = if(s1 is null, 0, s1) ;
+  SET s2 = IF(s2 IS NULL, 0, s2) ;
+  set cost = s1 + s2 ;
   RETURN cost ;
 END */$$
 DELIMITER ;
